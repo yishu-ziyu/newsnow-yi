@@ -20,6 +20,15 @@ export default defineConfig({
       "@shared": join(projectDir, "shared"),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        entryFileNames: `assets/[name].js`,
+        chunkFileNames: `assets/[name].js`,
+        assetFileNames: `assets/[name].[ext]`,
+      },
+    },
+  },
   plugins: [
     TanStackRouterVite({
       // error with auto import and vite-plugin-pwa

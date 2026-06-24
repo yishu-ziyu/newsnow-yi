@@ -13,6 +13,7 @@ declare global {
   const assertMethod: typeof import('../../../node_modules/.pnpm/h3@1.15.3/node_modules/h3')['assertMethod']
   const cachedEventHandler: typeof import('../../../node_modules/.pnpm/nitro-go@0.0.3_@libsql+client@0.15.4_better-sqlite3@11.10.0_mysql2@3.14.3/node_modules/nitro-go/dist/runtime/internal/cache')['cachedEventHandler']
   const cachedFunction: typeof import('../../../node_modules/.pnpm/nitro-go@0.0.3_@libsql+client@0.15.4_better-sqlite3@11.10.0_mysql2@3.14.3/node_modules/nitro-go/dist/runtime/internal/cache')['cachedFunction']
+  const callLLM: typeof import('../../../shared/agent')['callLLM']
   const callNodeListener: typeof import('../../../node_modules/.pnpm/h3@1.15.3/node_modules/h3')['callNodeListener']
   const clearResponseHeaders: typeof import('../../../node_modules/.pnpm/h3@1.15.3/node_modules/h3')['clearResponseHeaders']
   const clearSession: typeof import('../../../node_modules/.pnpm/h3@1.15.3/node_modules/h3')['clearSession']
@@ -60,6 +61,8 @@ declare global {
   const getCookie: typeof import('../../../node_modules/.pnpm/h3@1.15.3/node_modules/h3')['getCookie']
   const getHeader: typeof import('../../../node_modules/.pnpm/h3@1.15.3/node_modules/h3')['getHeader']
   const getHeaders: typeof import('../../../node_modules/.pnpm/h3@1.15.3/node_modules/h3')['getHeaders']
+  const getLLMConfig: typeof import('../../../shared/agent')['getLLMConfig']
+  const getLLMProviders: typeof import('../../../shared/agent')['getLLMProviders']
   const getMethod: typeof import('../../../node_modules/.pnpm/h3@1.15.3/node_modules/h3')['getMethod']
   const getProxyRequestHeaders: typeof import('../../../node_modules/.pnpm/h3@1.15.3/node_modules/h3')['getProxyRequestHeaders']
   const getQuery: typeof import('../../../node_modules/.pnpm/h3@1.15.3/node_modules/h3')['getQuery']
@@ -164,11 +167,14 @@ declare global {
 // for type re-export
 declare global {
   // @ts-ignore
+  export type { LLMProvider, LLMConfig, ChatRequest, ChatResponse, BriefingRequest, BriefingResponse } from '../../../shared/agent'
+  import('../../../shared/agent')
+  // @ts-ignore
   export type { OmitNever, UnionToIntersection, MaybePromise } from '../../../shared/type.util'
   import('../../../shared/type.util')
   // @ts-ignore
-  export type { Color, SourceID, AllSourceID, ColumnID, Metadata, PrimitiveMetadata, FixedColumnID, HiddenColumnID, OriginSource, Source, Column, NewsItem, SourceResponse } from '/Users/mahaoxuan/Desktop/vibe coding/readnew/shared/types.ts'
-  import('/Users/mahaoxuan/Desktop/vibe coding/readnew/shared/types.ts')
+  export type { Color, SourceID, AllSourceID, ColumnID, Metadata, PrimitiveMetadata, FixedColumnID, HiddenColumnID, OriginSource, Source, Column, NewsItem, SourceResponse } from '/Users/mahaoxuan/Developer/newsnow-yi/shared/types.ts'
+  import('/Users/mahaoxuan/Developer/newsnow-yi/shared/types.ts')
 }
 export { useNitroApp } from 'nitropack/runtime/internal/app';
 export { useRuntimeConfig, useAppConfig } from 'nitropack/runtime/internal/config';
@@ -183,19 +189,20 @@ export { defineTask, runTask } from 'nitropack/runtime/internal/task';
 export { defineNitroErrorHandler } from 'nitropack/runtime/internal/error/utils';
 export { appendCorsHeaders, appendCorsPreflightHeaders, appendHeader, appendHeaders, appendResponseHeader, appendResponseHeaders, assertMethod, callNodeListener, clearResponseHeaders, clearSession, createApp, createAppEventHandler, createError, createEvent, createEventStream, createRouter, defaultContentType, defineEventHandler, defineLazyEventHandler, defineNodeListener, defineNodeMiddleware, defineRequestMiddleware, defineResponseMiddleware, defineWebSocket, defineWebSocketHandler, deleteCookie, dynamicEventHandler, eventHandler, fetchWithEvent, fromNodeMiddleware, fromPlainHandler, fromWebHandler, getCookie, getHeader, getHeaders, getMethod, getProxyRequestHeaders, getQuery, getRequestFingerprint, getRequestHeader, getRequestHeaders, getRequestHost, getRequestIP, getRequestPath, getRequestProtocol, getRequestURL, getRequestWebStream, getResponseHeader, getResponseHeaders, getResponseStatus, getResponseStatusText, getRouterParam, getRouterParams, getSession, getValidatedQuery, getValidatedRouterParams, handleCacheHeaders, handleCors, isCorsOriginAllowed, isError, isEvent, isEventHandler, isMethod, isPreflightRequest, isStream, isWebResponse, lazyEventHandler, parseCookies, promisifyNodeListener, proxyRequest, readBody, readFormData, readMultipartFormData, readRawBody, readValidatedBody, removeResponseHeader, sanitizeStatusCode, sanitizeStatusMessage, sealSession, send, sendError, sendIterable, sendNoContent, sendProxy, sendRedirect, sendStream, sendWebResponse, serveStatic, setCookie, setHeader, setHeaders, setResponseHeader, setResponseHeaders, setResponseStatus, splitCookiesString, toEventHandler, toNodeListener, toPlainHandler, toWebHandler, toWebRequest, unsealSession, updateSession, useBase, useSession, writeEarlyHints } from 'h3';
 export { useDatabase } from 'nitropack/runtime/internal/database';
-export { decodeBase64URL, encodeBase64URL, decodeBase64, encodeBase64 } from '/Users/mahaoxuan/Desktop/vibe coding/readnew/server/utils/base64';
-export { md5, myCrypto } from '/Users/mahaoxuan/Desktop/vibe coding/readnew/server/utils/crypto';
-export { tranformToUTC, parseDate, parseRelativeDate } from '/Users/mahaoxuan/Desktop/vibe coding/readnew/server/utils/date';
-export { myFetch } from '/Users/mahaoxuan/Desktop/vibe coding/readnew/server/utils/fetch';
-export { logger } from '/Users/mahaoxuan/Desktop/vibe coding/readnew/server/utils/logger';
-export { defineForeignSource } from '/Users/mahaoxuan/Desktop/vibe coding/readnew/server/utils/proxy';
-export { rss2json } from '/Users/mahaoxuan/Desktop/vibe coding/readnew/server/utils/rss2json';
-export { defineSource, defineRSSSource, defineRSSHubSource, proxySource } from '/Users/mahaoxuan/Desktop/vibe coding/readnew/server/utils/source';
-export { TTL, Interval, Homepage, Version, Author } from '/Users/mahaoxuan/Desktop/vibe coding/readnew/shared/consts';
-export { projectDir } from '/Users/mahaoxuan/Desktop/vibe coding/readnew/shared/dir';
-export { columns, fixedColumnIds, hiddenColumns, metadata } from '/Users/mahaoxuan/Desktop/vibe coding/readnew/shared/metadata';
-export { originSources, genSources } from '/Users/mahaoxuan/Desktop/vibe coding/readnew/shared/pre-sources';
-export { default as sources } from '/Users/mahaoxuan/Desktop/vibe coding/readnew/shared/sources';
-export { typeSafeObjectFromEntries, typeSafeObjectEntries, typeSafeObjectValues } from '/Users/mahaoxuan/Desktop/vibe coding/readnew/shared/type.util';
-export { relativeTime, delay, randomUUID, randomItem } from '/Users/mahaoxuan/Desktop/vibe coding/readnew/shared/utils';
-export { verifyPrimitiveMetadata } from '/Users/mahaoxuan/Desktop/vibe coding/readnew/shared/verify';
+export { decodeBase64URL, encodeBase64URL, decodeBase64, encodeBase64 } from '/Users/mahaoxuan/Developer/newsnow-yi/server/utils/base64';
+export { md5, myCrypto } from '/Users/mahaoxuan/Developer/newsnow-yi/server/utils/crypto';
+export { tranformToUTC, parseDate, parseRelativeDate } from '/Users/mahaoxuan/Developer/newsnow-yi/server/utils/date';
+export { myFetch } from '/Users/mahaoxuan/Developer/newsnow-yi/server/utils/fetch';
+export { logger } from '/Users/mahaoxuan/Developer/newsnow-yi/server/utils/logger';
+export { defineForeignSource } from '/Users/mahaoxuan/Developer/newsnow-yi/server/utils/proxy';
+export { rss2json } from '/Users/mahaoxuan/Developer/newsnow-yi/server/utils/rss2json';
+export { defineSource, defineRSSSource, defineRSSHubSource, proxySource } from '/Users/mahaoxuan/Developer/newsnow-yi/server/utils/source';
+export { getLLMProviders, getLLMConfig, callLLM } from '/Users/mahaoxuan/Developer/newsnow-yi/shared/agent';
+export { TTL, Interval, Homepage, Version, Author } from '/Users/mahaoxuan/Developer/newsnow-yi/shared/consts';
+export { projectDir } from '/Users/mahaoxuan/Developer/newsnow-yi/shared/dir';
+export { columns, fixedColumnIds, hiddenColumns, metadata } from '/Users/mahaoxuan/Developer/newsnow-yi/shared/metadata';
+export { originSources, genSources } from '/Users/mahaoxuan/Developer/newsnow-yi/shared/pre-sources';
+export { default as sources } from '/Users/mahaoxuan/Developer/newsnow-yi/shared/sources';
+export { typeSafeObjectFromEntries, typeSafeObjectEntries, typeSafeObjectValues } from '/Users/mahaoxuan/Developer/newsnow-yi/shared/type.util';
+export { relativeTime, delay, randomUUID, randomItem } from '/Users/mahaoxuan/Developer/newsnow-yi/shared/utils';
+export { verifyPrimitiveMetadata } from '/Users/mahaoxuan/Developer/newsnow-yi/shared/verify';

@@ -1,43 +1,43 @@
 import process from 'node:process';globalThis._importMeta_={url:import.meta.url,env:process.env};import { tmpdir } from 'node:os';
-import destr from 'file:///Users/mahaoxuan/Desktop/vibe%20coding/readnew/node_modules/.pnpm/destr@2.0.5/node_modules/destr/dist/index.mjs';
-import { defineEventHandler, handleCacheHeaders, splitCookiesString, createEvent, fetchWithEvent, isEvent, eventHandler, setHeaders, getHeader, appendResponseHeader, sendRedirect, proxyRequest, getRequestURL, getRequestHeader, getResponseHeader, getRequestHeaders, setResponseHeaders, setResponseStatus, send, createError, createApp, createRouter as createRouter$1, toNodeListener, lazyEventHandler, getRouterParam, readBody, getQuery as getQuery$1 } from 'file:///Users/mahaoxuan/Desktop/vibe%20coding/readnew/node_modules/.pnpm/h3@1.15.3/node_modules/h3/dist/index.mjs';
-import { createHooks } from 'file:///Users/mahaoxuan/Desktop/vibe%20coding/readnew/node_modules/.pnpm/hookable@5.5.3/node_modules/hookable/dist/index.mjs';
-import { createFetch, Headers as Headers$1, $fetch as $fetch$1 } from 'file:///Users/mahaoxuan/Desktop/vibe%20coding/readnew/node_modules/.pnpm/ofetch@1.4.1/node_modules/ofetch/dist/node.mjs';
-import { fetchNodeRequestHandler, callNodeRequestHandler } from 'file:///Users/mahaoxuan/Desktop/vibe%20coding/readnew/node_modules/.pnpm/node-mock-http@1.0.2/node_modules/node-mock-http/dist/index.mjs';
-import { parseURL, withoutBase, joinURL, getQuery, withQuery } from 'file:///Users/mahaoxuan/Desktop/vibe%20coding/readnew/node_modules/.pnpm/ufo@1.6.1/node_modules/ufo/dist/index.mjs';
-import { createStorage, prefixStorage } from 'file:///Users/mahaoxuan/Desktop/vibe%20coding/readnew/node_modules/.pnpm/unstorage@1.16.0_db0@0.3.2_@libsql+client@0.15.4_better-sqlite3@11.10.0_mysql2@3.14.3__ioredis@5.6.1/node_modules/unstorage/dist/index.mjs';
-import unstorage_47drivers_47fs from 'file:///Users/mahaoxuan/Desktop/vibe%20coding/readnew/node_modules/.pnpm/unstorage@1.16.0_db0@0.3.2_@libsql+client@0.15.4_better-sqlite3@11.10.0_mysql2@3.14.3__ioredis@5.6.1/node_modules/unstorage/drivers/fs.mjs';
-import { digest } from 'file:///Users/mahaoxuan/Desktop/vibe%20coding/readnew/node_modules/.pnpm/ohash@2.0.11/node_modules/ohash/dist/index.mjs';
-import { klona } from 'file:///Users/mahaoxuan/Desktop/vibe%20coding/readnew/node_modules/.pnpm/klona@2.0.6/node_modules/klona/dist/index.mjs';
-import defu, { defuFn } from 'file:///Users/mahaoxuan/Desktop/vibe%20coding/readnew/node_modules/.pnpm/defu@6.1.4/node_modules/defu/dist/defu.mjs';
-import { snakeCase } from 'file:///Users/mahaoxuan/Desktop/vibe%20coding/readnew/node_modules/.pnpm/scule@1.3.0/node_modules/scule/dist/index.mjs';
-import { getContext } from 'file:///Users/mahaoxuan/Desktop/vibe%20coding/readnew/node_modules/.pnpm/unctx@2.4.1/node_modules/unctx/dist/index.mjs';
-import { toRouteMatcher, createRouter } from 'file:///Users/mahaoxuan/Desktop/vibe%20coding/readnew/node_modules/.pnpm/radix3@1.1.2/node_modules/radix3/dist/index.mjs';
+import destr from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/destr@2.0.5/node_modules/destr/dist/index.mjs';
+import { defineEventHandler, handleCacheHeaders, splitCookiesString, createEvent, fetchWithEvent, isEvent, eventHandler, setHeaders, getHeader, appendResponseHeader, sendRedirect, proxyRequest, getRequestURL, getRequestHeader, getResponseHeader, getRequestHeaders, setResponseHeaders, setResponseStatus, send, createError, createApp, createRouter as createRouter$1, toNodeListener, lazyEventHandler, getRouterParam, readBody, getQuery as getQuery$1 } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/h3@1.15.3/node_modules/h3/dist/index.mjs';
+import { createHooks } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/hookable@5.5.3/node_modules/hookable/dist/index.mjs';
+import { createFetch, Headers as Headers$1, $fetch as $fetch$1 } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/ofetch@1.4.1/node_modules/ofetch/dist/node.mjs';
+import { fetchNodeRequestHandler, callNodeRequestHandler } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/node-mock-http@1.0.2/node_modules/node-mock-http/dist/index.mjs';
+import { parseURL, withoutBase, joinURL, getQuery, withQuery } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/ufo@1.6.1/node_modules/ufo/dist/index.mjs';
+import { createStorage, prefixStorage } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/unstorage@1.16.0_db0@0.3.2_@libsql+client@0.15.4_better-sqlite3@11.10.0_mysql2@3.14.3__ioredis@5.6.1/node_modules/unstorage/dist/index.mjs';
+import unstorage_47drivers_47fs from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/unstorage@1.16.0_db0@0.3.2_@libsql+client@0.15.4_better-sqlite3@11.10.0_mysql2@3.14.3__ioredis@5.6.1/node_modules/unstorage/drivers/fs.mjs';
+import { digest } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/ohash@2.0.11/node_modules/ohash/dist/index.mjs';
+import { klona } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/klona@2.0.6/node_modules/klona/dist/index.mjs';
+import defu, { defuFn } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/defu@6.1.4/node_modules/defu/dist/defu.mjs';
+import { snakeCase } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/scule@1.3.0/node_modules/scule/dist/index.mjs';
+import { getContext } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/unctx@2.4.1/node_modules/unctx/dist/index.mjs';
+import { toRouteMatcher, createRouter } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/radix3@1.1.2/node_modules/radix3/dist/index.mjs';
 import { readFile } from 'node:fs/promises';
 import { resolve, dirname, join } from 'node:path';
-import consola, { createConsola } from 'file:///Users/mahaoxuan/Desktop/vibe%20coding/readnew/node_modules/.pnpm/consola@3.4.2/node_modules/consola/dist/index.mjs';
-import { ErrorParser } from 'file:///Users/mahaoxuan/Desktop/vibe%20coding/readnew/node_modules/.pnpm/youch-core@0.3.2/node_modules/youch-core/build/index.js';
-import { Youch } from 'file:///Users/mahaoxuan/Desktop/vibe%20coding/readnew/node_modules/.pnpm/youch@4.1.0-beta.7/node_modules/youch/build/index.js';
-import { SourceMapConsumer } from 'file:///Users/mahaoxuan/Desktop/vibe%20coding/readnew/node_modules/.pnpm/source-map@0.7.4/node_modules/source-map/source-map.js';
+import consola, { createConsola } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/consola@3.4.2/node_modules/consola/dist/index.mjs';
+import { ErrorParser } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/youch-core@0.3.2/node_modules/youch-core/build/index.js';
+import { Youch } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/youch@4.1.0-beta.7/node_modules/youch/build/index.js';
+import { SourceMapConsumer } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/source-map@0.7.4/node_modules/source-map/source-map.js';
 import process$1 from 'node:process';
-import { jwtVerify, SignJWT } from 'file:///Users/mahaoxuan/Desktop/vibe%20coding/readnew/node_modules/.pnpm/jose@6.0.11/node_modules/jose/dist/webapi/index.js';
+import { jwtVerify, SignJWT } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/jose@6.0.11/node_modules/jose/dist/webapi/index.js';
 import { Server } from 'node:http';
 import nodeCrypto from 'node:crypto';
 import { parentPort, threadId } from 'node:worker_threads';
-import { StreamableHTTPServerTransport } from 'file:///Users/mahaoxuan/Desktop/vibe%20coding/readnew/node_modules/.pnpm/@modelcontextprotocol+sdk@1.11.1/node_modules/@modelcontextprotocol/sdk/dist/esm/server/streamableHttp.js';
-import z$1, { z } from 'file:///Users/mahaoxuan/Desktop/vibe%20coding/readnew/node_modules/.pnpm/zod@3.24.4/node_modules/zod/lib/index.mjs';
-import { McpServer } from 'file:///Users/mahaoxuan/Desktop/vibe%20coding/readnew/node_modules/.pnpm/@modelcontextprotocol+sdk@1.11.1/node_modules/@modelcontextprotocol/sdk/dist/esm/server/mcp.js';
-import { XMLParser } from 'file:///Users/mahaoxuan/Desktop/vibe%20coding/readnew/node_modules/.pnpm/fast-xml-parser@5.2.2/node_modules/fast-xml-parser/src/fxp.js';
-import * as cheerio from 'file:///Users/mahaoxuan/Desktop/vibe%20coding/readnew/node_modules/.pnpm/cheerio@1.0.0/node_modules/cheerio/dist/esm/index.js';
-import { load } from 'file:///Users/mahaoxuan/Desktop/vibe%20coding/readnew/node_modules/.pnpm/cheerio@1.0.0/node_modules/cheerio/dist/esm/index.js';
-import _md5 from 'file:///Users/mahaoxuan/Desktop/vibe%20coding/readnew/node_modules/.pnpm/md5@2.3.0/node_modules/md5/md5.js';
-import { subtle as subtle$1 } from 'file:///Users/mahaoxuan/Desktop/vibe%20coding/readnew/node_modules/.pnpm/uncrypto@0.1.3/node_modules/uncrypto/dist/crypto.node.mjs';
+import { StreamableHTTPServerTransport } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/@modelcontextprotocol+sdk@1.11.1/node_modules/@modelcontextprotocol/sdk/dist/esm/server/streamableHttp.js';
+import z$1, { z } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/zod@3.24.4/node_modules/zod/lib/index.mjs';
+import { McpServer } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/@modelcontextprotocol+sdk@1.11.1/node_modules/@modelcontextprotocol/sdk/dist/esm/server/mcp.js';
+import { XMLParser } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/fast-xml-parser@5.2.2/node_modules/fast-xml-parser/src/fxp.js';
+import * as cheerio from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/cheerio@1.0.0/node_modules/cheerio/dist/esm/index.js';
+import { load } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/cheerio@1.0.0/node_modules/cheerio/dist/esm/index.js';
+import _md5 from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/md5@2.3.0/node_modules/md5/md5.js';
+import { subtle as subtle$1 } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/uncrypto@0.1.3/node_modules/uncrypto/dist/crypto.node.mjs';
 import { Buffer as Buffer$1 } from 'node:buffer';
-import iconv from 'file:///Users/mahaoxuan/Desktop/vibe%20coding/readnew/node_modules/.pnpm/iconv-lite@0.6.3/node_modules/iconv-lite/lib/index.js';
-import { createDatabase } from 'file:///Users/mahaoxuan/Desktop/vibe%20coding/readnew/node_modules/.pnpm/db0@0.3.2_@libsql+client@0.15.4_better-sqlite3@11.10.0_mysql2@3.14.3/node_modules/db0/dist/index.mjs';
-import betterSqlite3Connector from 'file:///Users/mahaoxuan/Desktop/vibe%20coding/readnew/node_modules/.pnpm/db0@0.3.2_@libsql+client@0.15.4_better-sqlite3@11.10.0_mysql2@3.14.3/node_modules/db0/dist/connectors/better-sqlite3.mjs';
+import iconv from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/iconv-lite@0.6.3/node_modules/iconv-lite/lib/index.js';
+import { createDatabase } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/db0@0.3.2_@libsql+client@0.15.4_better-sqlite3@11.10.0_mysql2@3.14.3/node_modules/db0/dist/index.mjs';
+import betterSqlite3Connector from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/db0@0.3.2_@libsql+client@0.15.4_better-sqlite3@11.10.0_mysql2@3.14.3/node_modules/db0/dist/connectors/better-sqlite3.mjs';
 
-const serverAssets = [{"baseName":"server","dir":"/Users/mahaoxuan/Desktop/vibe coding/readnew/server/assets"}];
+const serverAssets = [{"baseName":"server","dir":"/Users/mahaoxuan/Developer/newsnow-yi/server/assets"}];
 
 const assets = createStorage();
 
@@ -49,11 +49,11 @@ const storage = createStorage({});
 
 storage.mount('/assets', assets);
 
-storage.mount('root', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"/Users/mahaoxuan/Desktop/vibe coding/readnew"}));
-storage.mount('src', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"/Users/mahaoxuan/Desktop/vibe coding/readnew/server"}));
-storage.mount('build', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"/Users/mahaoxuan/Desktop/vibe coding/readnew/dist/.nitro"}));
-storage.mount('cache', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"/Users/mahaoxuan/Desktop/vibe coding/readnew/dist/.nitro/cache"}));
-storage.mount('data', unstorage_47drivers_47fs({"driver":"fs","base":"/Users/mahaoxuan/Desktop/vibe coding/readnew/.data/kv"}));
+storage.mount('root', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"/Users/mahaoxuan/Developer/newsnow-yi"}));
+storage.mount('src', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"/Users/mahaoxuan/Developer/newsnow-yi/server"}));
+storage.mount('build', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"/Users/mahaoxuan/Developer/newsnow-yi/dist/.nitro"}));
+storage.mount('cache', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"/Users/mahaoxuan/Developer/newsnow-yi/dist/.nitro/cache"}));
+storage.mount('data', unstorage_47drivers_47fs({"driver":"fs","base":"/Users/mahaoxuan/Developer/newsnow-yi/.data/kv"}));
 
 function useStorage(base = "") {
   return base ? prefixStorage(storage, base) : storage;
@@ -627,10 +627,21 @@ const _inlineRuntimeConfig = {
   },
   "nitro": {
     "routeRules": {
+      "/**/*.html": {
+        "headers": {
+          "cache-control": "no-cache, no-store, must-revalidate"
+        }
+      },
       "/**": {
+        "isr": 3600,
         "proxy": {
           "to": "/api/**",
           "_proxyStripBase": ""
+        }
+      },
+      "/assets/**": {
+        "headers": {
+          "cache-control": "public, max-age=31536000, immutable"
         }
       }
     }
@@ -943,13 +954,13 @@ const logger = createConsola({
   }
 });
 
-const _2oMfY4 = defineEventHandler(async (event) => {
+const _Sx6avg = defineEventHandler(async (event) => {
   var _a, _b;
   const url = getRequestURL(event);
   if (!url.pathname.startsWith("/api")) return;
   if (["JWT_SECRET", "G_CLIENT_ID", "G_CLIENT_SECRET"].find((k) => !process$1.env[k])) {
     event.context.disabledLogin = true;
-    if (["/api/s", "/api/proxy", "/api/latest", "/api/mcp"].every((p) => !url.pathname.startsWith(p)))
+    if (["/api/s", "/api/proxy", "/api/latest", "/api/mcp", "/api/agent"].every((p) => !url.pathname.startsWith(p)))
       throw createError({ statusCode: 506, message: "Server not configured, disable login" });
   } else {
     if (["/api/s", "/api/me"].find((p) => url.pathname.startsWith(p))) {
@@ -975,27 +986,31 @@ const _2oMfY4 = defineEventHandler(async (event) => {
   }
 });
 
-const _lazy_SzMvDr = () => Promise.resolve().then(function () { return enableLogin$1; });
-const _lazy_jdqRRo = () => Promise.resolve().then(function () { return latest$3; });
-const _lazy_Vzfwop = () => Promise.resolve().then(function () { return login$1; });
-const _lazy_Pg6xYq = () => Promise.resolve().then(function () { return mcp_post$1; });
-const _lazy_h04SbV = () => Promise.resolve().then(function () { return index$7; });
-const _lazy_oPpyTV = () => Promise.resolve().then(function () { return sync$1; });
-const _lazy_FbZpai = () => Promise.resolve().then(function () { return github$3; });
-const _lazy_wrcAXT = () => Promise.resolve().then(function () { return entire_post$1; });
-const _lazy_FVVP6C = () => Promise.resolve().then(function () { return index$1; });
+const _lazy_oweoGP = () => Promise.resolve().then(function () { return briefing_post$1; });
+const _lazy_djC89L = () => Promise.resolve().then(function () { return chat_post$1; });
+const _lazy_pkbqAK = () => Promise.resolve().then(function () { return enableLogin$1; });
+const _lazy_kPjrBz = () => Promise.resolve().then(function () { return latest$3; });
+const _lazy_gRVbSl = () => Promise.resolve().then(function () { return login$1; });
+const _lazy_HAo9Ty = () => Promise.resolve().then(function () { return mcp_post$1; });
+const _lazy_9OYYfo = () => Promise.resolve().then(function () { return index$7; });
+const _lazy_iteSca = () => Promise.resolve().then(function () { return sync$1; });
+const _lazy_6D0Nux = () => Promise.resolve().then(function () { return github$3; });
+const _lazy_A3DO29 = () => Promise.resolve().then(function () { return entire_post$1; });
+const _lazy_DORtJ5 = () => Promise.resolve().then(function () { return index$1; });
 
 const handlers = [
-  { route: '', handler: _2oMfY4, lazy: false, middleware: true, method: undefined },
-  { route: '/api/enable-login', handler: _lazy_SzMvDr, lazy: true, middleware: false, method: undefined },
-  { route: '/api/latest', handler: _lazy_jdqRRo, lazy: true, middleware: false, method: undefined },
-  { route: '/api/login', handler: _lazy_Vzfwop, lazy: true, middleware: false, method: undefined },
-  { route: '/api/mcp', handler: _lazy_Pg6xYq, lazy: true, middleware: false, method: "post" },
-  { route: '/api/me', handler: _lazy_h04SbV, lazy: true, middleware: false, method: undefined },
-  { route: '/api/me/sync', handler: _lazy_oPpyTV, lazy: true, middleware: false, method: undefined },
-  { route: '/api/oauth/github', handler: _lazy_FbZpai, lazy: true, middleware: false, method: undefined },
-  { route: '/api/s/entire', handler: _lazy_wrcAXT, lazy: true, middleware: false, method: "post" },
-  { route: '/api/s', handler: _lazy_FVVP6C, lazy: true, middleware: false, method: undefined }
+  { route: '', handler: _Sx6avg, lazy: false, middleware: true, method: undefined },
+  { route: '/api/agent/briefing', handler: _lazy_oweoGP, lazy: true, middleware: false, method: "post" },
+  { route: '/api/agent/chat', handler: _lazy_djC89L, lazy: true, middleware: false, method: "post" },
+  { route: '/api/enable-login', handler: _lazy_pkbqAK, lazy: true, middleware: false, method: undefined },
+  { route: '/api/latest', handler: _lazy_kPjrBz, lazy: true, middleware: false, method: undefined },
+  { route: '/api/login', handler: _lazy_gRVbSl, lazy: true, middleware: false, method: undefined },
+  { route: '/api/mcp', handler: _lazy_HAo9Ty, lazy: true, middleware: false, method: "post" },
+  { route: '/api/me', handler: _lazy_9OYYfo, lazy: true, middleware: false, method: undefined },
+  { route: '/api/me/sync', handler: _lazy_iteSca, lazy: true, middleware: false, method: undefined },
+  { route: '/api/oauth/github', handler: _lazy_6D0Nux, lazy: true, middleware: false, method: undefined },
+  { route: '/api/s/entire', handler: _lazy_A3DO29, lazy: true, middleware: false, method: "post" },
+  { route: '/api/s', handler: _lazy_DORtJ5, lazy: true, middleware: false, method: undefined }
 ];
 
 function createNitroApp() {
@@ -1279,6 +1294,270 @@ async function shutdown() {
   parentPort?.postMessage({ event: "exit" });
 }
 
+const FALLBACK_PROVIDERS = {
+  minimax: {
+    baseUrl: "https://api.minimaxi.com/anthropic",
+    model: "MiniMax-M3",
+    protocol: "anthropic"
+  },
+  deepseek: {
+    baseUrl: "https://api.deepseek.com/v1",
+    model: "deepseek-v4-pro",
+    protocol: "openai"
+  },
+  agnes: {
+    baseUrl: "https://apihub.agnes-ai.com/v1",
+    model: "agnes-2.0-flash",
+    protocol: "openai",
+    // Agnes free-tier key (公测期 $0). Override via NEWSNOW_LLM_FALLBACK_AGNES.
+    defaultKey: "sk-g8xSqyMHEcOVtaKA3MqUFWZKApt6LNOA1JQwT8CBabi1iaRm"
+  }
+};
+function detectProtocol(url) {
+  if (url.includes("anthropic") || url.includes("minimaxi")) return "anthropic";
+  return "openai";
+}
+function normalizeUrl(url) {
+  if (!url) return "https://api.openai.com/v1";
+  const trimmed = url.replace(/\/+$/, "");
+  if (detectProtocol(trimmed) === "anthropic") return trimmed;
+  if (!trimmed.endsWith("/v1")) return `${trimmed}/v1`;
+  return trimmed;
+}
+function getLLMProviders() {
+  const providers = [];
+  const primaryKey = process$1.env.NEWSNOW_LLM_API_KEY;
+  if (primaryKey) {
+    providers.push({
+      name: "primary",
+      apiKey: primaryKey,
+      baseUrl: normalizeUrl(process$1.env.NEWSNOW_LLM_API_URL || ""),
+      model: process$1.env.NEWSNOW_LLM_MODEL || "gpt-4o-mini",
+      protocol: detectProtocol(process$1.env.NEWSNOW_LLM_API_URL || "https://api.openai.com/v1")
+    });
+  }
+  if (process$1.env.NEWSNOW_LLM_FALLBACK_MINIMAX) {
+    providers.push({
+      name: "minimax",
+      apiKey: process$1.env.NEWSNOW_LLM_FALLBACK_MINIMAX,
+      ...FALLBACK_PROVIDERS.minimax
+    });
+  }
+  if (process$1.env.NEWSNOW_LLM_FALLBACK_DEEPSEEK) {
+    providers.push({
+      name: "deepseek",
+      apiKey: process$1.env.NEWSNOW_LLM_FALLBACK_DEEPSEEK,
+      ...FALLBACK_PROVIDERS.deepseek
+    });
+  }
+  providers.push({
+    name: "agnes",
+    apiKey: process$1.env.NEWSNOW_LLM_FALLBACK_AGNES || FALLBACK_PROVIDERS.agnes.defaultKey,
+    ...FALLBACK_PROVIDERS.agnes
+  });
+  return providers;
+}
+async function callLLM(provider, systemPrompt, userContent) {
+  var _a, _b, _c, _d, _e;
+  if (provider.protocol === "anthropic") {
+    const resp2 = await fetch(`${provider.baseUrl}/v1/messages`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": provider.apiKey,
+        "anthropic-version": "2023-06-01"
+      },
+      body: JSON.stringify({
+        model: provider.model,
+        max_tokens: 1024,
+        system: systemPrompt,
+        messages: [{ role: "user", content: userContent }]
+      })
+    });
+    if (!resp2.ok) {
+      const text = await resp2.text().catch(() => "");
+      throw new Error(`Anthropic HTTP ${resp2.status}: ${text.slice(0, 200)}`);
+    }
+    const data2 = await resp2.json();
+    return ((_b = (_a = data2.content) == null ? void 0 : _a[0]) == null ? void 0 : _b.text) || "\uFF08\u65E0\u56DE\u590D\uFF09";
+  }
+  const resp = await fetch(`${provider.baseUrl}/chat/completions`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${provider.apiKey}`
+    },
+    body: JSON.stringify({
+      model: provider.model,
+      max_tokens: 1024,
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userContent.map((p) => p.text).join("\n") }
+      ]
+    })
+  });
+  if (!resp.ok) {
+    const text = await resp.text().catch(() => "");
+    throw new Error(`OpenAI HTTP ${resp.status}: ${text.slice(0, 200)}`);
+  }
+  const data = await resp.json();
+  return ((_e = (_d = (_c = data.choices) == null ? void 0 : _c[0]) == null ? void 0 : _d.message) == null ? void 0 : _e.content) || "\uFF08\u65E0\u56DE\u590D\uFF09";
+}
+
+const briefing_post = defineEventHandler(async (event) => {
+  var _a, _b, _c;
+  const body = await readBody(event);
+  const days = body.days || 1;
+  const topic = body.topic;
+  if (process.env.ENABLE_CACHE === "false") {
+    throw createError({
+      statusCode: 503,
+      message: "\u7F13\u5B58\u672A\u542F\u7528\uFF0C\u65E0\u6CD5\u751F\u6210\u7B80\u62A5"
+    });
+  }
+  const db = useDatabase();
+  const cutoff = Date.now() - days * 24 * 60 * 60 * 1e3;
+  const rows = await db.prepare(
+    "SELECT id, data, updated FROM cache WHERE updated >= ?"
+  ).all(cutoff);
+  const results = (_b = (_a = rows.results) != null ? _a : rows) != null ? _b : [];
+  const cacheItems = results.map((row) => {
+    try {
+      return {
+        id: row.id,
+        updated: row.updated,
+        items: JSON.parse(row.data)
+      };
+    } catch {
+      return null;
+    }
+  }).filter(Boolean);
+  const totalItems = cacheItems.reduce((sum, c) => sum + c.items.length, 0);
+  if (totalItems === 0) {
+    return {
+      summary: topic ? `\u8FC7\u53BB ${days} \u5929\u5185\u6CA1\u6709\u627E\u5230\u5173\u4E8E"${topic}"\u7684\u65B0\u95FB\u7F13\u5B58\u3002` : `\u8FC7\u53BB ${days} \u5929\u5185\u6CA1\u6709\u65B0\u95FB\u7F13\u5B58\u6570\u636E\u3002`,
+      model: "mock",
+      mock: true,
+      sourceCount: 0
+    };
+  }
+  const providers = getLLMProviders();
+  if (providers.length === 0) {
+    const titles2 = cacheItems.flatMap((c) => c.items).map((item) => item.title).filter(Boolean).slice(0, 30).join("\n");
+    return {
+      summary: `[mock] \u53D1\u73B0 ${totalItems} \u6761\u65B0\u95FB\uFF0C\u6765\u81EA ${cacheItems.length} \u4E2A\u6765\u6E90\u3002${topic ? `\u4E3B\u9898\uFF1A${topic}\u3002` : ""}\u524D\u51E0\u6761\u6807\u9898\uFF1A
+${titles2.slice(0, 500)}
+
+\u8BBE\u7F6E NEWSNOW_LLM_API_KEY \u73AF\u5883\u53D8\u91CF\u53EF\u542F\u7528 AI \u7B80\u62A5\u3002`,
+      model: "mock",
+      mock: true,
+      sourceCount: cacheItems.length
+    };
+  }
+  const sourcesText = cacheItems.map((c) => `## ${c.id}
+${c.items.map((i) => `- ${i.title}`).join("\n")}`).join("\n\n");
+  const topicHint = topic ? `\u805A\u7126\u4E3B\u9898\uFF1A${topic}\u3002` : "";
+  const systemPrompt = `\u4F60\u662F\u4E00\u4E2A\u65B0\u95FB\u7B80\u62A5\u52A9\u624B\u3002${topicHint}\u8BF7\u57FA\u4E8E\u63D0\u4F9B\u7684\u65B0\u95FB\u6807\u9898\u5217\u8868\uFF0C\u751F\u6210\u4E00\u4EFD\u7B80\u6D01\u7684\u4E2D\u6587\u7B80\u62A5\u3002\u683C\u5F0F\uFF1A\u6309\u4E3B\u9898\u5206\u7EC4\uFF0C\u6BCF\u7EC4 2-3 \u6761\uFF0C\u6BCF\u6761\u4E00\u53E5\u8BDD\u6458\u8981\u3002\u63A7\u5236\u5728 300 \u5B57\u4EE5\u5185\u3002`;
+  const userText = `\u4EE5\u4E0B\u662F\u8FC7\u53BB ${days} \u5929\u7684\u65B0\u95FB\u6807\u9898\u5217\u8868\uFF1A
+
+${sourcesText.slice(0, 8e3)}`;
+  const userContent = [{ type: "text", text: userText }];
+  for (const provider of providers) {
+    try {
+      const summary = await callLLM(provider, systemPrompt, userContent);
+      console.log(`[agent/briefing] provider=${provider.name} model=${provider.model} ok`);
+      return {
+        summary,
+        model: provider.model,
+        mock: false,
+        sourceCount: cacheItems.length
+      };
+    } catch (e) {
+      console.error(`[agent/briefing] provider=${provider.name} failed:`, e);
+      continue;
+    }
+  }
+  const titles = cacheItems.flatMap((c) => c.items).map((item) => item.title).filter(Boolean).slice(0, 30).join("\n");
+  return {
+    summary: `[fallback] ${totalItems} \u6761\u65B0\u95FB\uFF0C${cacheItems.length} \u4E2A\u6765\u6E90\u3002LLM \u8C03\u7528\u5931\u8D25\u3002\u524D\u51E0\u6761\uFF1A
+${titles.slice(0, 500)}`,
+    model: ((_c = providers[0]) == null ? void 0 : _c.model) || "unknown",
+    mock: true,
+    sourceCount: cacheItems.length
+  };
+});
+
+const briefing_post$1 = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  default: briefing_post
+});
+
+const chat_post = defineEventHandler(async (event) => {
+  const body = await readBody(event);
+  const { message, context } = body;
+  if (!message || typeof message !== "string" || message.trim().length === 0) {
+    throw createError({
+      statusCode: 400,
+      message: "message is required"
+    });
+  }
+  const providers = getLLMProviders();
+  if (providers.length === 0) {
+    return mockChatReply(message, context);
+  }
+  const systemPrompt = buildSystemPrompt(context);
+  const userContent = buildUserContent(message, context);
+  for (const provider of providers) {
+    try {
+      const reply = await callLLM(provider, systemPrompt, userContent);
+      console.log(`[agent/chat] provider=${provider.name} model=${provider.model} ok`);
+      return {
+        reply,
+        model: provider.model,
+        mock: false,
+        provider: provider.name
+      };
+    } catch (e) {
+      console.error(`[agent/chat] provider=${provider.name} failed:`, e);
+      continue;
+    }
+  }
+  console.error("[agent/chat] all providers failed, returning mock");
+  return mockChatReply(message, context);
+});
+function mockChatReply(message, context, model = "mock") {
+  const titleHint = (context == null ? void 0 : context.title) ? `\u5173\u4E8E"${context.title}"` : "";
+  return {
+    reply: `[mock] \u6536\u5230\u4F60\u7684\u6D88\u606F${titleHint}\uFF1A"${message.slice(0, 50)}${message.length > 50 ? "..." : ""}"\u3002\u5F53\u524D\u672A\u914D\u7F6E LLM API\uFF08\u8BBE\u7F6E NEWSNOW_LLM_API_KEY \u73AF\u5883\u53D8\u91CF\u542F\u7528\u771F\u5B9E\u5BF9\u8BDD\uFF09\u3002`,
+    model,
+    mock: true
+  };
+}
+function buildSystemPrompt(context) {
+  const ctx = (context == null ? void 0 : context.title) ? `\u7528\u6237\u6B63\u5728\u9605\u8BFB\u6587\u7AE0\u300A${context.title}\u300B(${context.url || ""})\u3002` : "";
+  return `\u4F60\u662F\u4E00\u4E2A\u65B0\u95FB\u52A9\u624B\uFF0C\u5E2E\u52A9\u7528\u6237\u7406\u89E3\u548C\u8BA8\u8BBA\u65B0\u95FB\u5185\u5BB9\u3002${ctx}\u8BF7\u7528\u7B80\u6D01\u3001\u5BA2\u89C2\u7684\u65B9\u5F0F\u56DE\u7B54\u3002`;
+}
+function buildUserContent(message, context) {
+  const parts = [];
+  if (context == null ? void 0 : context.content) {
+    parts.push({
+      type: "text",
+      text: `\u6587\u7AE0\u5185\u5BB9\u6458\u8981\uFF1A
+${context.content.slice(0, 4e3)}`
+    });
+  }
+  parts.push({
+    type: "text",
+    text: message
+  });
+  return parts;
+}
+
+const chat_post$1 = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  default: chat_post
+});
+
 const enableLogin = defineEventHandler(async () => {
   return {
     enable: true,
@@ -1291,7 +1570,7 @@ const enableLogin$1 = /*#__PURE__*/Object.freeze({
   default: enableLogin
 });
 
-var version = "0.0.39";
+var version = "0.0.40";
 const packageJSON = {
 	version: version};
 
@@ -1518,6 +1797,13 @@ var producthunt$2 = {
 	color: "red",
 	interval: 600000
 };
+var qbitai$2 = {
+	name: "量子位",
+	column: "ai",
+	home: "https://www.qbitai.com",
+	color: "purple",
+	interval: 1800000
+};
 var github$4 = {
 	redirect: "github-trending-today",
 	name: "Github",
@@ -1538,14 +1824,12 @@ var bilibili$2 = {
 	interval: 600000,
 	title: "热搜"
 };
-var kuaishou$2 = {
-	name: "快手",
-	type: "hottest",
-	disable: "cf",
+var latepost$2 = {
+	name: "晚点LatePost",
 	column: "china",
-	home: "https://www.kuaishou.com",
-	color: "orange",
-	interval: 600000
+	home: "https://www.latepost.com",
+	color: "indigo",
+	interval: 3600000
 };
 var kaopu$2 = {
 	name: "靠谱新闻",
@@ -1891,6 +2175,7 @@ const _sources = {
 	solidot: solidot$2,
 	hackernews: hackernews$2,
 	producthunt: producthunt$2,
+	qbitai: qbitai$2,
 	github: github$4,
 	"github-trending-today": {
 	name: "Github",
@@ -1911,27 +2196,7 @@ const _sources = {
 	interval: 600000,
 	title: "热搜"
 },
-	"bilibili-hot-video": {
-	name: "哔哩哔哩",
-	type: "hottest",
-	disable: "cf",
-	column: "china",
-	home: "https://www.bilibili.com",
-	color: "blue",
-	interval: 600000,
-	title: "热门视频"
-},
-	"bilibili-ranking": {
-	name: "哔哩哔哩",
-	type: "hottest",
-	disable: "cf",
-	column: "china",
-	home: "https://www.bilibili.com",
-	color: "blue",
-	interval: 1800000,
-	title: "排行榜"
-},
-	kuaishou: kuaishou$2,
+	latepost: latepost$2,
 	kaopu: kaopu$2,
 	jin10: jin10$2,
 	baidu: baidu$2,
@@ -4443,53 +4708,67 @@ const baidu$1 = /*#__PURE__*/Object.freeze({
 });
 
 const hotSearch$1 = defineSource(async () => {
-  const url = "https://s.search.bilibili.com/main/hotword?limit=30";
-  const res = await myFetch(url);
-  return res.list.map((k) => ({
-    id: k.keyword,
-    title: k.show_name,
-    url: `https://search.bilibili.com/all?keyword=${encodeURIComponent(k.keyword)}`,
-    extra: {
-      icon: k.icon
-    }
-  }));
+  const url = "https://rsshub.app/bilibili/hotword";
+  const data = await myFetch(url);
+  const items = data.items || data;
+  if (!Array.isArray(items) || items.length === 0) {
+    throw new Error("No Bilibili hot search data");
+  }
+  return items.map((item) => {
+    var _a, _b, _c;
+    return {
+      id: ((_a = item.url) == null ? void 0 : _a.split("=").pop()) || item.guid || String(Math.random()),
+      title: item.title,
+      url: item.url || `https://search.bilibili.com/all?keyword=${encodeURIComponent(item.title)}`,
+      extra: {
+        info: item.author || "",
+        hover: ((_c = (_b = item.description) == null ? void 0 : _b.substring) == null ? void 0 : _c.call(_b, 0, 200)) || ""
+      }
+    };
+  });
 });
 const hotVideo = defineSource(async () => {
-  const url = "https://api.bilibili.com/x/web-interface/popular";
-  const res = await myFetch(url);
-  return res.data.list.map((video) => ({
-    id: video.bvid,
-    title: video.title,
-    url: `https://www.bilibili.com/video/${video.bvid}`,
-    pubDate: video.pubdate * 1e3,
-    extra: {
-      info: `${video.owner.name} \xB7 ${formatNumber(video.stat.view)}\u89C2\u770B \xB7 ${formatNumber(video.stat.like)}\u70B9\u8D5E`,
-      hover: video.desc,
-      icon: video.pic
-    }
-  }));
+  const url = "https://rsshub.app/bilibili/popular";
+  const data = await myFetch(url);
+  const items = data.items || data;
+  if (!Array.isArray(items) || items.length === 0) {
+    throw new Error("No Bilibili popular data");
+  }
+  return items.map((item) => {
+    var _a, _b, _c;
+    return {
+      id: ((_a = item.url) == null ? void 0 : _a.split("/").pop()) || item.guid || String(Math.random()),
+      title: item.title,
+      url: item.url || "https://www.bilibili.com",
+      pubDate: item.pubDate ? new Date(item.pubDate).getTime() : void 0,
+      extra: {
+        info: item.author || "",
+        hover: ((_c = (_b = item.description) == null ? void 0 : _b.substring) == null ? void 0 : _c.call(_b, 0, 200)) || ""
+      }
+    };
+  });
 });
 const ranking = defineSource(async () => {
-  const url = "https://api.bilibili.com/x/web-interface/ranking/v2";
-  const res = await myFetch(url);
-  return res.data.list.map((video) => ({
-    id: video.bvid,
-    title: video.title,
-    url: `https://www.bilibili.com/video/${video.bvid}`,
-    pubDate: video.pubdate * 1e3,
-    extra: {
-      info: `${video.owner.name} \xB7 ${formatNumber(video.stat.view)}\u89C2\u770B \xB7 ${formatNumber(video.stat.like)}\u70B9\u8D5E`,
-      hover: video.desc,
-      icon: video.pic
-    }
-  }));
-});
-function formatNumber(num) {
-  if (num >= 1e4) {
-    return `${Math.floor(num / 1e4)}w+`;
+  const url = "https://rsshub.app/bilibili/ranking/0";
+  const data = await myFetch(url);
+  const items = data.items || data;
+  if (!Array.isArray(items) || items.length === 0) {
+    throw new Error("No Bilibili ranking data");
   }
-  return num.toString();
-}
+  return items.map((item) => {
+    var _a, _b, _c;
+    return {
+      id: ((_a = item.url) == null ? void 0 : _a.split("/").pop()) || item.guid || String(Math.random()),
+      title: item.title,
+      url: item.url || "https://www.bilibili.com",
+      pubDate: item.pubDate ? new Date(item.pubDate).getTime() : void 0,
+      extra: {
+        info: item.author || "",
+        hover: ((_c = (_b = item.description) == null ? void 0 : _b.substring) == null ? void 0 : _c.call(_b, 0, 200)) || ""
+      }
+    };
+  });
+});
 const bilibili = defineSource({
   "bilibili": hotSearch$1,
   "bilibili-hot-search": hotSearch$1,
@@ -5400,6 +5679,59 @@ const kuaishou$1 = /*#__PURE__*/Object.freeze({
   default: kuaishou
 });
 
+const latepost = defineSource(async () => {
+  const url = "https://www.latepost.com/";
+  const html = await myFetch(url);
+  const $ = cheerio.load(html);
+  const items = [];
+  $(".headlines-title a").each((_, el) => {
+    const href = $(el).attr("href") || "";
+    const title = $(el).text().trim();
+    if (title && href) {
+      const u = href.startsWith("http") ? href : `https://www.latepost.com${href}`;
+      items.push({ id: u, title, url: u });
+    }
+  });
+  $(".Newsletter-li-title").each((_, el) => {
+    const a = $(el).closest("a");
+    const href = a.attr("href") || "";
+    const title = $(el).text().trim();
+    if (title && href) {
+      const u = href.startsWith("http") ? href : `https://www.latepost.com${href}`;
+      items.push({ id: u, title, url: u });
+    }
+  });
+  $(".Q-A-title").each((_, el) => {
+    const a = $(el).closest("a");
+    const href = a.attr("href") || "";
+    const title = $(el).text().trim();
+    if (title && href) {
+      const u = href.startsWith("http") ? href : `https://www.latepost.com${href}`;
+      items.push({ id: u, title, url: u });
+    }
+  });
+  $(".oldNewsletter-title").each((_, el) => {
+    const href = $(el).attr("href") || "";
+    const title = $(el).text().trim();
+    if (title && href) {
+      const u = href.startsWith("http") ? href : `https://www.latepost.com${href}`;
+      items.push({ id: u, title, url: u });
+    }
+  });
+  const seen = /* @__PURE__ */ new Set();
+  const unique = items.filter((item) => {
+    if (seen.has(item.url)) return false;
+    seen.add(item.url);
+    return true;
+  });
+  return unique.slice(0, 30);
+});
+
+const latepost$1 = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  default: latepost
+});
+
 const hot$1 = defineSource(async () => {
   const res = await myFetch("https://linux.do/top/daily.json");
   return res.topic_list.topics.filter((k) => k.visible && !k.archived && !k.pinned).map((k) => ({
@@ -5571,6 +5903,29 @@ const producthunt = defineSource(async () => {
 const producthunt$1 = /*#__PURE__*/Object.freeze({
   __proto__: null,
   default: producthunt
+});
+
+const qbitai = defineSource(async () => {
+  const url = "https://www.qbitai.com/feed";
+  const rss = await myFetch(url, {
+    headers: { Accept: "application/rss+xml, application/xml" }
+  });
+  const $ = cheerio.load(rss, { xmlMode: true });
+  const items = [];
+  $("item").each((_, el) => {
+    const title = $("title", el).text().trim();
+    const link = $("link", el).text().trim();
+    const pubDate = $("pubDate", el).text().trim();
+    if (title && link) {
+      items.push({ id: link, title, url: link, pubDate });
+    }
+  });
+  return items;
+});
+
+const qbitai$1 = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  default: qbitai
 });
 
 const hotSearch = defineSource(async () => {
@@ -6108,6 +6463,7 @@ const x = /*#__PURE__*/Object.freeze({
   juejin: juejin$1,
   kaopu: kaopu$1,
   kuaishou: kuaishou$1,
+  latepost: latepost$1,
   lennys: lennys$1,
   linuxdo: linuxdo$1,
   mktnews: mktnews$1,
@@ -6117,6 +6473,7 @@ const x = /*#__PURE__*/Object.freeze({
   pcbeta: pcbeta$1,
   producthunt: producthunt$1,
   psyche: psyche$1,
+  qbitai: qbitai$1,
   qqvideo: qqvideo$1,
   reddit_ai_monitor: reddit_ai_monitor$1,
   robertheaton: robertheaton$1,

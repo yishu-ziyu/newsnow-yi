@@ -18,6 +18,9 @@ export const columns = {
   english: {
     zh: "英文区",
   },
+  ai: {
+    zh: "AI",
+  },
   focus: {
     zh: "关注",
   },

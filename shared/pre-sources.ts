@@ -265,6 +265,13 @@ export const originSources = {
     type: "hottest",
     home: "https://www.producthunt.com/",
   },
+  "qbitai": {
+    name: "量子位",
+    color: "purple",
+    column: "ai",
+    home: "https://www.qbitai.com",
+    interval: Time.Common,
+  },
   "github": {
     name: "Github",
     color: "gray",
@@ -310,6 +317,13 @@ export const originSources = {
     // cloudflare pages cannot access
     disable: "cf",
     home: "https://www.kuaishou.com",
+  },
+  "latepost": {
+    name: "晚点LatePost",
+    color: "indigo",
+    column: "china",
+    home: "https://www.latepost.com",
+    interval: Time.Slow,
   },
   "kaopu": {
     name: "靠谱新闻",

@@ -12,6 +12,17 @@ const nitroOption: Parameters<typeof viteNitro>[0] = {
     plugins: [RollopGlob()],
   },
   sourceMap: false,
+  cacheOptions: {
+    swr: 3600,
+  },
+  prerender: {
+    crawlLinks: true,
+  },
+  routeRules: {
+    "/**/*.html": { headers: { "cache-control": "no-cache, no-store, must-revalidate" } },
+    "/**": { isr: 3600 },
+    "/assets/**": { headers: { "cache-control": "public, max-age=31536000, immutable" } },
+  },
   database: {
     default: {
       connector: "better-sqlite3",

@@ -4,7 +4,7 @@ import { VitePWA } from "vite-plugin-pwa"
 
 const pwaOption: Partial<VitePWAOptions> = {
   includeAssets: ["icon.svg", "apple-touch-icon.png"],
-  filename: "swx.js",
+  filename: "swx-v2.js",
   manifest: {
     name: "NewsNow",
     short_name: "NewsNow",
@@ -37,6 +37,16 @@ const pwaOption: Partial<VitePWAOptions> = {
   },
   workbox: {
     navigateFallbackDenylist: [/^\/api/],
+    runtimeCaching: [
+      {
+        urlPattern: /\/assets\/index\.js$/,
+        handler: "NetworkFirst",
+        options: {
+          cacheName: "app-js",
+          expiration: { maxEntries: 1 },
+        },
+      },
+    ],
   },
   devOptions: {
     enabled: process.env.SW_DEV === "true",
