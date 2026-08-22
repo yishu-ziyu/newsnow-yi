@@ -3,7 +3,7 @@ services:
     image: ghcr.io/ourongxing/newsnow:latest
     container_name: newsnow
     ports:
-      - '4444:4444'
+      - '127.0.0.1:4444:4444'
     volumes:
       - newsnow_data:/usr/app/.data
     environment:
@@ -12,7 +12,7 @@ services:
       - NODE_ENV=production
       - G_CLIENT_ID=
       - G_CLIENT_SECRET=
-      - JWT_SECRET=
+      - JWT_SECRET=${JWT_SECRET:-}
       - INIT_TABLE=true
       - ENABLE_CACHE=true
       - PRODUCTHUNT_API_TOKEN=
