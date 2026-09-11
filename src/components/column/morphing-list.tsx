@@ -59,9 +59,12 @@ export function MorphingNewsList({ items, sourceColor }: MorphingNewsListProps) 
       })
     : null
 
-  const c = `color-${sourceColor}`
-  const bgSolid = `bg-${sourceColor}-500`
-  const borderC = `border-${sourceColor}/30`
+  // 身份色只留给细条与图标；卡片本身走中性面，屏上只保留一个 accent（primary）
+  const identityBar = `bg-${sourceColor}-500`
+  const c = "text-neutral-600"
+  const bgSolid = "bg-neutral-900/[0.06] text-neutral-600"
+  const accentSolid = "bg-primary text-white"
+  const borderC = "border-neutral-900/10"
 
   // --- Nav button inside expanded card ---
   const NavBtn = ({ item }: { item: NewsItem }) => {
@@ -119,16 +122,16 @@ export function MorphingNewsList({ items, sourceColor }: MorphingNewsListProps) 
             "cursor-pointer rounded-2xl border shadow-md transition-[box-shadow,border-color] duration-150",
             "backdrop-blur-sm bg-white/70",
             borderC,
-            isTopCard && `hover:shadow-lg hover:border-${sourceColor}/50`,
-            isExpanded && `ring-2 ring-${sourceColor}/50 shadow-lg`,
+            isTopCard && "hover:shadow-lg hover:border-neutral-900/15",
+            isExpanded && "ring-2 ring-primary/40 shadow-lg",
             isStack && "absolute w-full",
           )}
         >
           <div className="p-4">
             <div className="flex items-start gap-3">
               <span className={$(
-                "shrink-0 w-9 h-9 flex items-center justify-center rounded-xl text-base font-black text-white",
-                bgSolid,
+                "flex size-9 shrink-0 items-center justify-center rounded-xl text-base font-black tabular-nums",
+                isExpanded ? accentSolid : bgSolid,
               )}
               >
                 {activeIndex + 1}
@@ -157,11 +160,11 @@ export function MorphingNewsList({ items, sourceColor }: MorphingNewsListProps) 
                   {item.extra?.info && (
                     <span className={$("text-xs font-semibold truncate", c)}>{item.extra.info}</span>
                   )}
-                  {date && <span className="text-xs text-neutral-400"><NewsTime date={date} /></span>}
+                  {date && <span className="text-xs text-neutral-500 tabular-nums"><NewsTime date={date} /></span>}
                 </div>
               </div>
               <div className="shrink-0 flex flex-col items-end gap-1">
-                {diff != null && <DiffBadge diff={diff} color={sourceColor} />}
+                {diff != null && <DiffBadge diff={diff} />}
                 {!isExpanded && (
                   <>
                     <AgentBtn label={item.title} onClick={e => handleAgentClick(e, item)} />
@@ -202,16 +205,16 @@ export function MorphingNewsList({ items, sourceColor }: MorphingNewsListProps) 
             "cursor-pointer rounded-2xl shadow-sm overflow-hidden transition-[box-shadow,border-color] duration-150",
             "backdrop-blur-sm bg-white/70",
             "border border-neutral-200/60",
-            `hover:shadow-md hover:border-${sourceColor}/40`,
-            isExpanded && `ring-2 ring-${sourceColor}/40 shadow-md`,
+            "hover:shadow-md hover:border-neutral-900/15",
+            isExpanded && "ring-2 ring-primary/35 shadow-md",
           )}
         >
-          <div className={$("h-2 w-full", bgSolid)} />
+          <div className={$("h-0.5 w-full rounded-full opacity-70", identityBar)} />
           <div className="p-3.5">
             <div className="flex items-start gap-2.5">
               <span className={$(
                 "shrink-0 w-8 h-8 flex items-center justify-center rounded-lg text-sm font-black text-white",
-                bgSolid,
+                isExpanded ? accentSolid : bgSolid,
               )}
               >
                 {index + 1}
@@ -235,7 +238,7 @@ export function MorphingNewsList({ items, sourceColor }: MorphingNewsListProps) 
                       <AgentBtn label={item.title} onClick={e => handleAgentClick(e, item)} />
                       <SelectBtn item={item} />
                     </div>
-                    {diff != null && <DiffBadge diff={diff} color={sourceColor} />}
+                    {diff != null && <DiffBadge diff={diff} />}
                   </div>
                 )
               : (
@@ -244,7 +247,7 @@ export function MorphingNewsList({ items, sourceColor }: MorphingNewsListProps) 
                       {item.extra?.info && <span className={$("text-xs font-semibold truncate", c)}>{item.extra.info}</span>}
                       {date && <NewsTime date={date} />}
                     </div>
-                    {diff != null && <DiffBadge diff={diff} color={sourceColor} />}
+                    {diff != null && <DiffBadge diff={diff} />}
                   </div>
                 )}
           </div>
@@ -277,16 +280,15 @@ export function MorphingNewsList({ items, sourceColor }: MorphingNewsListProps) 
           onClick={() => toggleExpand(item.id)}
           className={$(
             "cursor-pointer rounded-xl px-3 py-2.5 -mx-1 transition-[background-color,box-shadow,border-color] duration-150",
-            "backdrop-blur-sm bg-white/60",
             "border border-transparent",
-            `hover:bg-white/80 hover:shadow-sm hover:border-${sourceColor}/30`,
-            isExpanded && `bg-white/80 shadow-sm border-${sourceColor}/40`,
+            "hover:bg-white/70 hover:shadow-sm hover:border-neutral-900/10",
+            isExpanded && "bg-white/80 shadow-sm border-primary/30",
           )}
         >
           <div className="flex items-center gap-3">
             <span className={$(
               "shrink-0 w-7 h-7 flex items-center justify-center rounded-lg text-xs font-black text-white",
-              bgSolid,
+              isExpanded ? accentSolid : bgSolid,
             )}
             >
               {index + 1}
@@ -310,7 +312,7 @@ export function MorphingNewsList({ items, sourceColor }: MorphingNewsListProps) 
                       <NavBtn item={item} />
                       <AgentBtn label={item.title} onClick={e => handleAgentClick(e, item)} />
                       <SelectBtn item={item} />
-                      {date && <span className="text-xs text-neutral-400"><NewsTime date={date} /></span>}
+                      {date && <span className="text-xs text-neutral-500 tabular-nums"><NewsTime date={date} /></span>}
                     </div>
                   )
                 : (
@@ -318,12 +320,12 @@ export function MorphingNewsList({ items, sourceColor }: MorphingNewsListProps) 
                       {item.extra?.info && (
                         <span className={$("text-xs truncate", c)}>{item.extra.info}</span>
                       )}
-                      {date && <span className="text-xs text-neutral-400"><NewsTime date={date} /></span>}
+                      {date && <span className="text-xs text-neutral-500 tabular-nums"><NewsTime date={date} /></span>}
                     </div>
                   )}
             </div>
             <div className="shrink-0 flex items-center gap-1.5">
-              {diff != null && <DiffBadge diff={diff} color={sourceColor} />}
+              {diff != null && <DiffBadge diff={diff} />}
               {!isExpanded && (
                 <>
                   <AgentBtn label={item.title} onClick={e => handleAgentClick(e, item)} />
@@ -348,7 +350,7 @@ export function MorphingNewsList({ items, sourceColor }: MorphingNewsListProps) 
             onClick={() => setLayout(mode)}
             className={$(
               "rounded-md px-3 py-1.5 text-xs font-bold transition-colors duration-150",
-              layout === mode ? `${bgSolid} text-white` : "text-neutral-500 hover:text-foreground hover:bg-neutral-400/10",
+              layout === mode ? "bg-neutral-900/80 text-white" : "text-neutral-500 hover:bg-neutral-900/[0.06] hover:text-neutral-700",
             )}
           >
             {mode === "stack" ? "Stack" : mode === "grid" ? "Grid" : "List"}
@@ -384,7 +386,7 @@ export function MorphingNewsList({ items, sourceColor }: MorphingNewsListProps) 
               onClick={() => setActiveIndex(index)}
               className={$(
                 "h-1.5 rounded-full transition-[background-color] duration-150",
-                index === activeIndex ? `w-5 ${bgSolid}` : "w-1.5 bg-neutral-400/25 hover:bg-neutral-400/50",
+                index === activeIndex ? "w-5 bg-primary" : "w-1.5 bg-neutral-400/25 hover:bg-neutral-400/50",
               )}
             />
           ))}
@@ -401,7 +403,7 @@ function NewsTime({ date }: { date: string | number }) {
   return <>{relative}</>
 }
 
-function DiffBadge({ diff, color }: { diff: number, color: string }) {
+function DiffBadge({ diff }: { diff: number }) {
   const [visible, setVisible] = useState(true)
   useEffect(() => {
     setVisible(true)
@@ -418,7 +420,7 @@ function DiffBadge({ diff, color }: { diff: number, color: string }) {
           exit={{ opacity: 0, y: -8, scale: 0.8 }}
           className={$(
             "text-[10px] font-black px-1.5 py-0.5 rounded-md",
-            `bg-${color}-500 text-white`,
+            "bg-primary/15 text-primary",
           )}
         >
           {diff > 0 ? `+${diff}` : diff}
@@ -433,7 +435,7 @@ function AgentBtn({ onClick, label }: { onClick: (e: React.MouseEvent) => void, 
     <button
       type="button"
       aria-label={label ? `问 Agent：${label}` : "问 Agent"}
-      className="i-ph:sparkle-duotone px-1 text-sm text-neutral-400 transition-opacity duration-150 hover:text-neutral-600 dark:hover:text-neutral-300"
+      className="i-ph:sparkle-duotone px-1 text-sm text-neutral-500 transition-opacity duration-150 hover:text-neutral-700"
       title="问 Agent"
       onClick={onClick}
     />
@@ -454,7 +456,7 @@ function SelectBtn({ item }: { item: NewsItem }) {
       title={selected ? "已加入对比" : "加入对比"}
       className={$(selected
         ? "i-ph:check-circle-fill text-primary"
-        : "i-ph:plus-circle text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300", "px-1 text-sm transition-colors duration-150")}
+        : "i-ph:plus-circle text-neutral-500 hover:text-neutral-700", "px-1 text-sm transition-colors duration-150")}
       onClick={(e) => {
         e.preventDefault()
         e.stopPropagation()

@@ -33,10 +33,10 @@ export const CardWrapper = forwardRef<HTMLElement, ItemsProps>(({ id, isDragging
     <div
       ref={ref}
       className={$(
-        "flex flex-col h-500px rounded-2xl p-4 cursor-default",
+        "relative flex flex-col h-500px rounded-2xl p-4 cursor-default",
         "transition-opacity-300",
+        "bg-white/55 border border-neutral-900/10 shadow-[0_1px_2px_rgba(20,16,12,0.05)] backdrop-blur-sm",
         isDragging && "op-50",
-        `bg-${sources[id].color}-500 dark:bg-${sources[id].color} bg-op-60!`,
       )}
       style={{
         transformOrigin: "50% 50%",
@@ -44,6 +44,11 @@ export const CardWrapper = forwardRef<HTMLElement, ItemsProps>(({ id, isDragging
       }}
       {...props}
     >
+      {/* 身份色只剩这一条：卡片归属可辨，画面不再八色齐喊 */}
+      <span
+        aria-hidden="true"
+        className={$("absolute inset-x-4 top-0 h-0.5 rounded-full opacity-80", `bg-${sources[id].color}-500`)}
+      />
       {inView && <NewsCard id={id} setHandleRef={setHandleRef} />}
     </div>
   )
@@ -124,12 +129,12 @@ function NewsCard({ id, setHandleRef }: NewsCardProps) {
               >
                 {sources[id].name}
               </span>
-              {sources[id]?.title && <span className={$("text-sm", `color-${sources[id].color} bg-base op-80 bg-op-50! px-1 rounded`)}>{sources[id].title}</span>}
+              {sources[id]?.title && <span className="rounded bg-neutral-400/10 px-1 text-sm text-neutral-600">{sources[id].title}</span>}
             </span>
             <span className="text-xs op-70"><UpdatedTime isError={isError} updatedTime={data?.updatedTime} /></span>
           </span>
         </div>
-        <div className={$("flex gap-2 text-lg", `color-${sources[id].color}`)}>
+        <div className="flex gap-2 text-lg text-neutral-500">
           <button
             type="button"
             className={$("btn i-ph:arrow-counter-clockwise-duotone", isFetching && "animate-spin i-ph:circle-dashed-duotone")}
@@ -151,23 +156,30 @@ function NewsCard({ id, setHandleRef }: NewsCardProps) {
       </div>
 
       <OverlayScrollbar
-        className={$([
-          "h-full p-2 overflow-y-auto rounded-2xl",
-          isFetching && `animate-pulse`,
-          `sprinkle-${sources[id].color}`,
-        ])}
+        className="h-full overflow-y-auto rounded-2xl p-2"
         options={{
           overflow: { x: "hidden" },
         }}
         defer
       >
-        <div className={$("transition-opacity-500", isFetching && "op-20")}>
+        <div className={$("transition-opacity-300", isFetching && "op-60")}>
           {!!data?.items?.length && (
             <MorphingNewsList
               items={data.items}
               type={sources[id].type === "hottest" ? "hottest" : "realtime"}
               sourceColor={sources[id].color}
             />
+          )}
+          {/* 结构化骨架：不用整卡脉冲 */}
+          {!data?.items?.length && (
+            <div className="flex flex-col gap-2 px-1 pt-6" aria-hidden="true">
+              {[0, 1, 2, 3, 4, 5].map(i => (
+                <div key={i} className="flex items-center gap-3">
+                  <div className="size-7 shrink-0 rounded-lg bg-neutral-900/[0.06]" />
+                  <div className="h-3 rounded-full bg-neutral-900/[0.06]" style={{ width: `${72 - i * 7}%` }} />
+                </div>
+              ))}
+            </div>
           )}
         </div>
       </OverlayScrollbar>
