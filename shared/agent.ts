@@ -182,6 +182,12 @@ export interface ChatRequest {
     url?: string
     content?: string
   }
+  /** Two or more articles turn the turn into a cross-source comparison. */
+  contexts?: Array<{
+    title?: string
+    url?: string
+    content?: string
+  }>
 }
 
 /** One tool call the agent made while answering. */

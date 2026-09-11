@@ -55,15 +55,32 @@ const AGENT_SYSTEM_PROMPT = `你是 NewsNow 的新闻助手，帮用户理解和
 5. 搜到足够条目前就收尾回答，不要无限换源；搜不到时最多换两次关键词。
 6. 用户要“盯一个主题/每天给我简报”时，调 create_tracker 真正建立追踪，不要只口头承诺。`
 
-function buildSystemPrompt(context?: ChatRequest["context"]): string {
+function buildSystemPrompt(context?: ChatRequest["context"], contexts?: ChatRequest["contexts"]): string {
+  const compare = (contexts?.length ?? 0) > 1
+  const compareRule = compare
+    ? "\n\n本次是对比分析：用户选了几条不同来源的报道，请先给出各方说法差异（谁在讲什么、口径差在哪、是否有互相矛盾的时间线或数字），再给一句结论。分点列出，每条标出来源。"
+    : ""
+
+  if (compare) return `${AGENT_SYSTEM_PROMPT}${compareRule}`
   if (!context?.title) return AGENT_SYSTEM_PROMPT
+
   const url = context.url ? `（${context.url}）` : ""
   return `${AGENT_SYSTEM_PROMPT}
 
 当前用户正打开一条新闻：《${context.title}》${url}。优先围绕这条回答。`
 }
 
-function buildPrompt(message: string, context?: ChatRequest["context"]): string {
+function buildPrompt(message: string, context?: ChatRequest["context"], contexts?: ChatRequest["contexts"]): string {
+  if (contexts && contexts.length > 1) {
+    const blocks = contexts.map((item, index) => {
+      const title = item.title ?? `条目 ${index + 1}`
+      const url = item.url ? `\n链接：${item.url}` : ""
+      const body = item.content ? `\n内容摘要：${item.content.slice(0, 1200)}` : ""
+      return `${index + 1}. ${title}${url}${body}`
+    })
+    return `下面是我选中的 ${contexts.length} 条报道：\n\n${blocks.join("\n\n")}\n\n我的问题：${message}`
+  }
+
   if (!context?.content) return message
   return `这条新闻的内容摘要：\n${context.content.slice(0, 3000)}\n\n用户问题：${message}`
 }
@@ -170,7 +187,7 @@ export async function runNewsAgent(
   message: string,
   context?: ChatRequest["context"],
   history?: ChatRequest["history"],
-  options: { userId?: string } = {},
+  options: { userId?: string, contexts?: ChatRequest["contexts"] } = {},
 ): Promise<AgentRunResult> {
   const providers = getLLMProviders()
   if (providers.length === 0) return { ok: false, reason: "没有配置任何 LLM provider" }
@@ -180,14 +197,14 @@ export async function runNewsAgent(
   const tools = options.userId ? createNewsTools({ userId: options.userId }) : newsTools
   const messages = [
     ...turns.map(turn => ({ role: turn.role, content: turn.content })),
-    { role: "user" as const, content: buildPrompt(message, context) },
+    { role: "user" as const, content: buildPrompt(message, context, options.contexts) },
   ]
 
   for (const provider of providers) {
     try {
       const result = await generateText({
         model: toLanguageModel(provider),
-        system: buildSystemPrompt(context),
+        system: buildSystemPrompt(context, options.contexts),
         messages,
         tools,
         stopWhen: stepCountIs(AGENT_MAX_STEPS),

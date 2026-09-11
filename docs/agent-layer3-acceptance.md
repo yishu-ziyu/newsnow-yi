@@ -55,3 +55,5 @@
 - **生产上怎么定时**：`POST /api/agent/trackers/run` + `x-cron-secret: $CRON_SECRET`。Cloudflare Cron Trigger / Vercel Cron / crontab 都能打；进程内调度器只是自托管方便。
 - 新增环境变量：`CRON_SECRET`、`ENABLE_TRACKER_SCHEDULER`、`TRACKER_TICK_MS`（已写进 `example.env.server`）。
 - `sourceCount` 仍是"缓存里读到的源数"；工具实际命中数在 `steps` 里。
+
+> **基线更正（2026-09-11 晚）**：此前两份契约写的「typecheck 13 条 = 基线」是错的——那两次测量受 `shared/sources.json` 生成物漂移影响。用 worktree 在 fork 原始 HEAD `9c1b8871` 上实测：**15 条**（含 `shared/metadata.ts(38)` 的类型错，属原仓库既有）。当前工作树为 **14 条**，即本轮及前两轮都未引入新错误。

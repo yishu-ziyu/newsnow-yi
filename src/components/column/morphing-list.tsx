@@ -2,8 +2,9 @@ import { useCallback, useEffect, useState } from "react"
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion"
 import type { NewsItem } from "@shared/types"
 import { useWindowSize } from "react-use"
-import { useSetAtom } from "jotai"
+import { useAtomValue, useSetAtom } from "jotai"
 import { agentPanelActionsAtom } from "~/atoms/agent-panel"
+import { compareSelectionActionsAtom, compareSelectionAtom, itemKey } from "~/atoms/compare-selection"
 import { useRelativeTime } from "~/hooks/useRelativeTime"
 
 const SWIPE_THRESHOLD = 50
@@ -72,7 +73,7 @@ export function MorphingNewsList({ items, sourceColor }: MorphingNewsListProps) 
         rel="noopener noreferrer"
         className={$(
           "inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-lg",
-          "transition-all hover:opacity-80",
+          "transition-opacity duration-150 hover:opacity-80",
           `${bgSolid} text-white`,
         )}
         title={item.title}
@@ -115,7 +116,7 @@ export function MorphingNewsList({ items, sourceColor }: MorphingNewsListProps) 
         <div
           onClick={() => toggleExpand(item.id)}
           className={$(
-            "cursor-pointer rounded-2xl border shadow-md transition-all",
+            "cursor-pointer rounded-2xl border shadow-md transition-[box-shadow,border-color] duration-150",
             "backdrop-blur-sm bg-white/70",
             borderC,
             isTopCard && `hover:shadow-lg hover:border-${sourceColor}/50`,
@@ -148,7 +149,8 @@ export function MorphingNewsList({ items, sourceColor }: MorphingNewsListProps) 
                 {isExpanded && (
                   <div className="flex items-center gap-2 mt-3">
                     <NavBtn item={item} />
-                    <AgentBtn onClick={e => handleAgentClick(e, item)} />
+                    <AgentBtn label={item.title} onClick={e => handleAgentClick(e, item)} />
+                    <SelectBtn item={item} />
                   </div>
                 )}
                 <div className="flex items-center gap-3 mt-2">
@@ -160,7 +162,12 @@ export function MorphingNewsList({ items, sourceColor }: MorphingNewsListProps) 
               </div>
               <div className="shrink-0 flex flex-col items-end gap-1">
                 {diff != null && <DiffBadge diff={diff} color={sourceColor} />}
-                {!isExpanded && <AgentBtn onClick={e => handleAgentClick(e, item)} />}
+                {!isExpanded && (
+                  <>
+                    <AgentBtn label={item.title} onClick={e => handleAgentClick(e, item)} />
+                    <SelectBtn item={item} />
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -192,7 +199,7 @@ export function MorphingNewsList({ items, sourceColor }: MorphingNewsListProps) 
         <div
           onClick={() => toggleExpand(item.id)}
           className={$(
-            "cursor-pointer rounded-2xl shadow-sm overflow-hidden transition-all",
+            "cursor-pointer rounded-2xl shadow-sm overflow-hidden transition-[box-shadow,border-color] duration-150",
             "backdrop-blur-sm bg-white/70",
             "border border-neutral-200/60",
             `hover:shadow-md hover:border-${sourceColor}/40`,
@@ -225,7 +232,8 @@ export function MorphingNewsList({ items, sourceColor }: MorphingNewsListProps) 
                   <div className="flex items-center justify-between mt-3">
                     <div className="flex items-center gap-2">
                       <NavBtn item={item} />
-                      <AgentBtn onClick={e => handleAgentClick(e, item)} />
+                      <AgentBtn label={item.title} onClick={e => handleAgentClick(e, item)} />
+                      <SelectBtn item={item} />
                     </div>
                     {diff != null && <DiffBadge diff={diff} color={sourceColor} />}
                   </div>
@@ -268,7 +276,7 @@ export function MorphingNewsList({ items, sourceColor }: MorphingNewsListProps) 
         <div
           onClick={() => toggleExpand(item.id)}
           className={$(
-            "cursor-pointer rounded-xl transition-all px-3 py-2.5 -mx-1",
+            "cursor-pointer rounded-xl px-3 py-2.5 -mx-1 transition-[background-color,box-shadow,border-color] duration-150",
             "backdrop-blur-sm bg-white/60",
             "border border-transparent",
             `hover:bg-white/80 hover:shadow-sm hover:border-${sourceColor}/30`,
@@ -300,7 +308,8 @@ export function MorphingNewsList({ items, sourceColor }: MorphingNewsListProps) 
                 ? (
                     <div className="flex items-center gap-2 mt-2">
                       <NavBtn item={item} />
-                      <AgentBtn onClick={e => handleAgentClick(e, item)} />
+                      <AgentBtn label={item.title} onClick={e => handleAgentClick(e, item)} />
+                      <SelectBtn item={item} />
                       {date && <span className="text-xs text-neutral-400"><NewsTime date={date} /></span>}
                     </div>
                   )
@@ -315,7 +324,12 @@ export function MorphingNewsList({ items, sourceColor }: MorphingNewsListProps) 
             </div>
             <div className="shrink-0 flex items-center gap-1.5">
               {diff != null && <DiffBadge diff={diff} color={sourceColor} />}
-              {!isExpanded && <AgentBtn onClick={e => handleAgentClick(e, item)} />}
+              {!isExpanded && (
+                <>
+                  <AgentBtn label={item.title} onClick={e => handleAgentClick(e, item)} />
+                  <SelectBtn item={item} />
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -333,7 +347,7 @@ export function MorphingNewsList({ items, sourceColor }: MorphingNewsListProps) 
             key={mode}
             onClick={() => setLayout(mode)}
             className={$(
-              "rounded-md px-3 py-1.5 text-xs font-bold transition-all",
+              "rounded-md px-3 py-1.5 text-xs font-bold transition-colors duration-150",
               layout === mode ? `${bgSolid} text-white` : "text-neutral-500 hover:text-foreground hover:bg-neutral-400/10",
             )}
           >
@@ -369,7 +383,7 @@ export function MorphingNewsList({ items, sourceColor }: MorphingNewsListProps) 
               key={item.id}
               onClick={() => setActiveIndex(index)}
               className={$(
-                "h-1.5 rounded-full transition-all",
+                "h-1.5 rounded-full transition-[background-color] duration-150",
                 index === activeIndex ? `w-5 ${bgSolid}` : "w-1.5 bg-neutral-400/25 hover:bg-neutral-400/50",
               )}
             />
@@ -414,13 +428,38 @@ function DiffBadge({ diff, color }: { diff: number, color: string }) {
   )
 }
 
-function AgentBtn({ onClick }: { onClick: (e: React.MouseEvent) => void }) {
+function AgentBtn({ onClick, label }: { onClick: (e: React.MouseEvent) => void, label?: string }) {
   return (
     <button
       type="button"
-      className="i-ph:sparkle-duotone text-sm text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 transition-opacity px-1"
-      title="Ask Agent"
+      aria-label={label ? `问 Agent：${label}` : "问 Agent"}
+      className="i-ph:sparkle-duotone px-1 text-sm text-neutral-400 transition-opacity duration-150 hover:text-neutral-600 dark:hover:text-neutral-300"
+      title="问 Agent"
       onClick={onClick}
+    />
+  )
+}
+
+/** Adds or removes one item from the compare selection (Layer 3b). */
+function SelectBtn({ item }: { item: NewsItem }) {
+  const selection = useAtomValue(compareSelectionAtom)
+  const dispatch = useSetAtom(compareSelectionActionsAtom)
+  const selected = selection.some(i => itemKey(i) === itemKey(item))
+
+  return (
+    <button
+      type="button"
+      aria-label={selected ? `取消对比：${item.title}` : `加入对比：${item.title}`}
+      aria-pressed={selected}
+      title={selected ? "已加入对比" : "加入对比"}
+      className={$(selected
+        ? "i-ph:check-circle-fill text-primary"
+        : "i-ph:plus-circle text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300", "px-1 text-sm transition-colors duration-150")}
+      onClick={(e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        dispatch({ type: "toggle", item })
+      }}
     />
   )
 }

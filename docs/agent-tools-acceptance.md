@@ -42,3 +42,5 @@
 
 - **MCP 端点在 dev 下返回 406**：dev 的请求对象不带 header（实测 `event.node.req.headers.accept === undefined`），transport 的头校验过不去。生产环境（真实 node/CF 请求）不受影响。未修，需另开一次。
 - `reddit-ai-monitor` 返回 0 条；`zaobao` 上游超时——都是源本身的问题，工具会如实报出而不是假装没有。
+
+> **基线更正（2026-09-11 晚）**：此前两份契约写的「typecheck 13 条 = 基线」是错的——那两次测量受 `shared/sources.json` 生成物漂移影响。用 worktree 在 fork 原始 HEAD `9c1b8871` 上实测：**15 条**（含 `shared/metadata.ts(38)` 的类型错，属原仓库既有）。当前工作树为 **14 条**，即本轮及前两轮都未引入新错误。

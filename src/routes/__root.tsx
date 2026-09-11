@@ -11,6 +11,7 @@ import { Footer } from "~/components/footer"
 import { Toast } from "~/components/common/toast"
 import { SearchBar } from "~/components/common/search-bar"
 import { AgentPanel } from "~/components/common/agent-panel"
+import { CompareBar } from "~/components/common/compare-bar"
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient
@@ -68,6 +69,7 @@ function RootComponent() {
       <Toast />
       <SearchBar />
       <AgentPanel />
+      <CompareBar />
       {import.meta.env.DEV && (
         <>
           <ReactQueryDevtools buttonPosition="bottom-left" />

@@ -29,6 +29,9 @@ export interface AgentPanelState {
   messages: ChatMessage[]
   loading: boolean
   activeItem: NewsItem | null
+  /** Items selected for a cross-source comparison (2+). */
+  activeItems: NewsItem[]
+  view: "chat" | "trackers"
 }
 
 const initialState: AgentPanelState = {
@@ -36,6 +39,8 @@ const initialState: AgentPanelState = {
   messages: [],
   loading: false,
   activeItem: null,
+  activeItems: [],
+  view: "chat",
 }
 
 export const agentPanelAtom = atom<AgentPanelState>(initialState)
@@ -43,8 +48,10 @@ export const agentPanelAtom = atom<AgentPanelState>(initialState)
 // Action types
 type Action =
   | { type: "open", item: NewsItem }
+  | { type: "open_compare", items: NewsItem[] }
   | { type: "open_chat" }
   | { type: "close" }
+  | { type: "set_view", view: AgentPanelState["view"] }
   | { type: "set_messages", messages: ChatMessage[] }
   | { type: "add_user", content: string, context?: ChatMessage["context"] }
   | { type: "add_assistant", content: string, meta?: AssistantMeta }
@@ -57,10 +64,17 @@ export const agentPanelActionsAtom = atom(null, (get, set, action: Action) => {
 
   switch (action.type) {
     case "open":
-      set(agentPanelAtom, { ...state, open: true, activeItem: action.item, messages: [] })
+      set(agentPanelAtom, { ...state, open: true, activeItem: action.item, activeItems: [], messages: [] })
+      break
+    case "open_compare":
+      if (action.items.length < 2) return
+      set(agentPanelAtom, { ...state, open: true, activeItem: null, activeItems: action.items, view: "chat" })
       break
     case "open_chat":
-      set(agentPanelAtom, { ...state, open: true, activeItem: null })
+      set(agentPanelAtom, { ...state, open: true, activeItem: null, activeItems: [] })
+      break
+    case "set_view":
+      set(agentPanelAtom, { ...state, view: action.view })
       break
     case "close":
       set(agentPanelAtom, { ...state, open: false })
@@ -104,6 +118,10 @@ export const agentPanelActionsAtom = atom(null, (get, set, action: Action) => {
 // Convenience action creators
 export function openAgentPanel(item: NewsItem): Action {
   return { type: "open", item }
+}
+
+export function openComparePanel(items: NewsItem[]): Action {
+  return { type: "open_compare", items }
 }
 
 export function openAgentChat(): Action {
