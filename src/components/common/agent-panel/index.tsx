@@ -8,6 +8,7 @@ import { agentPanelActionsAtom, agentPanelAtom } from "~/atoms/agent-panel"
 import { itemKey } from "~/atoms/compare-selection"
 import { loadAgentHistory, saveAgentHistory } from "~/hooks/useAgentHistory"
 import { type TrackersState, loadTrackers, removeTracker } from "~/hooks/useTrackers"
+import { MarkdownLite } from "~/components/common/markdown-lite"
 
 const PANEL_EASE = [0.23, 1, 0.32, 1] as const
 const COMPARE_PROMPT = "对比这几条报道：各来源的说法差异在哪？谁讲了什么、口径差在哪、有没有相互矛盾的数字或时间线？"
@@ -66,7 +67,7 @@ function ChatMessageBubble({ message }: ChatMessageBubbleProps) {
             : "bg-neutral-400/10 text-neutral-800 dark:text-neutral-200",
       )}
       >
-        {message.content}
+        {isUser ? message.content : <MarkdownLite text={message.content} />}
       </div>
       {!!message.steps?.length && (
         <div className="flex flex-col gap-0.5 text-xs text-neutral-400/80 px-2 max-w-[85%]">

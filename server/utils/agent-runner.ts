@@ -58,7 +58,7 @@ const AGENT_SYSTEM_PROMPT = `你是 NewsNow 的新闻助手，帮用户理解和
 function buildSystemPrompt(context?: ChatRequest["context"], contexts?: ChatRequest["contexts"]): string {
   const compare = (contexts?.length ?? 0) > 1
   const compareRule = compare
-    ? "\n\n本次是对比分析：用户选了几条不同来源的报道，请先给出各方说法差异（谁在讲什么、口径差在哪、是否有互相矛盾的时间线或数字），再给一句结论。分点列出，每条标出来源。"
+    ? "\n\n本次是对比分析：用户选了几条不同来源的报道。先给一句结论，再用 markdown 表格逐维度对比（表头固定为「维度 | 来源 | 说法」），最后列出矛盾点或信息缺口。表格里只用给定来源的名字。"
     : ""
 
   if (compare) return `${AGENT_SYSTEM_PROMPT}${compareRule}`
