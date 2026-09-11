@@ -3,7 +3,8 @@ import { runNewsAgent } from "#/utils/agent-runner"
 
 export default defineEventHandler<{ body: ChatRequest, response: ChatResponse }>(async (event) => {
   const body = await readBody(event)
-  const { message, context } = body
+  const { message, context, history } = body
+  const user = event.context.user as { id?: string } | undefined
 
   if (!message || typeof message !== "string" || message.trim().length === 0) {
     throw createError({
@@ -12,7 +13,7 @@ export default defineEventHandler<{ body: ChatRequest, response: ChatResponse }>
     })
   }
 
-  const result = await runNewsAgent(message.trim(), context)
+  const result = await runNewsAgent(message.trim(), context, history, { userId: user?.id })
 
   if (result.ok) {
     return {

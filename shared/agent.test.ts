@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
-import { anthropicMessagesBaseUrl, trimAgentHistory } from "@shared/agent"
+import { anthropicMessagesBaseUrl, trimAgentHistory, trimHistoryForPrompt } from "@shared/agent"
+import { TRACKER_DEFAULT_INTERVAL_MS, TRACKER_MIN_INTERVAL_MS, clampInterval } from "@shared/tracker"
 
 // getLLMProviders, getLLMConfig, callLLM are auto-injected via unimport from shared/ dir
 
@@ -254,5 +255,51 @@ describe("trimAgentHistory", () => {
     expect(trimAgentHistory(undefined)).toEqual([])
     expect(trimAgentHistory("nope")).toEqual([])
     expect(trimAgentHistory([{ role: "system", content: "x" }, null, { role: "user" }])).toEqual([])
+  })
+})
+
+describe("trimHistoryForPrompt", () => {
+  const turn = (role: string, content: string, extra: Record<string, unknown> = {}) => ({ role, content, ...extra })
+
+  it("keeps the newest turns up to the limit", () => {
+    const many = Array.from({ length: 12 }, (_, i) => turn(i % 2 ? "assistant" : "user", `t${i}`))
+    const trimmed = trimHistoryForPrompt(many)
+    expect(trimmed).toHaveLength(8)
+    expect(trimmed.at(-1)!.content).toBe("t11")
+  })
+
+  it("drops placeholder answers so they do not poison the context", () => {
+    const trimmed = trimHistoryForPrompt([
+      turn("user", "问"),
+      turn("assistant", "本地占位", { mock: true }),
+      turn("user", "[mock] 旧格式占位"),
+      turn("assistant", "真回答"),
+    ])
+    expect(trimmed.map(t => t.content)).toEqual(["问", "真回答"])
+  })
+
+  it("caps each turn", () => {
+    expect(trimHistoryForPrompt([turn("assistant", "y".repeat(3000))])[0].content).toHaveLength(1500)
+  })
+
+  it("ignores junk", () => {
+    expect(trimHistoryForPrompt(undefined)).toEqual([])
+    expect(trimHistoryForPrompt([{ role: "system", content: "x" }, null])).toEqual([])
+  })
+})
+
+describe("clampInterval", () => {
+  it("defaults to a day", () => {
+    expect(clampInterval(undefined)).toBe(TRACKER_DEFAULT_INTERVAL_MS)
+  })
+  it("refuses intervals faster than a minute", () => {
+    expect(clampInterval(1000)).toBe(TRACKER_MIN_INTERVAL_MS)
+    expect(clampInterval(-5)).toBe(TRACKER_MIN_INTERVAL_MS)
+  })
+  it("keeps sane values", () => {
+    expect(clampInterval(3600000)).toBe(3600000)
+  })
+  it("falls back on junk", () => {
+    expect(clampInterval(Number.NaN)).toBe(TRACKER_DEFAULT_INTERVAL_MS)
   })
 })

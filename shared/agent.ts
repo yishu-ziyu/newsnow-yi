@@ -168,8 +168,15 @@ export async function callLLM(
 
 // --- Existing types ---
 
+export interface ChatTurn {
+  role: "user" | "assistant"
+  content: string
+}
+
 export interface ChatRequest {
   message: string
+  /** Earlier turns, oldest first. The server only keeps the newest few. */
+  history?: ChatTurn[]
   context?: {
     title?: string
     url?: string
@@ -219,6 +226,25 @@ export interface AgentChatMessage {
 
 const HISTORY_LIMIT = 40
 const HISTORY_CONTENT_LIMIT = 4000
+const PROMPT_HISTORY_LIMIT = 8
+const PROMPT_TURN_LIMIT = 1500
+
+/**
+ * Pick the turns that go back to the model: newest few, no placeholder
+ * answers, each turn capped so a long reply cannot blow up the prompt.
+ */
+export function trimHistoryForPrompt(history: unknown, limit = PROMPT_HISTORY_LIMIT): ChatTurn[] {
+  if (!Array.isArray(history)) return []
+
+  return history
+    .filter((turn): turn is Record<string, any> => !!turn && typeof turn === "object" && (turn.role === "user" || turn.role === "assistant") && typeof turn.content === "string")
+    .filter(turn => turn.mock !== true && !turn.content.startsWith("[mock]"))
+    .slice(-limit)
+    .map(turn => ({
+      role: turn.role as ChatTurn["role"],
+      content: turn.content.slice(0, PROMPT_TURN_LIMIT),
+    }))
+}
 
 /**
  * Bound what we write to the database: keep the newest messages, cut runaway

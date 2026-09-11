@@ -1,8 +1,8 @@
 import { generateText, stepCountIs } from "ai"
 import { createAnthropic } from "@ai-sdk/anthropic"
 import { createOpenAICompatible } from "@ai-sdk/openai-compatible"
-import { type AgentStep, type ChatRequest, type LLMProvider, anthropicMessagesBaseUrl, getLLMProviders } from "@shared/agent"
-import { newsTools } from "#/utils/news-tools"
+import { type AgentStep, type ChatRequest, type LLMProvider, anthropicMessagesBaseUrl, getLLMProviders, trimHistoryForPrompt } from "@shared/agent"
+import { createNewsTools, newsTools } from "#/utils/news-tools"
 
 /** Hard cap on tool rounds per request (acceptance: never spin). */
 export const AGENT_MAX_STEPS = 6
@@ -52,7 +52,8 @@ const AGENT_SYSTEM_PROMPT = `你是 NewsNow 的新闻助手，帮用户理解和
 2. 引用条目时给出标题和来源；绝不编造条目、链接或数字。
 3. 先给结论，再列证据；中文回答，简洁。用纯文本，不要 markdown 强调符号（**、##）——面板按纯文本渲染；分点就用短横线开头。
 4. 工具没查到就直说没查到，并提出可换的关键词。
-5. 搜到足够条目前就收尾回答，不要无限换源；搜不到时最多换两次关键词。`
+5. 搜到足够条目前就收尾回答，不要无限换源；搜不到时最多换两次关键词。
+6. 用户要“盯一个主题/每天给我简报”时，调 create_tracker 真正建立追踪，不要只口头承诺。`
 
 function buildSystemPrompt(context?: ChatRequest["context"]): string {
   if (!context?.title) return AGENT_SYSTEM_PROMPT
@@ -168,19 +169,27 @@ export async function runBriefing(options: {
 export async function runNewsAgent(
   message: string,
   context?: ChatRequest["context"],
+  history?: ChatRequest["history"],
+  options: { userId?: string } = {},
 ): Promise<AgentRunResult> {
   const providers = getLLMProviders()
   if (providers.length === 0) return { ok: false, reason: "没有配置任何 LLM provider" }
 
   const failures: string[] = []
+  const turns = trimHistoryForPrompt(history)
+  const tools = options.userId ? createNewsTools({ userId: options.userId }) : newsTools
+  const messages = [
+    ...turns.map(turn => ({ role: turn.role, content: turn.content })),
+    { role: "user" as const, content: buildPrompt(message, context) },
+  ]
 
   for (const provider of providers) {
     try {
       const result = await generateText({
         model: toLanguageModel(provider),
         system: buildSystemPrompt(context),
-        prompt: buildPrompt(message, context),
-        tools: newsTools,
+        messages,
+        tools,
         stopWhen: stepCountIs(AGENT_MAX_STEPS),
         maxOutputTokens: MAX_OUTPUT_TOKENS,
       })

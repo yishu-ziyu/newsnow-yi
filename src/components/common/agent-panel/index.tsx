@@ -163,6 +163,11 @@ export function AgentPanel() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           message: content,
+          // 带上最近几轮，模型才能接住「刚才那条」这种指代
+          history: state.messages
+            .filter(m => !m.mock)
+            .slice(-8)
+            .map(m => ({ role: m.role, content: m.content })),
           context: activeItem
             ? {
                 title: activeItem.title,
@@ -189,7 +194,7 @@ export function AgentPanel() {
     } finally {
       dispatch({ type: "set_loading", loading: false })
     }
-  }, [dispatch, state.activeItem])
+  }, [dispatch, state.activeItem, state.messages])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()

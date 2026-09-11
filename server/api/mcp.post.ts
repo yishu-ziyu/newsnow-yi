@@ -3,6 +3,13 @@ import { getServer } from "#/mcp/server"
 
 export default defineEventHandler(async (event) => {
   const req = event.node.req
+
+  // The dev proxy chain strips `accept` (other headers arrive intact) and the
+  // MCP transport refuses requests without it. This endpoint only speaks MCP,
+  // so default the header when it is missing.
+  if (!req.headers.accept) {
+    req.headers.accept = "application/json, text/event-stream"
+  }
   const res = event.node.res
   const server = getServer()
   try {
