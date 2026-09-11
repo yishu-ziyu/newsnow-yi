@@ -1,4 +1,6 @@
-import { type BriefingRequest, type BriefingResponse, callLLM, getLLMProviders } from "@shared/agent"
+import process from "node:process"
+import { type BriefingRequest, type BriefingResponse, getLLMProviders } from "@shared/agent"
+import { runBriefing } from "#/utils/agent-runner"
 import type { CacheInfo } from "#/types"
 
 export default defineEventHandler<{ body: BriefingRequest, response: BriefingResponse }>(async (event) => {
@@ -6,7 +8,6 @@ export default defineEventHandler<{ body: BriefingRequest, response: BriefingRes
   const days = body.days || 1
   const topic = body.topic
 
-  // eslint-disable-next-line node/prefer-global/process
   if (process.env.ENABLE_CACHE === "false") {
     throw createError({
       statusCode: 503,
@@ -47,64 +48,49 @@ export default defineEventHandler<{ body: BriefingRequest, response: BriefingRes
       model: "mock",
       mock: true,
       sourceCount: 0,
+      degradedReason: "缓存里没有条目",
     }
   }
 
-  const providers = getLLMProviders()
-
-  if (providers.length === 0) {
-    const titles = cacheItems
-      .flatMap(c => c.items)
-      .map(item => item.title)
-      .filter(Boolean)
-      .slice(0, 30)
-      .join("\n")
-
-    return {
-      summary: `[mock] 发现 ${totalItems} 条新闻，来自 ${cacheItems.length} 个来源。${topic ? `主题：${topic}。` : ""}前几条标题：\n${titles.slice(0, 500)}\n\n设置 NEWSNOW_LLM_API_KEY 环境变量可启用 AI 简报。`,
-      model: "mock",
-      mock: true,
-      sourceCount: cacheItems.length,
-    }
-  }
-
-  const sourcesText = cacheItems
-    .map(c => `## ${c.id}\n${c.items.map(i => `- ${i.title}`).join("\n")}`)
-    .join("\n\n")
-
-  const topicHint = topic ? `聚焦主题：${topic}。` : ""
-  const systemPrompt = `你是一个新闻简报助手。${topicHint}请基于提供的新闻标题列表，生成一份简洁的中文简报。格式：按主题分组，每组 2-3 条，每条一句话摘要。控制在 300 字以内。`
-  const userText = `以下是过去 ${days} 天的新闻标题列表：\n\n${sourcesText.slice(0, 8000)}`
-  const userContent = [{ type: "text", text: userText }]
-
-  for (const provider of providers) {
-    try {
-      const summary = await callLLM(provider, systemPrompt, userContent)
-      console.log(`[agent/briefing] provider=${provider.name} model=${provider.model} ok`)
-      return {
-        summary,
-        model: provider.model,
-        mock: false,
-        sourceCount: cacheItems.length,
-      }
-    } catch (e) {
-      console.error(`[agent/briefing] provider=${provider.name} failed:`, e)
-      continue
-    }
-  }
-
-  // All providers failed
-  const titles = cacheItems
+  const firstTitles = cacheItems
     .flatMap(c => c.items)
     .map(item => item.title)
     .filter(Boolean)
     .slice(0, 30)
     .join("\n")
 
+  if (getLLMProviders().length === 0) {
+    return {
+      summary: `[mock] 发现 ${totalItems} 条新闻，来自 ${cacheItems.length} 个来源。${topic ? `主题：${topic}。` : ""}前几条标题：\n${firstTitles.slice(0, 500)}\n\n配置模型后可生成简报。`,
+      model: "mock",
+      mock: true,
+      sourceCount: cacheItems.length,
+      degradedReason: "没有配置任何 LLM provider",
+    }
+  }
+
+  const run = await runBriefing({
+    days,
+    topic,
+    seeds: cacheItems.map(c => ({ id: String(c.id), titles: c.items.map(i => i.title).filter(Boolean) })),
+  })
+
+  if (run.ok) {
+    return {
+      summary: run.summary,
+      model: run.model,
+      provider: run.provider,
+      mock: false,
+      sourceCount: run.sourceCount,
+      steps: run.steps,
+    }
+  }
+
   return {
-    summary: `[fallback] ${totalItems} 条新闻，${cacheItems.length} 个来源。LLM 调用失败。前几条：\n${titles.slice(0, 500)}`,
-    model: providers[0]?.model || "unknown",
+    summary: `[fallback] ${totalItems} 条新闻，${cacheItems.length} 个来源。简报生成失败。前几条：\n${firstTitles.slice(0, 500)}`,
+    model: "mock",
     mock: true,
     sourceCount: cacheItems.length,
+    degradedReason: run.reason,
   }
 })

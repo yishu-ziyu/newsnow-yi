@@ -202,9 +202,67 @@ export interface BriefingRequest {
   days?: number
 }
 
+/** Message shape we persist for the agent panel (client adds its own id). */
+export interface AgentChatMessage {
+  role: "user" | "assistant"
+  content: string
+  timestamp: number
+  context?: {
+    title?: string
+    url?: string
+  }
+  mock?: boolean
+  steps?: AgentStep[]
+  provider?: string
+  model?: string
+}
+
+const HISTORY_LIMIT = 40
+const HISTORY_CONTENT_LIMIT = 4000
+
+/**
+ * Bound what we write to the database: keep the newest messages, cut runaway
+ * content, drop client-only fields. Pure so it can be unit tested.
+ */
+export function trimAgentHistory(messages: unknown, limit = HISTORY_LIMIT): AgentChatMessage[] {
+  if (!Array.isArray(messages)) return []
+
+  return messages
+    .filter((m): m is Record<string, any> => !!m && typeof m === "object" && (m.role === "user" || m.role === "assistant") && typeof m.content === "string")
+    .slice(-limit)
+    .map(m => ({
+      role: m.role,
+      content: m.content.slice(0, HISTORY_CONTENT_LIMIT),
+      timestamp: typeof m.timestamp === "number" ? m.timestamp : Date.now(),
+      ...(m.context?.title || m.context?.url
+        ? { context: { title: m.context?.title, url: m.context?.url } }
+        : {}),
+      ...(m.role === "assistant"
+        ? {
+            ...(m.mock ? { mock: true } : {}),
+            ...(Array.isArray(m.steps) && m.steps.length ? { steps: m.steps } : {}),
+            ...(m.provider ? { provider: m.provider } : {}),
+            ...(m.model ? { model: m.model } : {}),
+          }
+        : {}),
+    }))
+}
+
+export interface AgentHistoryResponse {
+  messages: AgentChatMessage[]
+  updatedTime: number
+  /** false when nobody is logged in (dev without login config). */
+  persisted: boolean
+}
+
 export interface BriefingResponse {
   summary: string
   model: string
   mock: boolean
   sourceCount: number
+  provider?: string
+  /** Tool calls the briefing made while gathering material. */
+  steps?: AgentStep[]
+  /** Why the summary is a placeholder, when mock is true. */
+  degradedReason?: string
 }

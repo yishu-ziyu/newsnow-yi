@@ -1,7 +1,9 @@
 import { useAtom, useSetAtom } from "jotai"
 import { useCallback, useEffect, useRef } from "react"
+import { useDebounce } from "react-use"
 import { clsx } from "clsx"
 import { agentPanelActionsAtom, agentPanelAtom } from "~/atoms/agent-panel"
+import { loadAgentHistory, saveAgentHistory } from "~/hooks/useAgentHistory"
 
 function formatTime(ts: number) {
   const d = new Date(ts)
@@ -122,6 +124,25 @@ export function AgentPanel() {
     window.addEventListener("keydown", handler)
     return () => window.removeEventListener("keydown", handler)
   }, [state.open, dispatch])
+
+  // Hydrate the stored conversation the first time the panel has nothing to show
+  useEffect(() => {
+    if (!state.open || state.messages.length > 0) return
+    let cancelled = false
+    loadAgentHistory().then((messages) => {
+      if (!cancelled && messages.length > 0) {
+        dispatch({ type: "set_messages", messages })
+      }
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [state.open, state.messages.length, dispatch])
+
+  // Persist after the reply settles (no-op without a login)
+  useDebounce(() => {
+    if (state.messages.length > 0) saveAgentHistory(state.messages)
+  }, 800, [state.messages])
 
   // Send message to backend
   const sendMessage = useCallback(async (content: string) => {

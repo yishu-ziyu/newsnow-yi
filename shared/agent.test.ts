@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
-import { anthropicMessagesBaseUrl } from "@shared/agent"
+import { anthropicMessagesBaseUrl, trimAgentHistory } from "@shared/agent"
 
 // getLLMProviders, getLLMConfig, callLLM are auto-injected via unimport from shared/ dir
 
@@ -216,5 +216,43 @@ describe("anthropicMessagesBaseUrl", () => {
 
   it("leaves a plain OpenAI-shaped host alone", () => {
     expect(anthropicMessagesBaseUrl("https://api.anthropic.com")).toBe("https://api.anthropic.com/v1")
+  })
+})
+
+describe("trimAgentHistory", () => {
+  const msg = (role: string, content: string, extra: Record<string, unknown> = {}) => ({ role, content, timestamp: 1, ...extra })
+
+  it("keeps only the newest messages up to the limit", () => {
+    const many = Array.from({ length: 50 }, (_, i) => msg("user", `m${i}`))
+    const trimmed = trimAgentHistory(many)
+    expect(trimmed).toHaveLength(40)
+    expect(trimmed.at(-1)!.content).toBe("m49")
+  })
+
+  it("drops client-only ids and article bodies but keeps the title", () => {
+    const trimmed = trimAgentHistory([msg("user", "hi", { id: "abc", context: { title: "标题", url: "https://a/1", content: "很长的正文" } })])
+    expect(trimmed[0]).not.toHaveProperty("id")
+    expect(trimmed[0].context).toEqual({ title: "标题", url: "https://a/1" })
+  })
+
+  it("keeps mock flag and steps on assistant messages only", () => {
+    const trimmed = trimAgentHistory([
+      msg("assistant", "答案", { mock: true, steps: [{ tool: "search_news", ok: true }], provider: "minimax", model: "MiniMax-M3" }),
+      msg("user", "问题", { mock: true }),
+    ])
+    expect(trimmed[0]).toMatchObject({ mock: true, provider: "minimax", model: "MiniMax-M3" })
+    expect(trimmed[0].steps).toHaveLength(1)
+    expect(trimmed[1]).not.toHaveProperty("mock")
+  })
+
+  it("cuts runaway content", () => {
+    const trimmed = trimAgentHistory([msg("assistant", "x".repeat(9000))])
+    expect(trimmed[0].content).toHaveLength(4000)
+  })
+
+  it("ignores junk input", () => {
+    expect(trimAgentHistory(undefined)).toEqual([])
+    expect(trimAgentHistory("nope")).toEqual([])
+    expect(trimAgentHistory([{ role: "system", content: "x" }, null, { role: "user" }])).toEqual([])
   })
 })

@@ -9,7 +9,8 @@ export default defineEventHandler(async (event) => {
     if (["/api/s", "/api/proxy", "/api/latest", "/api/mcp", "/api/agent"].every(p => !url.pathname.startsWith(p)))
       throw createError({ statusCode: 506, message: "Server not configured, disable login" })
   } else {
-    if (["/api/s", "/api/me"].find(p => url.pathname.startsWith(p))) {
+    // /api/agent also needs the user context: the panel history is stored per user
+    if (["/api/s", "/api/me", "/api/agent"].find(p => url.pathname.startsWith(p))) {
       const token = getHeader(event, "Authorization")?.replace(/Bearer\s*/, "")?.trim()
       if (token) {
         try {

@@ -87,6 +87,83 @@ function collectSteps(steps: readonly any[]): AgentStep[] {
   return collected
 }
 
+export interface BriefingSeed {
+  id: string
+  titles: string[]
+}
+
+export interface BriefingRunSuccess {
+  ok: true
+  summary: string
+  model: string
+  provider: string
+  sourceCount: number
+  steps: AgentStep[]
+}
+
+export interface BriefingRunFailure {
+  ok: false
+  reason: string
+}
+
+const BRIEFING_SYSTEM_PROMPT = `你是新闻简报助手。用户会给你过去若干天抓到的标题，按来源分组。
+
+规则：
+1. 先基于这些标题写简报；若某主题的条目太少或没有，用 search_news 工具去取更多（可限定 column）。工具调用合计控制在 4 次以内，搜不到就如实说没搜到。
+2. 纯文本输出，不要 markdown 强调符号（**、##），分点用短横线开头。
+3. 按主题分组，每组 2-3 条，每条一句话，句末标出来源。
+4. 总共 400 字以内；不要编造条目或链接。`
+
+/** Briefing generator that can reach the same news tools as the chat panel. */
+export async function runBriefing(options: {
+  days: number
+  topic?: string
+  seeds: BriefingSeed[]
+}): Promise<BriefingRunSuccess | BriefingRunFailure> {
+  const { days, topic, seeds } = options
+  const providers = getLLMProviders()
+  if (providers.length === 0) return { ok: false, reason: "没有配置任何 LLM provider" }
+
+  const totalTitles = seeds.reduce((sum, seed) => sum + seed.titles.length, 0)
+  const seedText = seeds
+    .map(seed => `## ${seed.id}\n${seed.titles.slice(0, 40).map(title => `- ${title}`).join("\n")}`)
+    .join("\n\n")
+  const prompt = `过去 ${days} 天抓到 ${totalTitles} 条标题，来自 ${seeds.length} 个来源。${topic ? `聚焦主题：${topic}。` : ""}\n\n${seedText.slice(0, 8000)}`
+
+  const failures: string[] = []
+
+  for (const provider of providers) {
+    try {
+      const result = await generateText({
+        model: toLanguageModel(provider),
+        system: BRIEFING_SYSTEM_PROMPT,
+        prompt,
+        tools: newsTools,
+        stopWhen: stepCountIs(AGENT_MAX_STEPS),
+        maxOutputTokens: MAX_OUTPUT_TOKENS,
+      })
+
+      const steps = collectSteps(result.steps)
+      console.log(`[agent/briefing] provider=${provider.name} model=${provider.model} steps=${steps.length}`)
+
+      return {
+        ok: true,
+        summary: result.text?.trim() || "（工具跑完了，但模型没有给出简报）",
+        model: provider.model,
+        provider: provider.name,
+        sourceCount: seeds.length,
+        steps,
+      }
+    } catch (e) {
+      const detail = e instanceof Error ? e.message : String(e)
+      failures.push(`${provider.name}: ${detail.slice(0, 160)}`)
+      console.error(`[agent/briefing] provider=${provider.name} failed:`, detail)
+    }
+  }
+
+  return { ok: false, reason: failures.join(" | ") }
+}
+
 /** Try each configured provider in order; the first one that answers wins. */
 export async function runNewsAgent(
   message: string,
