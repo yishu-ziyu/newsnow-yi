@@ -1,0 +1,129 @@
+import { generateText, stepCountIs } from "ai"
+import { createAnthropic } from "@ai-sdk/anthropic"
+import { createOpenAICompatible } from "@ai-sdk/openai-compatible"
+import { type AgentStep, type ChatRequest, type LLMProvider, anthropicMessagesBaseUrl, getLLMProviders } from "@shared/agent"
+import { newsTools } from "#/utils/news-tools"
+
+/** Hard cap on tool rounds per request (acceptance: never spin). */
+export const AGENT_MAX_STEPS = 6
+const MAX_OUTPUT_TOKENS = 1500
+
+export interface AgentRunSuccess {
+  ok: true
+  reply: string
+  model: string
+  provider: string
+  steps: AgentStep[]
+}
+
+export interface AgentRunFailure {
+  ok: false
+  reason: string
+}
+
+export type AgentRunResult = AgentRunSuccess | AgentRunFailure
+
+/** Map a configured provider onto an AI SDK model instance. */
+function toLanguageModel(provider: LLMProvider) {
+  if (provider.protocol === "anthropic") {
+    const anthropic = createAnthropic({
+      apiKey: provider.apiKey,
+      baseURL: anthropicMessagesBaseUrl(provider.baseUrl),
+    })
+    return anthropic(provider.model)
+  }
+  const compatible = createOpenAICompatible({
+    name: provider.name,
+    apiKey: provider.apiKey,
+    baseURL: provider.baseUrl,
+  })
+  return compatible(provider.model)
+}
+
+const AGENT_SYSTEM_PROMPT = `你是 NewsNow 的新闻助手，帮用户理解和梳理当前抓到的资讯。
+
+你可以调用这些工具：
+- list_sources：看有哪些源（可按栏目）
+- get_source_items：取某个源当前的条目
+- search_news：按关键词跨源搜索
+
+规则：
+1. 问题涉及"今天/最近/现在"时，先调工具查，不要凭记忆回答。
+2. 引用条目时给出标题和来源；绝不编造条目、链接或数字。
+3. 先给结论，再列证据；中文回答，简洁。用纯文本，不要 markdown 强调符号（**、##）——面板按纯文本渲染；分点就用短横线开头。
+4. 工具没查到就直说没查到，并提出可换的关键词。
+5. 搜到足够条目前就收尾回答，不要无限换源；搜不到时最多换两次关键词。`
+
+function buildSystemPrompt(context?: ChatRequest["context"]): string {
+  if (!context?.title) return AGENT_SYSTEM_PROMPT
+  const url = context.url ? `（${context.url}）` : ""
+  return `${AGENT_SYSTEM_PROMPT}
+
+当前用户正打开一条新闻：《${context.title}》${url}。优先围绕这条回答。`
+}
+
+function buildPrompt(message: string, context?: ChatRequest["context"]): string {
+  if (!context?.content) return message
+  return `这条新闻的内容摘要：\n${context.content.slice(0, 3000)}\n\n用户问题：${message}`
+}
+
+/** Flatten AI SDK steps into the shape the panel renders. */
+function collectSteps(steps: readonly any[]): AgentStep[] {
+  const collected: AgentStep[] = []
+  const byCallId = new Map<string, AgentStep>()
+
+  for (const step of steps ?? []) {
+    for (const call of step?.toolCalls ?? []) {
+      const entry: AgentStep = { tool: call.toolName, input: call.input, ok: true }
+      byCallId.set(call.toolCallId, entry)
+      collected.push(entry)
+    }
+    for (const result of step?.toolResults ?? []) {
+      const entry = byCallId.get(result.toolCallId)
+      if (entry) entry.summary = String(result.output ?? "").split("\n")[0].slice(0, 90)
+    }
+  }
+
+  return collected
+}
+
+/** Try each configured provider in order; the first one that answers wins. */
+export async function runNewsAgent(
+  message: string,
+  context?: ChatRequest["context"],
+): Promise<AgentRunResult> {
+  const providers = getLLMProviders()
+  if (providers.length === 0) return { ok: false, reason: "没有配置任何 LLM provider" }
+
+  const failures: string[] = []
+
+  for (const provider of providers) {
+    try {
+      const result = await generateText({
+        model: toLanguageModel(provider),
+        system: buildSystemPrompt(context),
+        prompt: buildPrompt(message, context),
+        tools: newsTools,
+        stopWhen: stepCountIs(AGENT_MAX_STEPS),
+        maxOutputTokens: MAX_OUTPUT_TOKENS,
+      })
+
+      const steps = collectSteps(result.steps)
+      console.log(`[agent/run] provider=${provider.name} model=${provider.model} steps=${steps.length}`)
+
+      return {
+        ok: true,
+        reply: result.text?.trim() || "（工具跑完了，但模型没有给出回复）",
+        model: provider.model,
+        provider: provider.name,
+        steps,
+      }
+    } catch (e) {
+      const detail = e instanceof Error ? e.message : String(e)
+      failures.push(`${provider.name}: ${detail.slice(0, 160)}`)
+      console.error(`[agent/run] provider=${provider.name} failed:`, detail)
+    }
+  }
+
+  return { ok: false, reason: failures.join(" | ") }
+}

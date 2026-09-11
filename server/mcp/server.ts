@@ -3,6 +3,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
 import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js"
 import packageJSON from "../../package.json"
 import { description } from "./desc.js"
+import { fetchSourceItems } from "#/utils/news-tools"
 
 export function getServer() {
   const server = new McpServer(
@@ -26,9 +27,10 @@ export function getServer() {
         n = 10
       }
 
-      const res: SourceResponse = await $fetch(`/api/s?id=${id}`)
+      // 走进程内取数：相对 $fetch 在 dev 下会落到 /api/api/... 而失败
+      const items = await fetchSourceItems(id)
       return {
-        content: res.items.slice(0, count).map((item) => {
+        content: items.slice(0, count).map((item) => {
           return {
             text: `[${item.title}](${item.url})`,
             type: "text",

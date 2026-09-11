@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
+import { anthropicMessagesBaseUrl } from "@shared/agent"
 
 // getLLMProviders, getLLMConfig, callLLM are auto-injected via unimport from shared/ dir
 
@@ -201,5 +202,19 @@ describe("callLLM", () => {
       userContent,
     )
     expect(reply).toBe("（无回复）")
+  })
+})
+
+describe("anthropicMessagesBaseUrl", () => {
+  it("appends /v1 for gateways that only expose the bare path", () => {
+    expect(anthropicMessagesBaseUrl("https://api.minimaxi.com/anthropic")).toBe("https://api.minimaxi.com/anthropic/v1")
+  })
+
+  it("keeps an explicit /v1 and ignores trailing slashes", () => {
+    expect(anthropicMessagesBaseUrl("https://api.minimaxi.com/anthropic/v1/")).toBe("https://api.minimaxi.com/anthropic/v1")
+  })
+
+  it("leaves a plain OpenAI-shaped host alone", () => {
+    expect(anthropicMessagesBaseUrl("https://api.anthropic.com")).toBe("https://api.anthropic.com/v1")
   })
 })

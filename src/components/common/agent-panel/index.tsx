@@ -12,6 +12,14 @@ interface ChatMessageBubbleProps {
   message: import("~/atoms/agent-panel").ChatMessage
 }
 
+export function describeStepInput(input: unknown): string {
+  if (!input || typeof input !== "object") return ""
+  const entries = Object.entries(input as Record<string, unknown>)
+    .filter(([, value]) => value !== undefined && value !== null && value !== "")
+    .map(([key, value]) => `${key}=${String(value)}`)
+  return entries.join(" ")
+}
+
 function ChatMessageBubble({ message }: ChatMessageBubbleProps) {
   const isUser = message.role === "user"
   return (
@@ -21,17 +29,52 @@ function ChatMessageBubble({ message }: ChatMessageBubbleProps) {
           {message.context.title}
         </div>
       )}
+      {message.mock && (
+        <div
+          className="text-xs px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-400 max-w-[85%]"
+          title={message.degradedReason}
+        >
+          模拟回复 · 未接模型
+        </div>
+      )}
       <div className={clsx(
         "max-w-[85%] px-3 py-2 rounded-2xl text-sm leading-relaxed",
         isUser
           ? "bg-primary/20 text-primary dark:bg-primary/30"
-          : "bg-neutral-400/10 text-neutral-800 dark:text-neutral-200",
+          : message.mock
+            ? "bg-amber-500/5 border border-dashed border-amber-500/40 text-neutral-600 dark:text-neutral-300"
+            : "bg-neutral-400/10 text-neutral-800 dark:text-neutral-200",
       )}
       >
         {message.content}
       </div>
+      {!!message.steps?.length && (
+        <div className="flex flex-col gap-0.5 text-xs text-neutral-400/80 px-2 max-w-[85%]">
+          <span className="opacity-60">
+            调了
+            {message.steps.length}
+            {" "}
+            次工具
+          </span>
+          {message.steps.map((step, index) => (
+            <span key={`${step.tool}-${index}`} className="truncate">
+              {step.tool}
+              {describeStepInput(step.input) && ` · ${describeStepInput(step.input)}`}
+            </span>
+          ))}
+        </div>
+      )}
       <span className="text-xs text-neutral-400/50 px-2">
         {formatTime(message.timestamp)}
+        {message.provider && message.model && (
+          <span className="ml-2 opacity-70">
+            {message.provider}
+            {" "}
+            ·
+            {" "}
+            {message.model}
+          </span>
+        )}
         {message.context?.url && (
           <a
             href={message.context.url}
@@ -109,7 +152,17 @@ export function AgentPanel() {
         }),
       })
       const data = await response.json()
-      dispatch({ type: "add_assistant", content: data.reply || "（无回复）" })
+      dispatch({
+        type: "add_assistant",
+        content: data.reply || "（无回复）",
+        meta: {
+          mock: data.mock === true,
+          steps: Array.isArray(data.steps) ? data.steps : [],
+          provider: data.provider,
+          model: data.model,
+          degradedReason: data.degradedReason,
+        },
+      })
     } catch {
       dispatch({ type: "add_assistant", content: "抱歉，请求失败了。请稍后再试。" })
     } finally {

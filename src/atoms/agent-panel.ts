@@ -1,4 +1,5 @@
 import { atom } from "jotai"
+import type { AgentStep } from "@shared/agent"
 import type { NewsItem } from "@shared/types"
 
 export interface ChatMessage {
@@ -11,7 +12,17 @@ export interface ChatMessage {
     url?: string
     content?: string
   }
+  /** True when the backend answered with the local placeholder instead of a model. */
+  mock?: boolean
+  /** Tool calls the agent made for this reply. */
+  steps?: AgentStep[]
+  provider?: string
+  model?: string
+  degradedReason?: string
 }
+
+/** Extra fields the backend returns alongside a reply. */
+export type AssistantMeta = Pick<ChatMessage, "mock" | "steps" | "provider" | "model" | "degradedReason">
 
 export interface AgentPanelState {
   open: boolean
@@ -36,7 +47,7 @@ type Action =
   | { type: "close" }
   | { type: "set_messages", messages: ChatMessage[] }
   | { type: "add_user", content: string, context?: ChatMessage["context"] }
-  | { type: "add_assistant", content: string }
+  | { type: "add_assistant", content: string, meta?: AssistantMeta }
   | { type: "set_loading", loading: boolean }
   | { type: "clear" }
 
@@ -77,6 +88,7 @@ export const agentPanelActionsAtom = atom(null, (get, set, action: Action) => {
           role: "assistant",
           content: action.content,
           timestamp: Date.now(),
+          ...action.meta,
         }],
       })
       break
@@ -110,8 +122,8 @@ export function addUserMessage(content: string, context?: ChatMessage["context"]
   return { type: "add_user", content, context }
 }
 
-export function addAssistantMessage(content: string): Action {
-  return { type: "add_assistant", content }
+export function addAssistantMessage(content: string, meta?: AssistantMeta): Action {
+  return { type: "add_assistant", content, meta }
 }
 
 export function setAgentLoading(loading: boolean): Action {

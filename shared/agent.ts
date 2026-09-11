@@ -97,6 +97,16 @@ export function getLLMProviders(): LLMProvider[] {
   return providers
 }
 
+/**
+ * The AI SDK appends `/messages` to the base URL, while the Anthropic-compatible
+ * gateways we talk to (MiniMax) live under `/anthropic/v1`. Hand-rolled
+ * callLLM() appends the whole `/v1/messages` itself, so it keeps the raw URL.
+ */
+export function anthropicMessagesBaseUrl(url: string): string {
+  const trimmed = url.replace(/\/+$/, "")
+  return trimmed.endsWith("/v1") ? trimmed : `${trimmed}/v1`
+}
+
 export function getLLMConfig(): LLMConfig {
   const providers = getLLMProviders()
   return { providers, enabled: providers.length > 0 }
@@ -167,11 +177,24 @@ export interface ChatRequest {
   }
 }
 
+/** One tool call the agent made while answering. */
+export interface AgentStep {
+  tool: string
+  input?: unknown
+  ok: boolean
+  /** First line of the tool result, for the panel. */
+  summary?: string
+}
+
 export interface ChatResponse {
   reply: string
   model: string
   mock: boolean
   provider?: string
+  /** Tool calls made for this reply (empty for a plain answer). */
+  steps?: AgentStep[]
+  /** Why the reply is a mock, when mock is true. */
+  degradedReason?: string
 }
 
 export interface BriefingRequest {

@@ -1,43 +1,49 @@
 import process from 'node:process';globalThis._importMeta_={url:import.meta.url,env:process.env};import { tmpdir } from 'node:os';
-import destr from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/destr@2.0.5/node_modules/destr/dist/index.mjs';
-import { defineEventHandler, handleCacheHeaders, splitCookiesString, createEvent, fetchWithEvent, isEvent, eventHandler, setHeaders, getHeader, appendResponseHeader, sendRedirect, proxyRequest, getRequestURL, getRequestHeader, getResponseHeader, getRequestHeaders, setResponseHeaders, setResponseStatus, send, createError, createApp, createRouter as createRouter$1, toNodeListener, lazyEventHandler, getRouterParam, readBody, getQuery as getQuery$1 } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/h3@1.15.3/node_modules/h3/dist/index.mjs';
-import { createHooks } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/hookable@5.5.3/node_modules/hookable/dist/index.mjs';
-import { createFetch, Headers as Headers$1, $fetch as $fetch$1 } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/ofetch@1.4.1/node_modules/ofetch/dist/node.mjs';
-import { fetchNodeRequestHandler, callNodeRequestHandler } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/node-mock-http@1.0.2/node_modules/node-mock-http/dist/index.mjs';
-import { parseURL, withoutBase, joinURL, getQuery, withQuery } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/ufo@1.6.1/node_modules/ufo/dist/index.mjs';
-import { createStorage, prefixStorage } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/unstorage@1.16.0_db0@0.3.2_@libsql+client@0.15.4_better-sqlite3@11.10.0_mysql2@3.14.3__ioredis@5.6.1/node_modules/unstorage/dist/index.mjs';
-import unstorage_47drivers_47fs from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/unstorage@1.16.0_db0@0.3.2_@libsql+client@0.15.4_better-sqlite3@11.10.0_mysql2@3.14.3__ioredis@5.6.1/node_modules/unstorage/drivers/fs.mjs';
-import { digest } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/ohash@2.0.11/node_modules/ohash/dist/index.mjs';
-import { klona } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/klona@2.0.6/node_modules/klona/dist/index.mjs';
-import defu, { defuFn } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/defu@6.1.4/node_modules/defu/dist/defu.mjs';
-import { snakeCase } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/scule@1.3.0/node_modules/scule/dist/index.mjs';
-import { getContext } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/unctx@2.4.1/node_modules/unctx/dist/index.mjs';
-import { toRouteMatcher, createRouter } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/radix3@1.1.2/node_modules/radix3/dist/index.mjs';
+import destr from 'file:///Users/mahaoxuan/Desktop/newsnow-yi/node_modules/.pnpm/destr@2.0.5/node_modules/destr/dist/index.mjs';
+import { defineEventHandler, handleCacheHeaders, splitCookiesString, createEvent, fetchWithEvent, isEvent, eventHandler, setHeaders, getHeader, appendResponseHeader, sendRedirect, proxyRequest, getRequestURL, getRequestHeader, getResponseHeader, getRequestHeaders, setResponseHeaders, setResponseStatus, send, createApp, createRouter as createRouter$1, toNodeListener, lazyEventHandler, createError as createError$1, getRouterParam, readBody, getQuery as getQuery$1 } from 'file:///Users/mahaoxuan/Desktop/newsnow-yi/node_modules/.pnpm/h3@1.15.11/node_modules/h3/dist/index.mjs';
+import { createHooks } from 'file:///Users/mahaoxuan/Desktop/newsnow-yi/node_modules/.pnpm/hookable@5.5.3/node_modules/hookable/dist/index.mjs';
+import { createFetch, Headers as Headers$1 } from 'file:///Users/mahaoxuan/Desktop/newsnow-yi/node_modules/.pnpm/ofetch@1.5.1/node_modules/ofetch/dist/node.mjs';
+import { fetchNodeRequestHandler, callNodeRequestHandler } from 'file:///Users/mahaoxuan/Desktop/newsnow-yi/node_modules/.pnpm/node-mock-http@1.0.5/node_modules/node-mock-http/dist/index.mjs';
+import { parseURL, withoutBase, joinURL, getQuery, withQuery } from 'file:///Users/mahaoxuan/Desktop/newsnow-yi/node_modules/.pnpm/ufo@1.6.4/node_modules/ufo/dist/index.mjs';
+import { createStorage, prefixStorage } from 'file:///Users/mahaoxuan/Desktop/newsnow-yi/node_modules/.pnpm/unstorage@1.17.5_@netlify+blobs@9.1.2_db0@0.3.2_@libsql+client@0.15.4_better-sqlite3@11_15b74207e1fcb7bb18df9c9d4bcf7d72/node_modules/unstorage/dist/index.mjs';
+import unstorage_47drivers_47fs from 'file:///Users/mahaoxuan/Desktop/newsnow-yi/node_modules/.pnpm/unstorage@1.17.5_@netlify+blobs@9.1.2_db0@0.3.2_@libsql+client@0.15.4_better-sqlite3@11_15b74207e1fcb7bb18df9c9d4bcf7d72/node_modules/unstorage/drivers/fs.mjs';
+import { digest } from 'file:///Users/mahaoxuan/Desktop/newsnow-yi/node_modules/.pnpm/ohash@2.0.12/node_modules/ohash/dist/index.mjs';
+import { klona } from 'file:///Users/mahaoxuan/Desktop/newsnow-yi/node_modules/.pnpm/klona@2.0.6/node_modules/klona/dist/index.mjs';
+import { defuFn } from 'file:///Users/mahaoxuan/Desktop/newsnow-yi/node_modules/.pnpm/defu@6.1.4/node_modules/defu/dist/defu.mjs';
+import { snakeCase } from 'file:///Users/mahaoxuan/Desktop/newsnow-yi/node_modules/.pnpm/scule@1.3.0/node_modules/scule/dist/index.mjs';
+import { getContext } from 'file:///Users/mahaoxuan/Desktop/newsnow-yi/node_modules/.pnpm/unctx@2.5.0/node_modules/unctx/dist/index.mjs';
+import defu from 'file:///Users/mahaoxuan/Desktop/newsnow-yi/node_modules/.pnpm/defu@6.1.7/node_modules/defu/dist/defu.mjs';
+import { toRouteMatcher, createRouter } from 'file:///Users/mahaoxuan/Desktop/newsnow-yi/node_modules/.pnpm/radix3@1.1.2/node_modules/radix3/dist/index.mjs';
 import { readFile } from 'node:fs/promises';
 import { resolve, dirname, join } from 'node:path';
-import consola, { createConsola } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/consola@3.4.2/node_modules/consola/dist/index.mjs';
-import { ErrorParser } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/youch-core@0.3.2/node_modules/youch-core/build/index.js';
-import { Youch } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/youch@4.1.0-beta.7/node_modules/youch/build/index.js';
-import { SourceMapConsumer } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/source-map@0.7.4/node_modules/source-map/source-map.js';
+import consola, { createConsola } from 'file:///Users/mahaoxuan/Desktop/newsnow-yi/node_modules/.pnpm/consola@3.4.2/node_modules/consola/dist/index.mjs';
+import { ErrorParser } from 'file:///Users/mahaoxuan/Desktop/newsnow-yi/node_modules/.pnpm/youch-core@0.3.3/node_modules/youch-core/build/index.js';
+import { Youch } from 'file:///Users/mahaoxuan/Desktop/newsnow-yi/node_modules/.pnpm/youch@4.1.1/node_modules/youch/build/index.js';
+import { SourceMapConsumer } from 'file:///Users/mahaoxuan/Desktop/newsnow-yi/node_modules/.pnpm/source-map@0.7.6/node_modules/source-map/source-map.js';
+import { defineEventHandler as defineEventHandler$1, getRequestURL as getRequestURL$1, createError, getHeader as getHeader$1, readBody as readBody$1, sendRedirect as sendRedirect$1, getQuery as getQuery$2 } from 'file:///Users/mahaoxuan/Desktop/newsnow-yi/node_modules/.pnpm/h3@1.15.3/node_modules/h3/dist/index.mjs';
 import process$1 from 'node:process';
-import { jwtVerify, SignJWT } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/jose@6.0.11/node_modules/jose/dist/webapi/index.js';
+import { jwtVerify, SignJWT } from 'file:///Users/mahaoxuan/Desktop/newsnow-yi/node_modules/.pnpm/jose@6.0.11/node_modules/jose/dist/webapi/index.js';
 import { Server } from 'node:http';
 import nodeCrypto from 'node:crypto';
 import { parentPort, threadId } from 'node:worker_threads';
-import { StreamableHTTPServerTransport } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/@modelcontextprotocol+sdk@1.11.1/node_modules/@modelcontextprotocol/sdk/dist/esm/server/streamableHttp.js';
-import z$1, { z } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/zod@3.24.4/node_modules/zod/lib/index.mjs';
-import { McpServer } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/@modelcontextprotocol+sdk@1.11.1/node_modules/@modelcontextprotocol/sdk/dist/esm/server/mcp.js';
-import { XMLParser } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/fast-xml-parser@5.2.2/node_modules/fast-xml-parser/src/fxp.js';
-import * as cheerio from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/cheerio@1.0.0/node_modules/cheerio/dist/esm/index.js';
-import { load } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/cheerio@1.0.0/node_modules/cheerio/dist/esm/index.js';
-import _md5 from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/md5@2.3.0/node_modules/md5/md5.js';
-import { subtle as subtle$1 } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/uncrypto@0.1.3/node_modules/uncrypto/dist/crypto.node.mjs';
+import { tool, generateText, stepCountIs } from 'file:///Users/mahaoxuan/Desktop/newsnow-yi/node_modules/.pnpm/ai@7.0.97_zod@3.25.76/node_modules/ai/dist/index.js';
+import { createAnthropic } from 'file:///Users/mahaoxuan/Desktop/newsnow-yi/node_modules/.pnpm/@ai-sdk+anthropic@4.0.52_zod@3.25.76/node_modules/@ai-sdk/anthropic/dist/index.js';
+import { createOpenAICompatible } from 'file:///Users/mahaoxuan/Desktop/newsnow-yi/node_modules/.pnpm/@ai-sdk+openai-compatible@3.0.47_zod@3.25.76/node_modules/@ai-sdk/openai-compatible/dist/index.js';
+import { StreamableHTTPServerTransport } from 'file:///Users/mahaoxuan/Desktop/newsnow-yi/node_modules/.pnpm/@modelcontextprotocol+sdk@1.11.1/node_modules/@modelcontextprotocol/sdk/dist/esm/server/streamableHttp.js';
+import z$1, { z } from 'file:///Users/mahaoxuan/Desktop/newsnow-yi/node_modules/.pnpm/zod@3.25.76/node_modules/zod/index.js';
+import { McpServer } from 'file:///Users/mahaoxuan/Desktop/newsnow-yi/node_modules/.pnpm/@modelcontextprotocol+sdk@1.11.1/node_modules/@modelcontextprotocol/sdk/dist/esm/server/mcp.js';
+import { $fetch as $fetch$1 } from 'file:///Users/mahaoxuan/Desktop/newsnow-yi/node_modules/.pnpm/ofetch@1.4.1/node_modules/ofetch/dist/node.mjs';
+import { XMLParser } from 'file:///Users/mahaoxuan/Desktop/newsnow-yi/node_modules/.pnpm/fast-xml-parser@5.2.2/node_modules/fast-xml-parser/src/fxp.js';
+import * as cheerio from 'file:///Users/mahaoxuan/Desktop/newsnow-yi/node_modules/.pnpm/cheerio@1.0.0/node_modules/cheerio/dist/esm/index.js';
+import { load } from 'file:///Users/mahaoxuan/Desktop/newsnow-yi/node_modules/.pnpm/cheerio@1.0.0/node_modules/cheerio/dist/esm/index.js';
+import _md5 from 'file:///Users/mahaoxuan/Desktop/newsnow-yi/node_modules/.pnpm/md5@2.3.0/node_modules/md5/md5.js';
+import { subtle as subtle$1 } from 'file:///Users/mahaoxuan/Desktop/newsnow-yi/node_modules/.pnpm/uncrypto@0.1.3/node_modules/uncrypto/dist/crypto.node.mjs';
 import { Buffer as Buffer$1 } from 'node:buffer';
-import iconv from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/iconv-lite@0.6.3/node_modules/iconv-lite/lib/index.js';
-import { createDatabase } from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/db0@0.3.2_@libsql+client@0.15.4_better-sqlite3@11.10.0_mysql2@3.14.3/node_modules/db0/dist/index.mjs';
-import betterSqlite3Connector from 'file:///Users/mahaoxuan/Developer/newsnow-yi/node_modules/.pnpm/db0@0.3.2_@libsql+client@0.15.4_better-sqlite3@11.10.0_mysql2@3.14.3/node_modules/db0/dist/connectors/better-sqlite3.mjs';
+import iconv from 'file:///Users/mahaoxuan/Desktop/newsnow-yi/node_modules/.pnpm/iconv-lite@0.6.3/node_modules/iconv-lite/lib/index.js';
+import { createDatabase } from 'file:///Users/mahaoxuan/Desktop/newsnow-yi/node_modules/.pnpm/db0@0.3.2_@libsql+client@0.15.4_better-sqlite3@11.10.0_mysql2@3.14.3/node_modules/db0/dist/index.mjs';
+import betterSqlite3Connector from 'file:///Users/mahaoxuan/Desktop/newsnow-yi/node_modules/.pnpm/db0@0.3.2_@libsql+client@0.15.4_better-sqlite3@11.10.0_mysql2@3.14.3/node_modules/db0/dist/connectors/better-sqlite3.mjs';
 
-const serverAssets = [{"baseName":"server","dir":"/Users/mahaoxuan/Developer/newsnow-yi/server/assets"}];
+const serverAssets = [{"baseName":"server","dir":"/Users/mahaoxuan/Desktop/newsnow-yi/server/assets"}];
 
 const assets = createStorage();
 
@@ -49,11 +55,11 @@ const storage = createStorage({});
 
 storage.mount('/assets', assets);
 
-storage.mount('root', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"/Users/mahaoxuan/Developer/newsnow-yi"}));
-storage.mount('src', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"/Users/mahaoxuan/Developer/newsnow-yi/server"}));
-storage.mount('build', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"/Users/mahaoxuan/Developer/newsnow-yi/dist/.nitro"}));
-storage.mount('cache', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"/Users/mahaoxuan/Developer/newsnow-yi/dist/.nitro/cache"}));
-storage.mount('data', unstorage_47drivers_47fs({"driver":"fs","base":"/Users/mahaoxuan/Developer/newsnow-yi/.data/kv"}));
+storage.mount('root', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"/Users/mahaoxuan/Desktop/newsnow-yi"}));
+storage.mount('src', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"/Users/mahaoxuan/Desktop/newsnow-yi/server"}));
+storage.mount('build', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"/Users/mahaoxuan/Desktop/newsnow-yi/dist/.nitro"}));
+storage.mount('cache', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"/Users/mahaoxuan/Desktop/newsnow-yi/dist/.nitro/cache"}));
+storage.mount('data', unstorage_47drivers_47fs({"driver":"fs","base":"/Users/mahaoxuan/Desktop/newsnow-yi/.data/kv"}));
 
 function useStorage(base = "") {
   return base ? prefixStorage(storage, base) : storage;
@@ -954,9 +960,9 @@ const logger = createConsola({
   }
 });
 
-const _Sx6avg = defineEventHandler(async (event) => {
+const _5qlM4G = defineEventHandler$1(async (event) => {
   var _a, _b;
-  const url = getRequestURL(event);
+  const url = getRequestURL$1(event);
   if (!url.pathname.startsWith("/api")) return;
   if (["JWT_SECRET", "G_CLIENT_ID", "G_CLIENT_SECRET"].find((k) => !process$1.env[k])) {
     event.context.disabledLogin = true;
@@ -964,7 +970,7 @@ const _Sx6avg = defineEventHandler(async (event) => {
       throw createError({ statusCode: 506, message: "Server not configured, disable login" });
   } else {
     if (["/api/s", "/api/me"].find((p) => url.pathname.startsWith(p))) {
-      const token = (_b = (_a = getHeader(event, "Authorization")) == null ? void 0 : _a.replace(/Bearer\s*/, "")) == null ? void 0 : _b.trim();
+      const token = (_b = (_a = getHeader$1(event, "Authorization")) == null ? void 0 : _a.replace(/Bearer\s*/, "")) == null ? void 0 : _b.trim();
       if (token) {
         try {
           const { payload } = await jwtVerify(token, new TextEncoder().encode(process$1.env.JWT_SECRET));
@@ -986,31 +992,31 @@ const _Sx6avg = defineEventHandler(async (event) => {
   }
 });
 
-const _lazy_oweoGP = () => Promise.resolve().then(function () { return briefing_post$1; });
-const _lazy_djC89L = () => Promise.resolve().then(function () { return chat_post$1; });
-const _lazy_pkbqAK = () => Promise.resolve().then(function () { return enableLogin$1; });
-const _lazy_kPjrBz = () => Promise.resolve().then(function () { return latest$3; });
-const _lazy_gRVbSl = () => Promise.resolve().then(function () { return login$1; });
-const _lazy_HAo9Ty = () => Promise.resolve().then(function () { return mcp_post$1; });
-const _lazy_9OYYfo = () => Promise.resolve().then(function () { return index$7; });
-const _lazy_iteSca = () => Promise.resolve().then(function () { return sync$1; });
-const _lazy_6D0Nux = () => Promise.resolve().then(function () { return github$3; });
-const _lazy_A3DO29 = () => Promise.resolve().then(function () { return entire_post$1; });
-const _lazy_DORtJ5 = () => Promise.resolve().then(function () { return index$1; });
+const _lazy_STEhfU = () => Promise.resolve().then(function () { return briefing_post$1; });
+const _lazy_wKBFzj = () => Promise.resolve().then(function () { return chat_post$1; });
+const _lazy_aNrmVt = () => Promise.resolve().then(function () { return enableLogin$1; });
+const _lazy_oPkPDz = () => Promise.resolve().then(function () { return latest$1; });
+const _lazy_o2fiOR = () => Promise.resolve().then(function () { return login$1; });
+const _lazy_VTphhs = () => Promise.resolve().then(function () { return mcp_post$1; });
+const _lazy_fXDJfY = () => Promise.resolve().then(function () { return index$3; });
+const _lazy_xD0A92 = () => Promise.resolve().then(function () { return sync$1; });
+const _lazy_Vji5sB = () => Promise.resolve().then(function () { return github$1; });
+const _lazy_J2Hk3P = () => Promise.resolve().then(function () { return entire_post$1; });
+const _lazy_XiXaCT = () => Promise.resolve().then(function () { return index$1; });
 
 const handlers = [
-  { route: '', handler: _Sx6avg, lazy: false, middleware: true, method: undefined },
-  { route: '/api/agent/briefing', handler: _lazy_oweoGP, lazy: true, middleware: false, method: "post" },
-  { route: '/api/agent/chat', handler: _lazy_djC89L, lazy: true, middleware: false, method: "post" },
-  { route: '/api/enable-login', handler: _lazy_pkbqAK, lazy: true, middleware: false, method: undefined },
-  { route: '/api/latest', handler: _lazy_kPjrBz, lazy: true, middleware: false, method: undefined },
-  { route: '/api/login', handler: _lazy_gRVbSl, lazy: true, middleware: false, method: undefined },
-  { route: '/api/mcp', handler: _lazy_HAo9Ty, lazy: true, middleware: false, method: "post" },
-  { route: '/api/me', handler: _lazy_9OYYfo, lazy: true, middleware: false, method: undefined },
-  { route: '/api/me/sync', handler: _lazy_iteSca, lazy: true, middleware: false, method: undefined },
-  { route: '/api/oauth/github', handler: _lazy_6D0Nux, lazy: true, middleware: false, method: undefined },
-  { route: '/api/s/entire', handler: _lazy_A3DO29, lazy: true, middleware: false, method: "post" },
-  { route: '/api/s', handler: _lazy_DORtJ5, lazy: true, middleware: false, method: undefined }
+  { route: '', handler: _5qlM4G, lazy: false, middleware: true, method: undefined },
+  { route: '/api/agent/briefing', handler: _lazy_STEhfU, lazy: true, middleware: false, method: "post" },
+  { route: '/api/agent/chat', handler: _lazy_wKBFzj, lazy: true, middleware: false, method: "post" },
+  { route: '/api/enable-login', handler: _lazy_aNrmVt, lazy: true, middleware: false, method: undefined },
+  { route: '/api/latest', handler: _lazy_oPkPDz, lazy: true, middleware: false, method: undefined },
+  { route: '/api/login', handler: _lazy_o2fiOR, lazy: true, middleware: false, method: undefined },
+  { route: '/api/mcp', handler: _lazy_VTphhs, lazy: true, middleware: false, method: "post" },
+  { route: '/api/me', handler: _lazy_fXDJfY, lazy: true, middleware: false, method: undefined },
+  { route: '/api/me/sync', handler: _lazy_xD0A92, lazy: true, middleware: false, method: undefined },
+  { route: '/api/oauth/github', handler: _lazy_Vji5sB, lazy: true, middleware: false, method: undefined },
+  { route: '/api/s/entire', handler: _lazy_J2Hk3P, lazy: true, middleware: false, method: "post" },
+  { route: '/api/s', handler: _lazy_XiXaCT, lazy: true, middleware: false, method: undefined }
 ];
 
 function createNitroApp() {
@@ -1166,13 +1172,13 @@ async function runTask(name, {
     return __runningTasks__[name];
   }
   if (!(name in tasks)) {
-    throw createError({
+    throw createError$1({
       message: `Task \`${name}\` is not available!`,
       statusCode: 404
     });
   }
   if (!tasks[name].resolve) {
-    throw createError({
+    throw createError$1({
       message: `Task \`${name}\` is not implemented!`,
       statusCode: 501
     });
@@ -1357,6 +1363,10 @@ function getLLMProviders() {
   });
   return providers;
 }
+function anthropicMessagesBaseUrl(url) {
+  const trimmed = url.replace(/\/+$/, "");
+  return trimmed.endsWith("/v1") ? trimmed : `${trimmed}/v1`;
+}
 async function callLLM(provider, systemPrompt, userContent) {
   var _a, _b, _c, _d, _e;
   if (provider.protocol === "anthropic") {
@@ -1385,7 +1395,7 @@ async function callLLM(provider, systemPrompt, userContent) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${provider.apiKey}`
+      "Authorization": `Bearer ${provider.apiKey}`
     },
     body: JSON.stringify({
       model: provider.model,
@@ -1404,9 +1414,9 @@ async function callLLM(provider, systemPrompt, userContent) {
   return ((_e = (_d = (_c = data.choices) == null ? void 0 : _c[0]) == null ? void 0 : _d.message) == null ? void 0 : _e.content) || "\uFF08\u65E0\u56DE\u590D\uFF09";
 }
 
-const briefing_post = defineEventHandler(async (event) => {
+const briefing_post = defineEventHandler$1(async (event) => {
   var _a, _b, _c;
-  const body = await readBody(event);
+  const body = await readBody$1(event);
   const days = body.days || 1;
   const topic = body.topic;
   if (process.env.ENABLE_CACHE === "false") {
@@ -1490,111 +1500,6 @@ ${titles.slice(0, 500)}`,
 const briefing_post$1 = /*#__PURE__*/Object.freeze({
   __proto__: null,
   default: briefing_post
-});
-
-const chat_post = defineEventHandler(async (event) => {
-  const body = await readBody(event);
-  const { message, context } = body;
-  if (!message || typeof message !== "string" || message.trim().length === 0) {
-    throw createError({
-      statusCode: 400,
-      message: "message is required"
-    });
-  }
-  const providers = getLLMProviders();
-  if (providers.length === 0) {
-    return mockChatReply(message, context);
-  }
-  const systemPrompt = buildSystemPrompt(context);
-  const userContent = buildUserContent(message, context);
-  for (const provider of providers) {
-    try {
-      const reply = await callLLM(provider, systemPrompt, userContent);
-      console.log(`[agent/chat] provider=${provider.name} model=${provider.model} ok`);
-      return {
-        reply,
-        model: provider.model,
-        mock: false,
-        provider: provider.name
-      };
-    } catch (e) {
-      console.error(`[agent/chat] provider=${provider.name} failed:`, e);
-      continue;
-    }
-  }
-  console.error("[agent/chat] all providers failed, returning mock");
-  return mockChatReply(message, context);
-});
-function mockChatReply(message, context, model = "mock") {
-  const titleHint = (context == null ? void 0 : context.title) ? `\u5173\u4E8E"${context.title}"` : "";
-  return {
-    reply: `[mock] \u6536\u5230\u4F60\u7684\u6D88\u606F${titleHint}\uFF1A"${message.slice(0, 50)}${message.length > 50 ? "..." : ""}"\u3002\u5F53\u524D\u672A\u914D\u7F6E LLM API\uFF08\u8BBE\u7F6E NEWSNOW_LLM_API_KEY \u73AF\u5883\u53D8\u91CF\u542F\u7528\u771F\u5B9E\u5BF9\u8BDD\uFF09\u3002`,
-    model,
-    mock: true
-  };
-}
-function buildSystemPrompt(context) {
-  const ctx = (context == null ? void 0 : context.title) ? `\u7528\u6237\u6B63\u5728\u9605\u8BFB\u6587\u7AE0\u300A${context.title}\u300B(${context.url || ""})\u3002` : "";
-  return `\u4F60\u662F\u4E00\u4E2A\u65B0\u95FB\u52A9\u624B\uFF0C\u5E2E\u52A9\u7528\u6237\u7406\u89E3\u548C\u8BA8\u8BBA\u65B0\u95FB\u5185\u5BB9\u3002${ctx}\u8BF7\u7528\u7B80\u6D01\u3001\u5BA2\u89C2\u7684\u65B9\u5F0F\u56DE\u7B54\u3002`;
-}
-function buildUserContent(message, context) {
-  const parts = [];
-  if (context == null ? void 0 : context.content) {
-    parts.push({
-      type: "text",
-      text: `\u6587\u7AE0\u5185\u5BB9\u6458\u8981\uFF1A
-${context.content.slice(0, 4e3)}`
-    });
-  }
-  parts.push({
-    type: "text",
-    text: message
-  });
-  return parts;
-}
-
-const chat_post$1 = /*#__PURE__*/Object.freeze({
-  __proto__: null,
-  default: chat_post
-});
-
-const enableLogin = defineEventHandler(async () => {
-  return {
-    enable: true,
-    url: `https://github.com/login/oauth/authorize?client_id=${process$1.env.G_CLIENT_ID}`
-  };
-});
-
-const enableLogin$1 = /*#__PURE__*/Object.freeze({
-  __proto__: null,
-  default: enableLogin
-});
-
-var version = "0.0.40";
-const packageJSON = {
-	version: version};
-
-const TTL = 30 * 60 * 1e3;
-const Version = packageJSON.version;
-
-const latest$2 = defineEventHandler(async () => {
-  return {
-    v: Version
-  };
-});
-
-const latest$3 = /*#__PURE__*/Object.freeze({
-  __proto__: null,
-  default: latest$2
-});
-
-const login = defineEventHandler(async (event) => {
-  sendRedirect(event, `https://github.com/login/oauth/authorize?client_id=${process$1.env.G_CLIENT_ID}`);
-});
-
-const login$1 = /*#__PURE__*/Object.freeze({
-  __proto__: null,
-  default: login
 });
 
 var v2ex$2 = {
@@ -2020,7 +1925,7 @@ var psyche$2 = {
 	color: "teal",
 	interval: 1800000
 };
-const _sources = {
+const sources$1 = {
 	v2ex: v2ex$2,
 	"v2ex-share": {
 	name: "V2EX",
@@ -2299,192 +2204,58 @@ const _sources = {
 }
 };
 
-const description = Object.entries(_sources).filter(([_, source]) => {
-  if (source.redirect) {
-    return false;
-  }
-  return true;
-}).map(([id, source]) => {
-  return source.title ? `${source.name}-${source.title} id is ${id}` : `${source.name} id is ${id}`;
-}).join(";");
+const sources = sources$1;
 
-function getServer() {
-  const server = new McpServer(
-    {
-      name: "NewsNow",
-      version: packageJSON.version
-    },
-    { capabilities: { logging: {} } }
-  );
-  server.tool(
-    "get_hotest_latest_news",
-    `get hotest or latest news from source by {id}, return {count: 10} news.`,
-    {
-      id: z.string().describe(`source id. e.g. ${description}`),
-      count: z.any().default(10).describe("count of news to return.")
-    },
-    async ({ id, count }) => {
-      const res = await $fetch(`/api/s?id=${id}`);
-      return {
-        content: res.items.slice(0, count).map((item) => {
-          return {
-            text: `[${item.title}](${item.url})`,
-            type: "text"
-          };
-        })
-      };
+const CJK_RUN = /[\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF]+/g;
+const LATIN_WORD = /[a-z0-9][a-z0-9+.#-]*/g;
+function tokenizeQuery(query) {
+  var _a, _b;
+  const terms = /* @__PURE__ */ new Set();
+  const lower = query.toLowerCase();
+  for (const word of (_a = lower.match(LATIN_WORD)) != null ? _a : []) {
+    if (word.length >= 2) terms.add(word);
+  }
+  for (const run of (_b = lower.match(CJK_RUN)) != null ? _b : []) {
+    if (run.length === 1) {
+      terms.add(run);
+      continue;
     }
-  );
-  server.server.onerror = console.error.bind(console);
-  return server;
+    for (let i = 0; i < run.length - 1; i++) terms.add(run.slice(i, i + 2));
+  }
+  return [...terms];
 }
-
-const mcp_post = defineEventHandler(async (event) => {
-  const req = event.node.req;
-  const res = event.node.res;
-  const server = getServer();
-  try {
-    const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: void 0 });
-    transport.onerror = console.error.bind(console);
-    await server.connect(transport);
-    await transport.handleRequest(req, res, await readBody(event));
-    res.on("close", () => {
-      transport.close();
-      server.close();
-    });
-    return res;
-  } catch (e) {
-    console.error(e);
-    return {
-      jsonrpc: "2.0",
-      error: {
-        code: -32603,
-        message: "Internal server error"
-      },
-      id: null
-    };
-  }
-});
-
-const mcp_post$1 = /*#__PURE__*/Object.freeze({
-  __proto__: null,
-  default: mcp_post
-});
-
-const index$6 = defineEventHandler(() => {
-  return {
-    hello: "world"
-  };
-});
-
-const index$7 = /*#__PURE__*/Object.freeze({
-  __proto__: null,
-  default: index$6
-});
-
-function verifyPrimitiveMetadata(target) {
-  return z$1.object({
-    data: z$1.record(z$1.string(), z$1.array(z$1.string())),
-    updatedTime: z$1.number()
-  }).parse(target);
-}
-
-var __defProp$1 = Object.defineProperty;
-var __defNormalProp$1 = (obj, key, value) => key in obj ? __defProp$1(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __publicField$1 = (obj, key, value) => __defNormalProp$1(obj, key + "" , value);
-class UserTable {
-  constructor(db) {
-    __publicField$1(this, "db");
-    this.db = db;
-  }
-  async init() {
-    await this.db.prepare(`
-      CREATE TABLE IF NOT EXISTS user (
-        id TEXT PRIMARY KEY,
-        email TEXT,
-        data TEXT,
-        type TEXT,
-        created INTEGER,
-        updated INTEGER
-      );
-    `).run();
-    await this.db.prepare(`
-      CREATE INDEX IF NOT EXISTS idx_user_id ON user(id);
-    `).run();
-    logger.success(`init user table`);
-  }
-  async addUser(id, email, type) {
-    const u = await this.getUser(id);
-    const now = Date.now();
-    if (!u) {
-      await this.db.prepare(`INSERT INTO user (id, email, data, type, created, updated) VALUES (?, ?, ?, ?, ?, ?)`).run(id, email, "", type, now, now);
-      logger.success(`add user ${id}`);
-    } else if (u.email !== email && u.type !== type) {
-      await this.db.prepare(`UPDATE user SET email = ?, updated = ? WHERE id = ?`).run(email, now, id);
-      logger.success(`update user ${id} email`);
-    } else {
-      logger.info(`user ${id} already exists`);
+function scoreText(text, terms, weight = 1) {
+  if (!text || terms.length === 0) return 0;
+  const haystack = text.toLowerCase();
+  let score = 0;
+  for (const term of terms) {
+    let index = haystack.indexOf(term);
+    while (index !== -1) {
+      score += weight;
+      index = haystack.indexOf(term, index + term.length);
     }
   }
-  async getUser(id) {
-    return await this.db.prepare(`SELECT id, email, data, created, updated FROM user WHERE id = ?`).get(id);
+  return score;
+}
+function searchNewsItems(items, query, limit = 10) {
+  var _a;
+  const terms = tokenizeQuery(query);
+  if (terms.length === 0) return [];
+  const seen = /* @__PURE__ */ new Set();
+  const scored = [];
+  for (const item of items) {
+    const key = `${item.title}|${item.url}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    const score = scoreText(item.title, terms, 3) + scoreText((_a = item.text) != null ? _a : "", terms, 1);
+    if (score > 0) scored.push({ item, score });
   }
-  async setData(key, value, updatedTime = Date.now()) {
-    const state = await this.db.prepare(
-      `UPDATE user SET data = ?, updated = ? WHERE id = ?`
-    ).run(value, updatedTime, key);
-    if (!state.success) throw new Error(`set user ${key} data failed`);
-    logger.success(`set ${key} data`);
-  }
-  async getData(id) {
-    const row = await this.db.prepare(`SELECT data, updated FROM user WHERE id = ?`).get(id);
-    if (!row) throw new Error(`user ${id} not found`);
-    logger.success(`get ${id} data`);
-    return row;
-  }
-  async deleteUser(key) {
-    const state = await this.db.prepare(`DELETE FROM user WHERE id = ?`).run(key);
-    if (!state.success) throw new Error(`delete user ${key} failed`);
-    logger.success(`delete user ${key}`);
-  }
+  return scored.sort((a, b) => b.score - a.score).slice(0, limit);
 }
 
-const sync = defineEventHandler(async (event) => {
-  try {
-    const { id } = event.context.user;
-    const db = useDatabase();
-    if (!db) throw new Error("Not found database");
-    const userTable = new UserTable(db);
-    if (process$1.env.INIT_TABLE !== "false") await userTable.init();
-    if (event.method === "GET") {
-      const { data, updated } = await userTable.getData(id);
-      return {
-        data: data ? JSON.parse(data) : void 0,
-        updatedTime: updated
-      };
-    } else if (event.method === "POST") {
-      const body = await readBody(event);
-      verifyPrimitiveMetadata(body);
-      const { updatedTime, data } = body;
-      await userTable.setData(id, JSON.stringify(data), updatedTime);
-      return {
-        success: true,
-        updatedTime
-      };
-    }
-  } catch (e) {
-    logger.error(e);
-    throw createError({
-      statusCode: 500,
-      message: e instanceof Error ? e.message : "Internal Server Error"
-    });
-  }
-});
-
-const sync$1 = /*#__PURE__*/Object.freeze({
-  __proto__: null,
-  default: sync
-});
+function typeSafeObjectEntries(obj) {
+  return Object.entries(obj);
+}
 
 const myFetch = $fetch$1.create({
   headers: {
@@ -2493,153 +2264,6 @@ const myFetch = $fetch$1.create({
   timeout: 1e4,
   retry: 3
 });
-
-const github$2 = defineEventHandler(async (event) => {
-  const db = useDatabase();
-  const userTable = db ? new UserTable(db) : void 0;
-  if (!userTable) throw new Error("db is not defined");
-  if (process$1.env.INIT_TABLE !== "false") await userTable.init();
-  const response = await myFetch(
-    `https://github.com/login/oauth/access_token`,
-    {
-      method: "POST",
-      body: {
-        client_id: process$1.env.G_CLIENT_ID,
-        client_secret: process$1.env.G_CLIENT_SECRET,
-        code: getQuery$1(event).code
-      },
-      headers: {
-        accept: "application/json"
-      }
-    }
-  );
-  const userInfo = await myFetch(`https://api.github.com/user`, {
-    headers: {
-      "Accept": "application/vnd.github+json",
-      "Authorization": `token ${response.access_token}`,
-      // 必须有 user-agent，在 cloudflare worker 会报错
-      "User-Agent": "NewsNow App"
-    }
-  });
-  const userID = String(userInfo.id);
-  await userTable.addUser(userID, userInfo.notification_email || userInfo.email, "github");
-  const jwtToken = await new SignJWT({
-    id: userID,
-    type: "github"
-  }).setExpirationTime("60d").setProtectedHeader({ alg: "HS256" }).sign(new TextEncoder().encode(process$1.env.JWT_SECRET));
-  const params = new URLSearchParams({
-    login: "github",
-    jwt: jwtToken,
-    user: JSON.stringify({
-      avatar: userInfo.avatar_url,
-      name: userInfo.name
-    })
-  });
-  return sendRedirect(event, `/?${params.toString()}`);
-});
-
-const github$3 = /*#__PURE__*/Object.freeze({
-  __proto__: null,
-  default: github$2
-});
-
-const sources = _sources;
-
-var __defProp = Object.defineProperty;
-var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __publicField = (obj, key, value) => __defNormalProp(obj, key + "" , value);
-class Cache {
-  constructor(db) {
-    __publicField(this, "db");
-    this.db = db;
-  }
-  async init() {
-    await this.db.prepare(`
-      CREATE TABLE IF NOT EXISTS cache (
-        id TEXT PRIMARY KEY,
-        updated INTEGER,
-        data TEXT
-      );
-    `).run();
-    logger.success(`init cache table`);
-  }
-  async set(key, value) {
-    const now = Date.now();
-    await this.db.prepare(
-      `INSERT OR REPLACE INTO cache (id, data, updated) VALUES (?, ?, ?)`
-    ).run(key, JSON.stringify(value), now);
-    logger.success(`set ${key} cache`);
-  }
-  async get(key) {
-    const row = await this.db.prepare(`SELECT id, data, updated FROM cache WHERE id = ?`).get(key);
-    if (row) {
-      logger.success(`get ${key} cache`);
-      return {
-        id: row.id,
-        updated: row.updated,
-        items: JSON.parse(row.data)
-      };
-    }
-  }
-  async getEntire(keys) {
-    var _a;
-    const keysStr = keys.map((k) => `id = '${k}'`).join(" or ");
-    const res = await this.db.prepare(`SELECT id, data, updated FROM cache WHERE ${keysStr}`).all();
-    const rows = (_a = res.results) != null ? _a : res;
-    if (rows == null ? void 0 : rows.length) {
-      logger.success(`get entire (...) cache`);
-      return rows.map((row) => ({
-        id: row.id,
-        updated: row.updated,
-        items: JSON.parse(row.data)
-      }));
-    } else {
-      return [];
-    }
-  }
-  async delete(key) {
-    return await this.db.prepare(`DELETE FROM cache WHERE id = ?`).run(key);
-  }
-}
-async function getCacheTable() {
-  try {
-    const db = useDatabase();
-    if (process$1.env.ENABLE_CACHE === "false") return;
-    const cacheTable = new Cache(db);
-    if (process$1.env.INIT_TABLE !== "false") await cacheTable.init();
-    return cacheTable;
-  } catch (e) {
-    logger.error("failed to init database ", e);
-  }
-}
-
-const entire_post = defineEventHandler(async (event) => {
-  try {
-    const { sources: _ } = await readBody(event);
-    const cacheTable = await getCacheTable();
-    const ids = _ == null ? void 0 : _.filter((k) => sources[k]);
-    if ((ids == null ? void 0 : ids.length) && cacheTable) {
-      const caches = await cacheTable.getEntire(ids);
-      const now = Date.now();
-      return caches.map((cache) => ({
-        status: "cache",
-        id: cache.id,
-        items: cache.items,
-        updatedTime: now - cache.updated < sources[cache.id].interval ? now : cache.updated
-      }));
-    }
-  } catch {
-  }
-});
-
-const entire_post$1 = /*#__PURE__*/Object.freeze({
-  __proto__: null,
-  default: entire_post
-});
-
-function typeSafeObjectEntries(obj) {
-  return Object.entries(obj);
-}
 
 async function rss2json(url) {
   var _a, _b, _c, _d, _e;
@@ -4817,11 +4441,11 @@ const hot$3 = defineSource(async () => {
   });
   return news;
 });
-const latest$1 = defineRSSSource("https://www.chongbuluo.com/forum.php?mod=rss&view=newthread");
+const latest$3 = defineRSSSource("https://www.chongbuluo.com/forum.php?mod=rss&view=newthread");
 const chongbuluo = defineSource({
   "chongbuluo": hot$3,
   "chongbuluo-hot": hot$3,
-  "chongbuluo-latest": latest$1
+  "chongbuluo-latest": latest$3
 });
 
 const chongbuluo$1 = /*#__PURE__*/Object.freeze({
@@ -4901,16 +4525,16 @@ const telegraph = defineSource(async () => {
     };
   });
 });
-const index$4 = defineSource({
+const index$6 = defineSource({
   "cls": telegraph,
   "cls-telegraph": telegraph,
   "cls-depth": depth,
   "cls-hot": hot$2
 });
 
-const index$5 = /*#__PURE__*/Object.freeze({
+const index$7 = /*#__PURE__*/Object.freeze({
   __proto__: null,
-  default: index$4
+  default: index$6
 });
 
 function encodeBase64(str) {
@@ -4946,7 +4570,7 @@ async function genHeaders() {
   };
 }
 
-const index$2 = defineSource({
+const index$4 = defineSource({
   coolapk: async () => {
     const url = "https://api.coolapk.com/v6/page/dataList?url=%2Ffeed%2FstatList%3FcacheExpires%3D300%26statType%3Dday%26sortField%3Ddetailnum%26title%3D%E4%BB%8A%E6%97%A5%E7%83%AD%E9%97%A8&title=%E4%BB%8A%E6%97%A5%E7%83%AD%E9%97%A8&subTitle=&page=1";
     const r = await myFetch(url, {
@@ -4968,9 +4592,9 @@ const index$2 = defineSource({
   }
 });
 
-const index$3 = /*#__PURE__*/Object.freeze({
+const index$5 = /*#__PURE__*/Object.freeze({
   __proto__: null,
-  default: index$2
+  default: index$4
 });
 
 const douban = defineSource(async () => {
@@ -5426,14 +5050,14 @@ const trending = defineSource(async () => {
   });
   return news;
 });
-const github = defineSource({
+const github$2 = defineSource({
   "github": trending,
   "github-trending-today": trending
 });
 
-const github$1 = /*#__PURE__*/Object.freeze({
+const github$3 = /*#__PURE__*/Object.freeze({
   __proto__: null,
-  default: github
+  default: github$2
 });
 
 const hackernews = defineSource(async () => {
@@ -5740,7 +5364,7 @@ const hot$1 = defineSource(async () => {
     url: `https://linux.do/t/topic/${k.id}`
   }));
 });
-const latest = defineSource(async () => {
+const latest$2 = defineSource(async () => {
   const res = await myFetch("https://linux.do/latest.json?order=created");
   return res.topic_list.topics.filter((k) => k.visible && !k.archived && !k.pinned).map((k) => ({
     id: k.id,
@@ -5750,8 +5374,8 @@ const latest = defineSource(async () => {
   }));
 });
 const linuxdo = defineSource({
-  "linuxdo": latest,
-  "linuxdo-latest": latest,
+  "linuxdo": latest$2,
+  "linuxdo-latest": latest$2,
   "linuxdo-hot": hot$1
 });
 
@@ -6443,8 +6067,8 @@ const x = /*#__PURE__*/Object.freeze({
   bilibili: bilibili$1,
   cankaoxiaoxi: cankaoxiaoxi$1,
   chongbuluo: chongbuluo$1,
-  cls: index$5,
-  coolapk: index$3,
+  cls: index$7,
+  coolapk: index$5,
   douban: douban$1,
   douyin: douyin$1,
   farnam_street: farnam_street$1,
@@ -6452,7 +6076,7 @@ const x = /*#__PURE__*/Object.freeze({
   freebuf: freebuf$1,
   gelonghui: gelonghui$1,
   ghxi: ghxi$1,
-  github: github$1,
+  github: github$3,
   google_alert_musk: google_alert_musk$1,
   hackernews: hackernews$1,
   hupu: hupu$1,
@@ -6497,7 +6121,7 @@ const x = /*#__PURE__*/Object.freeze({
   zhihu: zhihu$1
 });
 
-const getters = function() {
+const getters = (function() {
   const getters2 = {};
   typeSafeObjectEntries(x).forEach(([id, x2]) => {
     if (x2.default instanceof Function) {
@@ -6507,12 +6131,669 @@ const getters = function() {
     }
   });
   return getters2;
-}();
+})();
 
-const index = defineEventHandler(async (event) => {
+var __defProp$1 = Object.defineProperty;
+var __defNormalProp$1 = (obj, key, value) => key in obj ? __defProp$1(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __publicField$1 = (obj, key, value) => __defNormalProp$1(obj, key + "" , value);
+class Cache {
+  constructor(db) {
+    __publicField$1(this, "db");
+    this.db = db;
+  }
+  async init() {
+    await this.db.prepare(`
+      CREATE TABLE IF NOT EXISTS cache (
+        id TEXT PRIMARY KEY,
+        updated INTEGER,
+        data TEXT
+      );
+    `).run();
+    logger.success(`init cache table`);
+  }
+  async set(key, value) {
+    const now = Date.now();
+    await this.db.prepare(
+      `INSERT OR REPLACE INTO cache (id, data, updated) VALUES (?, ?, ?)`
+    ).run(key, JSON.stringify(value), now);
+    logger.success(`set ${key} cache`);
+  }
+  async get(key) {
+    const row = await this.db.prepare(`SELECT id, data, updated FROM cache WHERE id = ?`).get(key);
+    if (row) {
+      logger.success(`get ${key} cache`);
+      return {
+        id: row.id,
+        updated: row.updated,
+        items: JSON.parse(row.data)
+      };
+    }
+  }
+  async getEntire(keys) {
+    var _a;
+    const keysStr = keys.map((k) => `id = '${k}'`).join(" or ");
+    const res = await this.db.prepare(`SELECT id, data, updated FROM cache WHERE ${keysStr}`).all();
+    const rows = (_a = res.results) != null ? _a : res;
+    if (rows == null ? void 0 : rows.length) {
+      logger.success(`get entire (...) cache`);
+      return rows.map((row) => ({
+        id: row.id,
+        updated: row.updated,
+        items: JSON.parse(row.data)
+      }));
+    } else {
+      return [];
+    }
+  }
+  async delete(key) {
+    return await this.db.prepare(`DELETE FROM cache WHERE id = ?`).run(key);
+  }
+}
+async function getCacheTable() {
+  try {
+    const db = useDatabase();
+    if (process$1.env.ENABLE_CACHE === "false") return;
+    const cacheTable = new Cache(db);
+    if (process$1.env.INIT_TABLE !== "false") await cacheTable.init();
+    return cacheTable;
+  } catch (e) {
+    logger.error("failed to init database ", e);
+  }
+}
+
+const MAX_SOURCES_PER_SEARCH = 8;
+const COLUMNS = ["china", "world", "tech", "finance", "ai", "english"];
+function listSourceBriefs(column) {
+  return Object.entries(sources).filter(([, value]) => value && !value.redirect).filter(([, value]) => !column || value.column === column).map(([id, value]) => ({ id, name: value.name, column: value.column, type: value.type }));
+}
+function resolveSourceId(id) {
+  var _a;
+  const entry = sources[id];
+  return (_a = entry == null ? void 0 : entry.redirect) != null ? _a : id;
+}
+const fetchSourceItems = async (id) => {
+  var _a, _b;
+  const sourceId = resolveSourceId(id);
+  const getter = getters[sourceId];
+  if (!getter) throw new Error(`\u672A\u77E5\u6E90\uFF1A${id}`);
+  const cacheTable = await getCacheTable();
+  const cache = cacheTable ? await cacheTable.get(sourceId) : void 0;
+  const interval = (_b = (_a = sources[sourceId]) == null ? void 0 : _a.interval) != null ? _b : 0;
+  if (cache && Date.now() - Number(cache.updated) < interval) return cache.items;
+  try {
+    const items = (await getter()).slice(0, 30);
+    if (cacheTable && items.length) await cacheTable.set(sourceId, items);
+    return items;
+  } catch (e) {
+    if (cache) return cache.items;
+    throw e;
+  }
+};
+function toLine(item, sourceName) {
+  var _a;
+  const when = item.pubDate ? ` \xB7 ${new Date(item.pubDate).toISOString().slice(0, 16).replace("T", " ")}` : "";
+  const hover = ((_a = item.extra) == null ? void 0 : _a.hover) ? `
+   ${String(item.extra.hover).slice(0, 160)}` : "";
+  return `- [${sourceName}] ${item.title}${when}
+   ${item.url}${hover}`;
+}
+function defaultSearchScope(column) {
+  var _a, _b;
+  const briefs = listSourceBriefs(column).filter((b) => b.type !== void 0);
+  if (column) return briefs.slice(0, MAX_SOURCES_PER_SEARCH);
+  const byColumn = /* @__PURE__ */ new Map();
+  for (const brief of briefs) {
+    const list = (_a = byColumn.get(brief.column)) != null ? _a : [];
+    list.push(brief);
+    byColumn.set(brief.column, list);
+  }
+  const picked = [];
+  const columns = [...byColumn.keys()];
+  let round = 0;
+  while (picked.length < MAX_SOURCES_PER_SEARCH) {
+    let added = false;
+    for (const col of columns) {
+      const candidate = (_b = byColumn.get(col)) == null ? void 0 : _b[round];
+      if (candidate && picked.length < MAX_SOURCES_PER_SEARCH) {
+        picked.push(candidate);
+        added = true;
+      }
+    }
+    if (!added) break;
+    round += 1;
+  }
+  return picked;
+}
+async function searchNews(query, options = {}) {
+  const { column, ids, limit = 10, fetchItems = fetchSourceItems } = options;
+  const scope = (ids == null ? void 0 : ids.length) ? ids.slice(0, MAX_SOURCES_PER_SEARCH).map((id) => {
+    var _a, _b;
+    return {
+      id,
+      name: (_b = (_a = listSourceBriefs().find((b) => b.id === id)) == null ? void 0 : _a.name) != null ? _b : id,
+      column: ""
+    };
+  }) : defaultSearchScope(column);
+  const settled = await Promise.all(scope.map(async (brief) => {
+    try {
+      const items = await fetchItems(brief.id);
+      return {
+        brief,
+        error: "",
+        items: items.map((item) => {
+          var _a;
+          return {
+            id: item.id,
+            title: item.title,
+            url: item.url,
+            text: ((_a = item.extra) == null ? void 0 : _a.hover) ? String(item.extra.hover) : "",
+            source: brief.name
+          };
+        })
+      };
+    } catch (e) {
+      const reason = e instanceof Error ? e.message : String(e);
+      console.error(`[news-tools] source ${brief.id} failed:`, reason);
+      return { brief, error: reason.slice(0, 80), items: [] };
+    }
+  }));
+  const flat = settled.flatMap((s) => s.items);
+  const failed = settled.filter((s) => s.error);
+  return {
+    scanned: flat.length,
+    scope: scope.map((s) => s.name),
+    failed: failed.map((s) => `${s.brief.id}(${s.error})`),
+    matches: searchNewsItems(flat, query, limit)
+  };
+}
+const newsTools = {
+  list_sources: tool({
+    description: "\u5217\u51FA\u53EF\u7528\u7684\u65B0\u95FB\u6E90\uFF08id\u3001\u540D\u79F0\u3001\u680F\u76EE\uFF09\u3002\u641C\u7D22\u6216\u53D6\u65B0\u95FB\u524D\u5148\u7528\u5B83\u786E\u8BA4\u6709\u6CA1\u6709\u76F8\u5173\u6E90\u3002",
+    inputSchema: z.object({
+      column: z.enum(COLUMNS).optional().describe("\u53EA\u5217\u67D0\u4E2A\u680F\u76EE\uFF1Achina/world/tech/finance/ai/english")
+    }),
+    execute: async ({ column }) => {
+      const briefs = listSourceBriefs(column);
+      return `${briefs.length} \u4E2A\u6E90\uFF1A
+${briefs.map((b) => `${b.id} (${b.column}) ${b.name}`).join("\n")}`;
+    }
+  }),
+  get_source_items: tool({
+    description: "\u53D6\u67D0\u4E00\u4E2A\u6E90\u5F53\u524D\u7684\u70ED\u699C\u6216\u6700\u65B0\u6761\u76EE\u3002\u77E5\u9053\u6E90 id \u65F6\u7528\u5B83\u3002",
+    inputSchema: z.object({
+      id: z.string().describe("\u6E90 id\uFF0C\u4F8B\u5982 zhihu\u3001tldr\u3001github-trending-today"),
+      count: z.number().int().min(1).max(30).default(10).describe("\u8FD4\u56DE\u6761\u6570")
+    }),
+    execute: async ({ id, count }) => {
+      var _a, _b;
+      const name = (_b = (_a = listSourceBriefs().find((b) => b.id === id)) == null ? void 0 : _a.name) != null ? _b : id;
+      try {
+        const items = await fetchSourceItems(id);
+        if (!items.length) return `\u6E90 ${id}\uFF08${name}\uFF09\u5F53\u524D\u6CA1\u6709\u6761\u76EE\u3002`;
+        return `${name} \u524D ${Math.min(count, items.length)} \u6761\uFF1A
+${items.slice(0, count).map((i) => toLine(i, name)).join("\n")}`;
+      } catch (e) {
+        return `\u53D6\u6E90 ${id} \u5931\u8D25\uFF1A${e instanceof Error ? e.message : String(e)}\u3002\u53EF\u4EE5\u6362\u4E00\u4E2A\u6E90\uFF0C\u6216\u7A0D\u540E\u91CD\u8BD5\u3002`;
+      }
+    }
+  }),
+  search_news: tool({
+    description: "\u6309\u5173\u952E\u8BCD\u5728\u5F53\u524D\u6293\u5230\u7684\u65B0\u95FB\u91CC\u641C\u7D22\uFF0C\u8FD4\u56DE\u6700\u76F8\u5173\u7684\u6761\u76EE\uFF08\u6807\u9898\u3001\u94FE\u63A5\u3001\u6765\u6E90\uFF09\u3002\u95EE\u201C\u4ECA\u5929\u6709\u4EC0\u4E48\u5173\u4E8E X \u7684\u65B0\u95FB\u201D\u65F6\u7528\u5B83\u3002",
+    inputSchema: z.object({
+      query: z.string().describe("\u5173\u952E\u8BCD\uFF0C\u652F\u6301\u4E2D\u82F1\u6587"),
+      column: z.enum(COLUMNS).optional().describe("\u9650\u5B9A\u680F\u76EE\uFF0C\u4E0D\u7ED9\u5C31\u5728\u591A\u4E2A\u680F\u76EE\u91CC\u5206\u6563\u53D6\u6E90"),
+      limit: z.number().int().min(1).max(20).default(10).describe("\u8FD4\u56DE\u6761\u6570")
+    }),
+    execute: async ({ query, column, limit }) => {
+      const { scanned, scope, failed, matches } = await searchNews(query, { column, limit });
+      const failNote = failed.length ? `
+\u53D6\u6570\u5931\u8D25\u7684\u6E90\uFF1A${failed.join("\u3001")}` : "";
+      if (!matches.length) {
+        return `\u5728 ${scope.join("\u3001")} \u8FD9 ${scope.length} \u4E2A\u6E90\uFF08\u5171 ${scanned} \u6761\uFF09\u91CC\u6CA1\u641C\u5230\u300C${query}\u300D\u3002\u53EF\u4EE5\u6362\u5173\u952E\u8BCD\uFF0C\u6216\u5148 list_sources \u6362\u4E2A\u6E90\u3002${failNote}`;
+      }
+      return `\u5728 ${scope.join("\u3001")} \u8FD9 ${scope.length} \u4E2A\u6E90\uFF08\u5171 ${scanned} \u6761\uFF09\u91CC\u5339\u914D ${matches.length} \u6761\uFF1A
+${matches.map((m) => {
+        var _a;
+        return toLine({ id: m.item.id, title: m.item.title, url: m.item.url }, (_a = m.item.source) != null ? _a : "");
+      }).join("\n")}${failNote}`;
+    }
+  })
+};
+
+const AGENT_MAX_STEPS = 6;
+const MAX_OUTPUT_TOKENS = 1500;
+function toLanguageModel(provider) {
+  if (provider.protocol === "anthropic") {
+    const anthropic = createAnthropic({
+      apiKey: provider.apiKey,
+      baseURL: anthropicMessagesBaseUrl(provider.baseUrl)
+    });
+    return anthropic(provider.model);
+  }
+  const compatible = createOpenAICompatible({
+    name: provider.name,
+    apiKey: provider.apiKey,
+    baseURL: provider.baseUrl
+  });
+  return compatible(provider.model);
+}
+const AGENT_SYSTEM_PROMPT = `\u4F60\u662F NewsNow \u7684\u65B0\u95FB\u52A9\u624B\uFF0C\u5E2E\u7528\u6237\u7406\u89E3\u548C\u68B3\u7406\u5F53\u524D\u6293\u5230\u7684\u8D44\u8BAF\u3002
+
+\u4F60\u53EF\u4EE5\u8C03\u7528\u8FD9\u4E9B\u5DE5\u5177\uFF1A
+- list_sources\uFF1A\u770B\u6709\u54EA\u4E9B\u6E90\uFF08\u53EF\u6309\u680F\u76EE\uFF09
+- get_source_items\uFF1A\u53D6\u67D0\u4E2A\u6E90\u5F53\u524D\u7684\u6761\u76EE
+- search_news\uFF1A\u6309\u5173\u952E\u8BCD\u8DE8\u6E90\u641C\u7D22
+
+\u89C4\u5219\uFF1A
+1. \u95EE\u9898\u6D89\u53CA"\u4ECA\u5929/\u6700\u8FD1/\u73B0\u5728"\u65F6\uFF0C\u5148\u8C03\u5DE5\u5177\u67E5\uFF0C\u4E0D\u8981\u51ED\u8BB0\u5FC6\u56DE\u7B54\u3002
+2. \u5F15\u7528\u6761\u76EE\u65F6\u7ED9\u51FA\u6807\u9898\u548C\u6765\u6E90\uFF1B\u7EDD\u4E0D\u7F16\u9020\u6761\u76EE\u3001\u94FE\u63A5\u6216\u6570\u5B57\u3002
+3. \u5148\u7ED9\u7ED3\u8BBA\uFF0C\u518D\u5217\u8BC1\u636E\uFF1B\u4E2D\u6587\u56DE\u7B54\uFF0C\u7B80\u6D01\u3002\u7528\u7EAF\u6587\u672C\uFF0C\u4E0D\u8981 markdown \u5F3A\u8C03\u7B26\u53F7\uFF08**\u3001##\uFF09\u2014\u2014\u9762\u677F\u6309\u7EAF\u6587\u672C\u6E32\u67D3\uFF1B\u5206\u70B9\u5C31\u7528\u77ED\u6A2A\u7EBF\u5F00\u5934\u3002
+4. \u5DE5\u5177\u6CA1\u67E5\u5230\u5C31\u76F4\u8BF4\u6CA1\u67E5\u5230\uFF0C\u5E76\u63D0\u51FA\u53EF\u6362\u7684\u5173\u952E\u8BCD\u3002
+5. \u641C\u5230\u8DB3\u591F\u6761\u76EE\u524D\u5C31\u6536\u5C3E\u56DE\u7B54\uFF0C\u4E0D\u8981\u65E0\u9650\u6362\u6E90\uFF1B\u641C\u4E0D\u5230\u65F6\u6700\u591A\u6362\u4E24\u6B21\u5173\u952E\u8BCD\u3002`;
+function buildSystemPrompt(context) {
+  if (!(context == null ? void 0 : context.title)) return AGENT_SYSTEM_PROMPT;
+  const url = context.url ? `\uFF08${context.url}\uFF09` : "";
+  return `${AGENT_SYSTEM_PROMPT}
+
+\u5F53\u524D\u7528\u6237\u6B63\u6253\u5F00\u4E00\u6761\u65B0\u95FB\uFF1A\u300A${context.title}\u300B${url}\u3002\u4F18\u5148\u56F4\u7ED5\u8FD9\u6761\u56DE\u7B54\u3002`;
+}
+function buildPrompt(message, context) {
+  if (!(context == null ? void 0 : context.content)) return message;
+  return `\u8FD9\u6761\u65B0\u95FB\u7684\u5185\u5BB9\u6458\u8981\uFF1A
+${context.content.slice(0, 3e3)}
+
+\u7528\u6237\u95EE\u9898\uFF1A${message}`;
+}
+function collectSteps(steps) {
+  var _a, _b, _c;
+  const collected = [];
+  const byCallId = /* @__PURE__ */ new Map();
+  for (const step of steps != null ? steps : []) {
+    for (const call of (_a = step == null ? void 0 : step.toolCalls) != null ? _a : []) {
+      const entry = { tool: call.toolName, input: call.input, ok: true };
+      byCallId.set(call.toolCallId, entry);
+      collected.push(entry);
+    }
+    for (const result of (_b = step == null ? void 0 : step.toolResults) != null ? _b : []) {
+      const entry = byCallId.get(result.toolCallId);
+      if (entry) entry.summary = String((_c = result.output) != null ? _c : "").split("\n")[0].slice(0, 90);
+    }
+  }
+  return collected;
+}
+async function runNewsAgent(message, context) {
+  var _a;
+  const providers = getLLMProviders();
+  if (providers.length === 0) return { ok: false, reason: "\u6CA1\u6709\u914D\u7F6E\u4EFB\u4F55 LLM provider" };
+  const failures = [];
+  for (const provider of providers) {
+    try {
+      const result = await generateText({
+        model: toLanguageModel(provider),
+        system: buildSystemPrompt(context),
+        prompt: buildPrompt(message, context),
+        tools: newsTools,
+        stopWhen: stepCountIs(AGENT_MAX_STEPS),
+        maxOutputTokens: MAX_OUTPUT_TOKENS
+      });
+      const steps = collectSteps(result.steps);
+      console.log(`[agent/run] provider=${provider.name} model=${provider.model} steps=${steps.length}`);
+      return {
+        ok: true,
+        reply: ((_a = result.text) == null ? void 0 : _a.trim()) || "\uFF08\u5DE5\u5177\u8DD1\u5B8C\u4E86\uFF0C\u4F46\u6A21\u578B\u6CA1\u6709\u7ED9\u51FA\u56DE\u590D\uFF09",
+        model: provider.model,
+        provider: provider.name,
+        steps
+      };
+    } catch (e) {
+      const detail = e instanceof Error ? e.message : String(e);
+      failures.push(`${provider.name}: ${detail.slice(0, 160)}`);
+      console.error(`[agent/run] provider=${provider.name} failed:`, detail);
+    }
+  }
+  return { ok: false, reason: failures.join(" | ") };
+}
+
+const chat_post = defineEventHandler$1(async (event) => {
+  const body = await readBody$1(event);
+  const { message, context } = body;
+  if (!message || typeof message !== "string" || message.trim().length === 0) {
+    throw createError({
+      statusCode: 400,
+      message: "message is required"
+    });
+  }
+  const result = await runNewsAgent(message.trim(), context);
+  if (result.ok) {
+    return {
+      reply: result.reply,
+      model: result.model,
+      provider: result.provider,
+      mock: false,
+      steps: result.steps
+    };
+  }
+  return mockChatReply(message, context, result.reason);
+});
+function mockChatReply(message, context, degradedReason = "\u6CA1\u6709\u53EF\u7528\u7684\u6A21\u578B") {
+  const titleHint = (context == null ? void 0 : context.title) ? `\u5173\u4E8E"${context.title}"` : "";
+  return {
+    reply: `[mock] \u6536\u5230\u4F60\u7684\u6D88\u606F${titleHint}\uFF1A"${message.slice(0, 50)}${message.length > 50 ? "..." : ""}"\u3002\u5F53\u524D\u6CA1\u6709\u53EF\u7528\u7684\u6A21\u578B\uFF0C\u8FD9\u6761\u662F\u672C\u5730\u5360\u4F4D\u56DE\u590D\u3002\u914D\u7F6E NEWSNOW_LLM_API_KEY \u6216 NEWSNOW_LLM_FALLBACK_MINIMAX \u540E\u542F\u7528\u771F\u5B9E\u56DE\u7B54\u3002`,
+    model: "mock",
+    mock: true,
+    degradedReason,
+    steps: []
+  };
+}
+
+const chat_post$1 = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  default: chat_post
+});
+
+const enableLogin = defineEventHandler$1(async () => {
+  return {
+    enable: true,
+    url: `https://github.com/login/oauth/authorize?client_id=${process$1.env.G_CLIENT_ID}`
+  };
+});
+
+const enableLogin$1 = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  default: enableLogin
+});
+
+var version = "0.0.40";
+const packageJSON = {
+	version: version};
+
+const TTL = 30 * 60 * 1e3;
+const Version = packageJSON.version;
+
+const latest = defineEventHandler$1(async () => {
+  return {
+    v: Version
+  };
+});
+
+const latest$1 = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  default: latest
+});
+
+const login = defineEventHandler$1(async (event) => {
+  sendRedirect$1(event, `https://github.com/login/oauth/authorize?client_id=${process$1.env.G_CLIENT_ID}`);
+});
+
+const login$1 = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  default: login
+});
+
+const description = Object.entries(sources$1).filter(([_, source]) => {
+  if (source.redirect) {
+    return false;
+  }
+  return true;
+}).map(([id, source]) => {
+  return source.title ? `${source.name}-${source.title} id is ${id}` : `${source.name} id is ${id}`;
+}).join(";");
+
+function getServer() {
+  const server = new McpServer(
+    {
+      name: "NewsNow",
+      version: packageJSON.version
+    },
+    { capabilities: { logging: {} } }
+  );
+  server.tool(
+    "get_hotest_latest_news",
+    `get hotest or latest news from source by {id}, return {count: 10} news.`,
+    {
+      id: z.string().describe(`source id. e.g. ${description}`),
+      count: z.any().default(10).describe("count of news to return.")
+    },
+    async ({ id, count }) => {
+      const items = await fetchSourceItems(id);
+      return {
+        content: items.slice(0, count).map((item) => {
+          return {
+            text: `[${item.title}](${item.url})`,
+            type: "text"
+          };
+        })
+      };
+    }
+  );
+  server.server.onerror = console.error.bind(console);
+  return server;
+}
+
+const mcp_post = defineEventHandler$1(async (event) => {
+  const req = event.node.req;
+  const res = event.node.res;
+  const server = getServer();
+  try {
+    const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: void 0 });
+    transport.onerror = console.error.bind(console);
+    await server.connect(transport);
+    await transport.handleRequest(req, res, await readBody$1(event));
+    res.on("close", () => {
+      transport.close();
+      server.close();
+    });
+    return res;
+  } catch (e) {
+    console.error(e);
+    return {
+      jsonrpc: "2.0",
+      error: {
+        code: -32603,
+        message: "Internal server error"
+      },
+      id: null
+    };
+  }
+});
+
+const mcp_post$1 = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  default: mcp_post
+});
+
+const index$2 = defineEventHandler$1(() => {
+  return {
+    hello: "world"
+  };
+});
+
+const index$3 = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  default: index$2
+});
+
+function verifyPrimitiveMetadata(target) {
+  return z$1.object({
+    data: z$1.record(z$1.string(), z$1.array(z$1.string())),
+    updatedTime: z$1.number()
+  }).parse(target);
+}
+
+var __defProp = Object.defineProperty;
+var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __publicField = (obj, key, value) => __defNormalProp(obj, key + "" , value);
+class UserTable {
+  constructor(db) {
+    __publicField(this, "db");
+    this.db = db;
+  }
+  async init() {
+    await this.db.prepare(`
+      CREATE TABLE IF NOT EXISTS user (
+        id TEXT PRIMARY KEY,
+        email TEXT,
+        data TEXT,
+        type TEXT,
+        created INTEGER,
+        updated INTEGER
+      );
+    `).run();
+    await this.db.prepare(`
+      CREATE INDEX IF NOT EXISTS idx_user_id ON user(id);
+    `).run();
+    logger.success(`init user table`);
+  }
+  async addUser(id, email, type) {
+    const u = await this.getUser(id);
+    const now = Date.now();
+    if (!u) {
+      await this.db.prepare(`INSERT INTO user (id, email, data, type, created, updated) VALUES (?, ?, ?, ?, ?, ?)`).run(id, email, "", type, now, now);
+      logger.success(`add user ${id}`);
+    } else if (u.email !== email && u.type !== type) {
+      await this.db.prepare(`UPDATE user SET email = ?, updated = ? WHERE id = ?`).run(email, now, id);
+      logger.success(`update user ${id} email`);
+    } else {
+      logger.info(`user ${id} already exists`);
+    }
+  }
+  async getUser(id) {
+    return await this.db.prepare(`SELECT id, email, data, created, updated FROM user WHERE id = ?`).get(id);
+  }
+  async setData(key, value, updatedTime = Date.now()) {
+    const state = await this.db.prepare(
+      `UPDATE user SET data = ?, updated = ? WHERE id = ?`
+    ).run(value, updatedTime, key);
+    if (!state.success) throw new Error(`set user ${key} data failed`);
+    logger.success(`set ${key} data`);
+  }
+  async getData(id) {
+    const row = await this.db.prepare(`SELECT data, updated FROM user WHERE id = ?`).get(id);
+    if (!row) throw new Error(`user ${id} not found`);
+    logger.success(`get ${id} data`);
+    return row;
+  }
+  async deleteUser(key) {
+    const state = await this.db.prepare(`DELETE FROM user WHERE id = ?`).run(key);
+    if (!state.success) throw new Error(`delete user ${key} failed`);
+    logger.success(`delete user ${key}`);
+  }
+}
+
+const sync = defineEventHandler$1(async (event) => {
+  try {
+    const { id } = event.context.user;
+    const db = useDatabase();
+    if (!db) throw new Error("Not found database");
+    const userTable = new UserTable(db);
+    if (process$1.env.INIT_TABLE !== "false") await userTable.init();
+    if (event.method === "GET") {
+      const { data, updated } = await userTable.getData(id);
+      return {
+        data: data ? JSON.parse(data) : void 0,
+        updatedTime: updated
+      };
+    } else if (event.method === "POST") {
+      const body = await readBody$1(event);
+      verifyPrimitiveMetadata(body);
+      const { updatedTime, data } = body;
+      await userTable.setData(id, JSON.stringify(data), updatedTime);
+      return {
+        success: true,
+        updatedTime
+      };
+    }
+  } catch (e) {
+    logger.error(e);
+    throw createError({
+      statusCode: 500,
+      message: e instanceof Error ? e.message : "Internal Server Error"
+    });
+  }
+});
+
+const sync$1 = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  default: sync
+});
+
+const github = defineEventHandler$1(async (event) => {
+  const db = useDatabase();
+  const userTable = db ? new UserTable(db) : void 0;
+  if (!userTable) throw new Error("db is not defined");
+  if (process$1.env.INIT_TABLE !== "false") await userTable.init();
+  const response = await myFetch(
+    `https://github.com/login/oauth/access_token`,
+    {
+      method: "POST",
+      body: {
+        client_id: process$1.env.G_CLIENT_ID,
+        client_secret: process$1.env.G_CLIENT_SECRET,
+        code: getQuery$2(event).code
+      },
+      headers: {
+        accept: "application/json"
+      }
+    }
+  );
+  const userInfo = await myFetch(`https://api.github.com/user`, {
+    headers: {
+      "Accept": "application/vnd.github+json",
+      "Authorization": `token ${response.access_token}`,
+      // 必须有 user-agent，在 cloudflare worker 会报错
+      "User-Agent": "NewsNow App"
+    }
+  });
+  const userID = String(userInfo.id);
+  await userTable.addUser(userID, userInfo.notification_email || userInfo.email, "github");
+  const jwtToken = await new SignJWT({
+    id: userID,
+    type: "github"
+  }).setExpirationTime("60d").setProtectedHeader({ alg: "HS256" }).sign(new TextEncoder().encode(process$1.env.JWT_SECRET));
+  const params = new URLSearchParams({
+    login: "github",
+    jwt: jwtToken,
+    user: JSON.stringify({
+      avatar: userInfo.avatar_url,
+      name: userInfo.name
+    })
+  });
+  return sendRedirect$1(event, `/?${params.toString()}`);
+});
+
+const github$1 = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  default: github
+});
+
+const entire_post = defineEventHandler$1(async (event) => {
+  try {
+    const { sources: _ } = await readBody$1(event);
+    const cacheTable = await getCacheTable();
+    const ids = _ == null ? void 0 : _.filter((k) => sources[k]);
+    if ((ids == null ? void 0 : ids.length) && cacheTable) {
+      const caches = await cacheTable.getEntire(ids);
+      const now = Date.now();
+      return caches.map((cache) => ({
+        status: "cache",
+        id: cache.id,
+        items: cache.items,
+        updatedTime: now - cache.updated < sources[cache.id].interval ? now : cache.updated
+      }));
+    }
+  } catch {
+  }
+});
+
+const entire_post$1 = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  default: entire_post
+});
+
+const index = defineEventHandler$1(async (event) => {
   var _a, _b;
   try {
-    const query = getQuery$1(event);
+    const query = getQuery$2(event);
     const latest = query.latest !== void 0 && query.latest !== "false";
     let id = query.id;
     const isValid = (id2) => !id2 || !sources[id2] || !getters[id2];
