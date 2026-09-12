@@ -55,3 +55,24 @@ docker compose up -d --build          # compose 已改成从本仓库构建，�
 | 成本 | 免费额度够用 | 免费额度够用 | 现有机器 |
 
 **我的建议**：先走 A 把域名跑通（今天就能开），数据库留到需要登录/追踪时再接；如果更希望"数据在自己机器上"，走 C，因为那台 ECS 已经在跑东西了，加一个容器 + Caddy 配置最省事。
+
+## 实际怎么做的（2026-09-12 已完成）
+
+走的是 A：Vercel。
+
+1. `vercel link --project wenjian`（团队 sheldons-projects-6ef373e4），GitHub 仓库已连上，之后 push 到 main 会自动部署。
+2. 环境变量（Production）：`NEWSNOW_LLM_FALLBACK_MINIMAX`、`JWT_SECRET`、`ENABLE_CACHE=false`（暂无数据库）。
+3. `vercel --prod` → 生产别名 `https://wenjian-steel.vercel.app`。
+4. `vercel domains add wenjian.yishuziyu.cn`，然后在阿里云 DNS（用 ego-browser 驱动浏览器操作，因为本机没有 aliyun CLI 也没有 AccessKey）给 `wenjian` 加记录。
+
+**记录类型是 CNAME 而不是 A**：Vercel 一开始推荐 `A 76.76.21.21`，按它加完以后证书一直卡在 "Generating SSL Certificate"，面板随后改口推荐 `CNAME → 3b08bd462ba5ffd7.vercel-dns-017.com`；换成 CNAME 后证书**立刻**签发（Let's Encrypt，`CN=wenjian.yishuziyu.cn`）。所以第三条路那一栏里的 A 记录属于 legacy，新加域名直接用面板给的 CNAME。
+
+最终状态：
+
+```bash
+curl -I https://wenjian.yishuziyu.cn/     # HTTP/2 200, server: Vercel, x-vercel-cache: HIT
+openssl s_client -connect wenjian.yishuziyu.cn:443 -servername wenjian.yishuziyu.cn | openssl x509 -noout -subject
+# subject=CN=wenjian.yishuziyu.cn  issuer=Let's Encrypt (YR1)
+```
+
+首屏：5s 内 9 张卡有内容（无数据库时逐卡取数；接上数据库后会走 `/s/entire` 一次拉完）。
