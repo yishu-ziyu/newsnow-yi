@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>闻见 · og-image</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1200px; height: 630px; }
+  body {
+    background: #F9F7F1;
+    color: #20201D;
+    font-family: "LXGW WenKai", "Songti SC", "Noto Serif SC", "STSong", serif;
+    /* 极轻的印刷颗粒：只做质感，不做渐变 */
+    background-image: radial-gradient(#20201D 0.5px, transparent 0.5px);
+    background-size: 4px 4px;
+    background-position: 0 0;
+    position: relative;
+    overflow: hidden;
+  }
+  body::after {
+    /* 颗粒压到几乎不可见，避免脏 */
+    content: "";
+    position: absolute; inset: 0;
+    background: linear-gradient(#F9F7F1, #F9F7F1);
+    opacity: 0.94;
+  }
+  .stage { position: absolute; inset: 0; padding: 68px 72px; display: flex; z-index: 2; }
+
+  /* 左侧：字标 */
+  .left { width: 520px; display: flex; flex-direction: column; }
+  .mark { margin-bottom: 34px; }
+  .name { font-size: 104px; line-height: 1; letter-spacing: 6px; }
+  .latin { margin-top: 18px; font-family: ui-monospace, Menlo, monospace; font-size: 15px; letter-spacing: 8px; color: #6B675F; }
+  .rule { width: 64px; height: 2px; background: #F14D42; margin: 30px 0 24px; }
+  .tagline { font-size: 25px; line-height: 1.6; color: #3A3833; max-width: 440px; }
+  .foot { margin-top: auto; font-family: ui-monospace, Menlo, monospace; font-size: 13px; letter-spacing: 1px; color: #8B8580; }
+
+  /* 右侧：一小片卡片墙 + 简报块 */
+  .right { position: relative; flex: 1; }
+  .wall { position: absolute; right: 0; top: 6px; width: 520px; height: 470px; }
+  .card {
+    position: absolute; width: 178px; background: #FFFFFF;
+    border: 1px solid #E5E0D8; border-radius: 10px; padding: 12px 12px 14px;
+  }
+  .card .src { display: flex; align-items: center; gap: 6px; font-family: system-ui, -apple-system, "PingFang SC", sans-serif; font-size: 12px; color: #20201D; }
+  .card .src i { width: 8px; height: 8px; border-radius: 2px; background: #20201D; opacity: 0.75; }
+  .bar { height: 7px; border-radius: 3px; background: #20201D; opacity: 0.16; margin-top: 9px; }
+  .bar.s { width: 62%; }
+  .bar.m { width: 84%; }
+  .bar.l { width: 96%; }
+  .row { display: flex; align-items: center; gap: 7px; margin-top: 12px; }
+  .row .idx { width: 14px; height: 14px; border-radius: 4px; background: #20201D; opacity: 0.1; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; background: #F14D42; box-shadow: 0 0 0 4px rgba(241,77,66,0.14); }
+  .dot.small { width: 7px; height: 7px; box-shadow: none; }
+
+  .brief {
+    position: absolute; right: 0; bottom: 0; width: 236px;
+    background: #FFFFFF; border: 1px solid #E5E0D8; border-left: 3px solid #F14D42;
+    border-radius: 10px; padding: 14px 16px;
+  }
+  .brief h3 { font-family: system-ui, -apple-system, "PingFang SC", sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.5px; }
+  .brief p { font-family: ui-monospace, Menlo, monospace; font-size: 11px; color: #6B675F; margin-top: 6px; letter-spacing: 0.5px; }
+  svg.links { position: absolute; right: 0; bottom: 0; width: 520px; height: 470px; overflow: visible; }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div class="left">
+      <svg class="mark" width="76" height="76" viewBox="0 0 512 512" aria-hidden="true">
+        <g fill="#20201D">
+          <circle cx="128" cy="128" r="31" /><circle cx="256" cy="128" r="26" /><rect x="361" y="105" width="46" height="46" />
+          <circle cx="128" cy="256" r="26" /><circle cx="384" cy="256" r="31" />
+          <rect x="105" y="361" width="46" height="46" /><circle cx="256" cy="384" r="31" /><circle cx="384" cy="384" r="26" />
+        </g>
+        <circle cx="256" cy="256" r="58" fill="#F14D42" />
+      </svg>
+      <div class="name">闻见</div>
+      <div class="latin">WENJIAN</div>
+      <div class="rule"></div>
+      <div class="tagline">从新闻里，看见值得追踪的事。</div>
+      <div class="foot">wenjian.yishuziyu.cn</div>
+    </div>
+
+    <div class="right">
+      <div class="wall">
+        <svg class="links" viewBox="0 0 520 470" aria-hidden="true">
+          <path d="M 371 111 C 371 230, 300 300, 281 392" fill="none" stroke="#F14D42" stroke-width="1.4" stroke-dasharray="3 4" />
+          <path d="M 258 307 C 258 350, 268 370, 280 427" fill="none" stroke="#F14D42" stroke-width="1.4" stroke-dasharray="3 4" />
+        </svg>
+
+        <div class="card" style="left: 8px; top: 18px;">
+          <div class="src"><i></i>微博 · 实时热搜</div>
+          <div class="row"><span class="idx"></span><div class="bar l" style="margin:0"></div></div>
+          <div class="row"><span class="idx"></span><div class="bar m" style="margin:0"></div></div>
+          <div class="row"><span class="idx"></span><div class="bar s" style="margin:0"></div></div>
+        </div>
+
+        <div class="card" style="left: 210px; top: 62px;">
+          <div class="src"><i></i>知乎 · 热榜</div>
+          <div class="row"><span class="idx"></span><div class="bar m" style="margin:0"></div><span class="dot"></span></div>
+          <div class="row"><span class="idx"></span><div class="bar l" style="margin:0"></div></div>
+          <div class="row"><span class="idx"></span><div class="bar s" style="margin:0"></div></div>
+        </div>
+
+        <div class="card" style="left: 96px; top: 232px;">
+          <div class="src"><i></i>36氪 · 人气榜</div>
+          <div class="row"><span class="idx"></span><div class="bar l" style="margin:0"></div></div>
+          <div class="row"><span class="idx"></span><div class="bar m" style="margin:0"></div><span class="dot small"></span></div>
+        </div>
+
+        <div class="brief" style="right: 4px; bottom: 8px;">
+          <h3>值得追踪的变化</h3>
+          <p>7 个来源 · 3 条线索</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

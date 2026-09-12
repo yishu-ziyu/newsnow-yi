@@ -47,3 +47,26 @@ grep -rl "ourongxing" dist/output/public/assets   # 只剩 Brand.upstream 那一
 - `README.zh-CN.md` / `README.ja-JP.md` 的 MCP 配置示例里 `BASE_URL` 原来指向上游的线上实例 `newsnow.busiyi.world`，改成自托管的 `http://127.0.0.1:4444`。
 
 改完之后全仓库搜 `ourongxing/newsnow` 只剩三处，都是**故意保留的署名**：`shared/brand.ts`（页脚署名链接）、`README.md` 第 7 行与第 99 行（"基于 xxx 的增强版本" / "原项目"）。
+
+## 定稿（用户拍板）
+
+- **站名**：闻见（`name: "闻见"`、`wordmark: ["闻","见"]`、`latin: "WENJIAN"`）。含义：**闻**是收到世界的消息，**见**是从消息里形成自己的判断。
+- **一句对外文案**：闻见 — 从新闻里，看见值得追踪的事。
+- **描述**：把几十个来源的实时资讯放在一起，追问、对比，并持续追踪真正重要的变化。
+- **域名**：`https://wenjian.yishuziyu.cn/` —— `og:url`、Schema.org `url`、`public/sitemap.xml` 三处统一（sitemap 原来还写着上游的 `newsnow.busiyi.world`，已换）。
+
+### 「信号点阵」品牌视觉
+
+一套母版导出五个文件，**不要**报纸/地球/RSS/天线这些新闻 App 陳词：
+
+| 文件 | 规格 | 生成方式 |
+|---|---|---|
+| `public/icon.svg` | 512×512 矢量母版：3×3 点阵，八个低权重信息（细点 + 方块），中心一个是红色信号点 | 手写 SVG |
+| `public/apple-touch-icon.png` | 180×180 | `magick -background none -density 384 public/icon.svg -resize 180x180 public/apple-touch-icon.png` |
+| `public/pwa-192x192.png` | 192×192 | 同上，`-resize 192x192` |
+| `public/pwa-512x512.png` | 512×512 | `magick -background none -density 768 public/icon.svg -resize 512x512 public/pwa-512x512.png` |
+| `public/og-image.png` | 1200×630：左侧「闻见 + 一句文案」，右侧一小片示意卡片墙，两条红色虚线从信号点汇进「值得追踪的变化」简报块 | 渲染 `scripts/brand/og-image.html` 后截图（用 `scripts/qa-cdp-lib.mjs` 起一次性无头浏览器，1200×630） |
+
+色板固定：暖纸 `#F9F7F1`、炭黑 `#20201D`、强调红 `#F14D42`；无渐变、无玻璃、圆角很小；16px favicon 仍然只看得到「点阵 + 红色信号点」（已按 16/32px 放大目视核对）。
+
+页头字标改用 `font-serif-heading`（原来那套 Baloo 2 是上游的拉丁字标字体，中文用不上，预加载链接一并去掉）；「见」用主色，对应"从消息里形成判断"。
