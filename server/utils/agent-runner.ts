@@ -130,7 +130,8 @@ const BRIEFING_SYSTEM_PROMPT = `你是新闻简报助手。用户会给你过去
 1. 先基于这些标题写简报；若某主题的条目太少或没有，用 search_news 工具去取更多（可限定 column）。工具调用合计控制在 4 次以内，搜不到就如实说没搜到。
 2. 纯文本输出，不要 markdown 强调符号（**、##），分点用短横线开头。
 3. 按主题分组，每组 2-3 条，每条一句话，句末标出来源。
-4. 总共 400 字以内；不要编造条目或链接。`
+4. 总共 400 字以内；不要编造条目或链接。
+5. 只输出简报正文。不要输出你的过程、计划、思考（例如「先搜索」「资料够了」「开始写」），也不要说自己在调用工具。`
 
 /** Briefing generator that can reach the same news tools as the chat panel. */
 export async function runBriefing(options: {
@@ -182,6 +183,33 @@ export async function runBriefing(options: {
   return { ok: false, reason: failures.join(" | ") }
 }
 
+/**
+ * 对比分析要求输出 markdown 表格，但模型偶尔只给列表。
+ * 这种情况再用一次无工具的改写调用补出表格，避免用户点"对比"却看不到矩阵。
+ */
+async function ensureCompareTable(
+  model: ReturnType<typeof toLanguageModel>,
+  contexts: NonNullable<ChatRequest["contexts"]>,
+  reply: string,
+): Promise<string> {
+  if (/\|.*\|/.test(reply)) return reply
+
+  const sources = contexts.map((c, i) => `${i + 1}. ${c.title ?? `条目 ${i + 1}`}`).join("\n")
+  try {
+    const result = await generateText({
+      model,
+      system: "你把已有的对比分析改写成 markdown 表格。表头固定三列：维度 | 来源 | 说法。只使用给定来源的名称，信息不足时写「未提及」。只输出一句结论加表格，不要解释。",
+      prompt: `选中来源：\n${sources}\n\n已有分析：\n${reply.slice(0, 5000)}`,
+      maxOutputTokens: MAX_OUTPUT_TOKENS,
+    })
+    const rewritten = result.text?.trim()
+    return rewritten && /\|.*\|/.test(rewritten) ? rewritten : reply
+  } catch (e) {
+    console.error("[agent/compare] 兜底改写失败：", e instanceof Error ? e.message.slice(0, 120) : e)
+    return reply
+  }
+}
+
 /** Try each configured provider in order; the first one that answers wins. */
 export async function runNewsAgent(
   message: string,
@@ -214,9 +242,14 @@ export async function runNewsAgent(
       const steps = collectSteps(result.steps)
       console.log(`[agent/run] provider=${provider.name} model=${provider.model} steps=${steps.length}`)
 
+      let reply = result.text?.trim() || "（工具跑完了，但模型没有给出回复）"
+      if (options.contexts && options.contexts.length > 1) {
+        reply = await ensureCompareTable(toLanguageModel(provider), options.contexts, reply)
+      }
+
       return {
         ok: true,
-        reply: result.text?.trim() || "（工具跑完了，但模型没有给出回复）",
+        reply,
         model: provider.model,
         provider: provider.name,
         steps,

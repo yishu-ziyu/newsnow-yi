@@ -13,11 +13,12 @@ export function defineSource(source: SourceGetter | R): SourceGetter | R {
 export function defineRSSSource(url: string, option?: SourceOption): SourceGetter {
   return async () => {
     const data = await rss2json(url)
-    if (!data?.items.length) throw new Error("Cannot fetch rss data")
-    return data.items.map(item => ({
+    const items = Array.isArray(data?.items) ? data.items.filter((item: any) => item && (item.title || item.link)) : []
+    if (!items.length) throw new Error(`RSS 没有可用条目：${url}`)
+    return items.map((item: any) => ({
       title: item.title,
       url: item.link,
-      id: item.link,
+      id: item.link ?? item.title,
       pubDate: !option?.hiddenDate ? item.created : undefined,
     }))
   }

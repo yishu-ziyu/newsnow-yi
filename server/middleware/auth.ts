@@ -6,7 +6,8 @@ export default defineEventHandler(async (event) => {
   if (!url.pathname.startsWith("/api")) return
   if (["JWT_SECRET", "G_CLIENT_ID", "G_CLIENT_SECRET"].find(k => !process.env[k])) {
     event.context.disabledLogin = true
-    if (["/api/s", "/api/proxy", "/api/latest", "/api/mcp", "/api/agent"].every(p => !url.pathname.startsWith(p)))
+    // enable-login 是启动探测：未配置登录时它要能正常返回 enabled:false，不能抛 506
+    if (["/api/s", "/api/proxy", "/api/latest", "/api/mcp", "/api/agent", "/api/enable-login"].every(p => !url.pathname.startsWith(p)))
       throw createError({ statusCode: 506, message: "Server not configured, disable login" })
   } else {
     // /api/agent also needs the user context: the panel history is stored per user

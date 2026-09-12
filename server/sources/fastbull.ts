@@ -9,15 +9,16 @@ const express = defineSource(async () => {
   const news: NewsItem[] = []
   $main.each((_, el) => {
     const a = $(el).find(".title_name")
-    const url = a.attr("href")
-    const titleText = a.text()
+    const titleText = a.text().trim()
     const title = titleText.match(/【(.+)】/)?.[1] ?? titleText
     const date = $(el).attr("data-date")
-    if (url && title && date) {
+    // express 流没有单条永久链接（页面上只有 mailto 分享），用 data-id 去重、指向列表页
+    const id = $(el).attr("data-id") ?? `${date}-${title.slice(0, 24)}`
+    if (title && date) {
       news.push({
-        url: baseURL + url,
+        url: `${baseURL}/cn/express-news`,
         title: title.length < 4 ? titleText : title,
-        id: url,
+        id,
         pubDate: Number(date),
       })
     }

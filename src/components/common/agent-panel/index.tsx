@@ -166,7 +166,7 @@ function SegmentedTabs({ value, onChange }: { value: "chat" | "trackers", onChan
   )
 }
 
-function TrackersView({ onStartTracking }: { onStartTracking?: () => void }) {
+function TrackersView({ onStartTracking, reloadToken = 0 }: { onStartTracking?: () => void, reloadToken?: number }) {
   const [state, setState] = useState<TrackersState>({ persisted: false, trackers: [], briefings: [] })
   const [loading, setLoading] = useState(true)
   const [confirmId, setConfirmId] = useState<string | null>(null)
@@ -180,7 +180,7 @@ function TrackersView({ onStartTracking }: { onStartTracking?: () => void }) {
 
   useEffect(() => {
     refresh()
-  }, [refresh])
+  }, [refresh, reloadToken])
 
   const handleDelete = useCallback(async (id: string) => {
     await removeTracker(id)
@@ -213,10 +213,20 @@ function TrackersView({ onStartTracking }: { onStartTracking?: () => void }) {
       <section className="flex flex-col gap-2">
         <header className="flex items-baseline justify-between">
           <h3 className="text-xs font-semibold text-neutral-600 dark:text-neutral-300">追踪</h3>
-          <span className="text-xs text-neutral-400 tabular-nums">
-            {state.trackers.length}
-            {" "}
-            条
+          <span className="flex items-center gap-2">
+            <span className="text-xs text-neutral-400 tabular-nums">
+              {state.trackers.length}
+              {" "}
+              条
+            </span>
+            <button
+              type="button"
+              aria-label="刷新追踪与简报"
+              onClick={refresh}
+              className="rounded px-1.5 py-0.5 text-xs text-neutral-500 transition-colors duration-150 hover:bg-neutral-400/20 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200"
+            >
+              刷新
+            </button>
           </span>
         </header>
 
@@ -358,6 +368,7 @@ export function AgentPanel() {
   const inputRef = useRef<HTMLInputElement>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const autoCompareSent = useRef(false)
+  const [trackersToken, setTrackersToken] = useState(0)
   const reduceMotion = useReducedMotion()
 
   const compareItems = state.activeItems
@@ -426,9 +437,14 @@ export function AgentPanel() {
     dispatch({ type: "set_loading", loading: true })
 
     try {
+      // 带上登录态：服务端要靠它把 create_tracker 之类落到当前用户名下
+      const jwt = safeParseString(localStorage.getItem("jwt"))
       const response = await fetch("/api/agent/chat", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(jwt ? { Authorization: `Bearer ${jwt}` } : {}),
+        },
         body: JSON.stringify({
           message: content,
           history: state.messages
@@ -449,6 +465,11 @@ export function AgentPanel() {
           })),
         }),
       })
+      if (!response.ok) {
+        // fetch 不会因 4xx/5xx 抛错，必须自己检查，否则错误体会被当成回复渲染
+        const detail = await response.json().catch(() => null) as { message?: string } | null
+        throw new Error(detail?.message ? `${detail.message}（HTTP ${response.status}）` : `HTTP ${response.status}`)
+      }
       const data = await response.json()
       dispatch({
         type: "add_assistant",
@@ -461,8 +482,9 @@ export function AgentPanel() {
           degradedReason: data.degradedReason,
         },
       })
-    } catch {
-      dispatch({ type: "add_assistant", content: "抱歉，请求失败了。请稍后再试。", meta: { mock: true, degradedReason: "网络请求失败" } })
+    } catch (e) {
+      const reason = e instanceof Error ? e.message : "网络请求失败"
+      dispatch({ type: "add_assistant", content: `抱歉，请求失败了（${reason}）。请稍后再试。`, meta: { mock: true, degradedReason: reason } })
     } finally {
       dispatch({ type: "set_loading", loading: false })
     }
@@ -543,7 +565,14 @@ export function AgentPanel() {
             <h2 className="truncate text-sm font-bold text-neutral-800 dark:text-neutral-200 [text-wrap:balance]">
               {title}
             </h2>
-            <SegmentedTabs value={state.view} onChange={view => dispatch({ type: "set_view", view })} />
+            <SegmentedTabs
+              value={state.view}
+              onChange={(view) => {
+                dispatch({ type: "set_view", view })
+                // 每次切到追踪都重新拉一次，否则在别处新建的追踪/简报不会出现
+                if (view === "trackers") setTrackersToken(token => token + 1)
+              }}
+            />
           </div>
           <div className="ml-2 flex gap-2">
             <button
@@ -596,6 +625,7 @@ export function AgentPanel() {
         {state.view === "trackers"
           ? (
               <TrackersView
+                reloadToken={trackersToken}
                 onStartTracking={() => {
                   dispatch({ type: "set_view", view: "chat" })
                   requestAnimationFrame(() => {

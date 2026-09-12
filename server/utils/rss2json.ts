@@ -16,6 +16,10 @@ export async function rss2json(url: string): Promise<RSSInfo | undefined> {
 
   let channel = result.rss && result.rss.channel ? result.rss.channel : result.feed
   if (Array.isArray(channel)) channel = channel[0]
+  // 上游返回 HTML（例如论坛 RSS 被拦）时 channel 是 undefined，
+  // 之前会在这里抛 "Cannot read properties of undefined (reading 'title')"，
+  // 现在返回 undefined，由调用方给出可读错误
+  if (!channel || typeof channel !== "object") return undefined
 
   const rss = {
     title: channel.title ?? "",
