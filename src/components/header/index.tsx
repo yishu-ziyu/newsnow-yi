@@ -60,14 +60,14 @@ export function Header() {
         <Link to="/" className="flex gap-2 items-center">
           <div className="h-10 w-10 bg-cover" title="logo" style={{ backgroundImage: "url(/icon.svg)" }} />
           <span className="text-2xl font-brand line-height-none!">
-            <p>News</p>
+            <p>{Brand.wordmark[0]}</p>
             <p className="mt--1">
-              <span className="color-primary-6">N</span>
-              <span>ow</span>
+              <span className="color-primary-6">{Brand.wordmark[1]?.slice(0, 1)}</span>
+              <span>{Brand.wordmark[1]?.slice(1)}</span>
             </p>
           </span>
         </Link>
-        <a target="_blank" href={`${Homepage}/releases/tag/v${Version}`} className="btn text-sm ml-1 font-mono">
+        <a target="_blank" href={`${Brand.repo}/releases`} className="btn text-sm ml-1 font-mono">
           {`v${Version}`}
         </a>
       </span>
@@ -76,7 +76,7 @@ export function Header() {
           <NavBar />
         </span>
       </span>
-      <span className="justify-self-end flex gap-2 items-center text-xl text-primary-600 dark:text-primary">
+      <span className="justify-self-end flex gap-2 items-center text-xl text-primary-600 dark:text-primary-400">
         <button
           type="button"
           title="Agent 助手"

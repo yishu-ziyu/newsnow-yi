@@ -1,6 +1,7 @@
 import { z } from "zod"
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
 import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js"
+import { Brand } from "@shared/brand"
 import packageJSON from "../../package.json"
 import { description } from "./desc.js"
 import { fetchSourceItems } from "#/utils/news-tools"
@@ -8,7 +9,7 @@ import { fetchSourceItems } from "#/utils/news-tools"
 export function getServer() {
   const server = new McpServer(
     {
-      name: "NewsNow",
+      name: Brand.name,
       version: packageJSON.version,
     },
     { capabilities: { logging: {} } },

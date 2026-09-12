@@ -1,5 +1,6 @@
 import process from "node:process"
 import { SignJWT } from "jose"
+import { Brand } from "@shared/brand"
 import { UserTable } from "#/database/user"
 
 export default defineEventHandler(async (event) => {
@@ -38,7 +39,7 @@ export default defineEventHandler(async (event) => {
       "Accept": "application/vnd.github+json",
       "Authorization": `token ${response.access_token}`,
       // 必须有 user-agent，在 cloudflare worker 会报错
-      "User-Agent": "NewsNow App",
+      "User-Agent": `${Brand.name} App`,
     },
   })
 

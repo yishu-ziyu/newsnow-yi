@@ -1,12 +1,15 @@
+import { Brand } from "@shared/brand"
+
 export function Footer() {
+  const year = new Date().getFullYear()
   return (
     <>
-      <a href={`${Homepage}/blob/main/LICENSE`} target="_blank">MIT LICENSE</a>
+      <a href={`${Brand.repo}/blob/main/LICENSE`} target="_blank">MIT LICENSE</a>
       <span>
-        <span>NewsNow © 2024 By </span>
-        <a href={Author.url} target="_blank">
-          {Author.name}
-        </a>
+        <span>基于 </span>
+        <a href={Brand.upstream.url} target="_blank">{Brand.upstream.name}</a>
+        <span>{` 二次开发 · © 2024-${year} `}</span>
+        <a href={Brand.author.url} target="_blank">{Brand.author.name}</a>
       </span>
     </>
   )

@@ -1,28 +1,38 @@
 <!doctype html>
-<html lang="zh-CN" class="dark">
+<html lang="zh-CN">
 
 <head>
+  <script>
+    try {
+      const colorScheme = JSON.parse(localStorage.getItem("color-scheme"))
+      const isDark = colorScheme === "dark"
+        || (colorScheme === "auto" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+      document.documentElement.classList.toggle("dark", isDark)
+    } catch {
+      document.documentElement.classList.remove("dark")
+    }
+  </script>
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/icon.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- SEO Meta Tags -->
-  <meta name="description" content="NewsNow - 实时新闻聚合阅读器，汇集全球热点新闻，提供优雅的阅读体验" />
-  <meta name="keywords" content="新闻,科技新闻,实时新闻,新闻聚合,NewsNow" />
-  <meta name="author" content="NewsNow" />
+  <!-- SEO Meta Tags（品牌文案与 shared/brand.ts 保持一致） -->
+  <meta name="description" content="实时新闻聚合阅读器：把几十个来源的热榜拼成一面墙，可以追问、对比、建立长期追踪。" />
+  <meta name="keywords" content="新闻,科技新闻,实时新闻,新闻聚合,热榜" />
+  <meta name="author" content="yishu-ziyu" />
   <meta name="robots" content="index, follow" />
 
   <!-- Open Graph Meta Tags -->
-  <meta property="og:title" content="NewsNow - 优雅的新闻聚合阅读器" />
-  <meta property="og:description" content="实时新闻聚合阅读器，汇集全球热点新闻，提供优雅的阅读体验" />
+  <meta property="og:title" content="新闻墙 - 优雅的新闻聚合阅读器" />
+  <meta property="og:description" content="实时新闻聚合阅读器：把几十个来源的热榜拼成一面墙，可以追问、对比、建立长期追踪。" />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://newsnow.busiyi.world" />
-  <meta property="og:image" content="https://newsnow.busiyi.world/og-image.png" />
+  <meta property="og:url" content="https://github.com/yishu-ziyu/newsnow-yi" />
+  <meta property="og:image" content="/og-image.png" />
 
   <!-- Twitter Card Meta Tags -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="NewsNow - 优雅的新闻聚合阅读器" />
-  <meta name="twitter:description" content="实时新闻聚合阅读器，汇集全球热点新闻，提供优雅的阅读体验" />
-  <meta name="twitter:image" content="https://newsnow.busiyi.world/og-image.svg" />
+  <meta name="twitter:title" content="新闻墙 - 优雅的新闻聚合阅读器" />
+  <meta name="twitter:description" content="实时新闻聚合阅读器：把几十个来源的热榜拼成一面墙。" />
+  <meta name="twitter:image" content="/og-image.png" />
 
   <meta name="theme-color" content="#F14D42" />
   <link rel="preload" href="/Baloo2-Bold.subset.ttf" as="font" type="font/ttf" crossorigin>
@@ -33,20 +43,15 @@
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
-      "name": "NewsNow",
-      "url": "https://newsnow.busiyi.world",
-      "description": "实时新闻聚合阅读器，汇集全球热点新闻，提供优雅的阅读体验",
+      "name": "新闻墙",
+      "url": "https://github.com/yishu-ziyu/newsnow-yi",
+      "description": "实时新闻聚合阅读器：把几十个来源的热榜拼成一面墙，可以追问、对比、建立长期追踪。",
     }
   </script>
 
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-EL9HHYE5LC"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'G-EL9HHYE5LC');
-  </script>
+  <!-- 统计：上游那段 Google Analytics 已移除——它是上游作者的媒体资源，留着等于把访客数据
+       交给别人的账号（具体 ID 见 git 历史）。要用就换成自己的 ID，或换 Umami/Plausible 这类自托管方案。
+  -->
 
   <script>
     const query = new URLSearchParams(window.location.search)
@@ -56,7 +61,7 @@
       window.history.replaceState({}, document.title, window.location.pathname)
     }
   </script>
-  <title>NewsNow</title>
+  <title>新闻墙</title>
 </head>
 
 <body>

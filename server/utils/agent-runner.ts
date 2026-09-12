@@ -1,3 +1,4 @@
+import { Brand } from "@shared/brand"
 import { generateText, stepCountIs } from "ai"
 import { createAnthropic } from "@ai-sdk/anthropic"
 import { createOpenAICompatible } from "@ai-sdk/openai-compatible"
@@ -40,7 +41,7 @@ function toLanguageModel(provider: LLMProvider) {
   return compatible(provider.model)
 }
 
-const AGENT_SYSTEM_PROMPT = `你是 NewsNow 的新闻助手，帮用户理解和梳理当前抓到的资讯。
+const AGENT_SYSTEM_PROMPT = `你是 ${Brand.name} 的新闻助手，帮用户理解和梳理当前抓到的资讯。
 
 你可以调用这些工具：
 - list_sources：看有哪些源（可按栏目）

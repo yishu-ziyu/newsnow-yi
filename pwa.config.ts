@@ -1,14 +1,15 @@
 import process from "node:process"
 import type { VitePWAOptions } from "vite-plugin-pwa"
 import { VitePWA } from "vite-plugin-pwa"
+import { Brand } from "./shared/brand"
 
 const pwaOption: Partial<VitePWAOptions> = {
   includeAssets: ["icon.svg", "apple-touch-icon.png"],
   filename: "swx-v2.js",
   manifest: {
-    name: "NewsNow",
-    short_name: "NewsNow",
-    description: "Elegant reading of real-time and hottest news",
+    name: Brand.name,
+    short_name: Brand.name,
+    description: Brand.description,
     theme_color: "#F14D42",
     icons: [
       {
