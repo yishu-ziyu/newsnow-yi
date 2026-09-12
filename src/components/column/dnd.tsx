@@ -18,7 +18,7 @@ import { currentSourcesAtom } from "~/atoms"
 import { disabledSourceIDsAtom } from "~/atoms/source-health"
 
 const AnimationDuration = 200
-const WIDTH = 350
+const WIDTH = 280
 export function Dnd() {
   const [items, setItems] = useAtom(currentSourcesAtom)
   const disabledSourceIDs = useAtomValue(disabledSourceIDsAtom)

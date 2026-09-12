@@ -237,6 +237,7 @@ function NewsCard({ id, setHandleRef }: NewsCardProps) {
               items={data.items}
               type={sources[id].type === "hottest" ? "hottest" : "realtime"}
               sourceColor={sources[id].color}
+              sourceId={id}
             />
           )}
           {/* 结构化骨架：只在真的加载中显示 */}

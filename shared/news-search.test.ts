@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { scoreText, searchNewsItems, tokenizeQuery } from "@shared/news-search"
+import { newsSearchQuery, relatedNewsItems, resolveNewsSearchQuery, scoreText, searchNewsItems, titleOverlap, tokenizeQuery } from "@shared/news-search"
 
 describe("tokenizeQuery", () => {
   it("keeps latin words whole and lowercases them", () => {
@@ -72,5 +72,80 @@ describe("searchNewsItems", () => {
 
   it("respects the limit", () => {
     expect(searchNewsItems(items, "iPhone", 1)).toHaveLength(1)
+  })
+})
+
+describe("titleOverlap", () => {
+  it("is 1 for identical titles", () => {
+    expect(titleOverlap("陶哲轩联名抗议", "陶哲轩联名抗议")).toBe(1)
+  })
+
+  it("is high when one title is a shorter cut of the other", () => {
+    expect(titleOverlap(
+      "陶哲轩、邓煜等菲奖得主联合抗议 AI 公司数学",
+      "陶哲轩等菲奖得主抗议 AI 公司",
+    )).toBeGreaterThanOrEqual(0.5)
+  })
+
+  it("is low for unrelated hot-search titles", () => {
+    expect(titleOverlap("苏超", "世界是一本巨大的教科书")).toBeLessThan(0.5)
+  })
+})
+
+describe("relatedNewsItems", () => {
+  const zhihu = { id: 1, title: "陶哲轩、邓煜等菲奖得主联合抗议 AI 公司数学", url: "https://zhihu/1", source: "zhihu" }
+  const weibo = { id: 2, title: "陶哲轩等菲奖得主抗议 AI 公司", url: "https://weibo/2", source: "weibo" }
+  const apple = { id: 3, title: "iPhone 18 Pro 预售", url: "https://toutiao/3", source: "toutiao" }
+  const other = { id: 4, title: "苏超总决赛", url: "https://hupu/4", source: "hupu" }
+
+  it("finds the same event on another source", () => {
+    expect(relatedNewsItems(zhihu, [zhihu, weibo, apple, other]).map(i => i.id)).toEqual([2])
+  })
+
+  it("does not glue stories that only share a brand word", () => {
+    const duo = { id: 5, title: "iPhone Duo 近百万人预约", url: "https://weibo/5", source: "weibo" }
+    expect(relatedNewsItems(apple, [apple, duo])).toEqual([])
+  })
+
+  it("skips the seed itself and same-source rows", () => {
+    const twin = { id: 6, title: "陶哲轩等菲奖得主抗议 AI 公司 后续", url: "https://zhihu/6", source: "zhihu" }
+    expect(relatedNewsItems(zhihu, [zhihu, twin, weibo]).map(i => i.id)).toEqual([2])
+  })
+
+  it("respects the limit", () => {
+    const w2 = { id: 7, title: "菲奖得主联合抗议 AI 公司", url: "https://coolapk/7", source: "coolapk" }
+    expect(relatedNewsItems(zhihu, [weibo, w2], { limit: 1 })).toHaveLength(1)
+  })
+})
+
+describe("newsSearchQuery", () => {
+  it("pulls the topic out of a spoken ask", () => {
+    expect(newsSearchQuery("今天有什么 iPhone 相关的新闻？")).toBe("iPhone")
+  })
+
+  it("leaves a recursive follow-up to the model", () => {
+    expect(newsSearchQuery("是的，你可以做一些更详细的递归搜索。")).toBeNull()
+  })
+
+  it("does not search the filler sentence on 细节/后续/什么意思", () => {
+    expect(newsSearchQuery("可以具体看一下细节吧和后续反应。")).toBeNull()
+    expect(newsSearchQuery("这个被泄密是什么意思？")).toBeNull()
+  })
+})
+
+describe("resolveNewsSearchQuery", () => {
+  it("reuses the last topical user ask for a 细节 follow-up", () => {
+    expect(resolveNewsSearchQuery("可以具体看一下细节吧和后续反应。", [
+      { role: "user", content: "今天有什么 iPhone 相关的新闻？" },
+      { role: "assistant", content: "折叠屏比例被泄密。" },
+      { role: "user", content: "这个被泄密是什么意思？" },
+      { role: "assistant", content: "就是尺寸提前流出去了。" },
+    ])).toBe("iPhone")
+  })
+
+  it("keeps an explicit topic on the current message", () => {
+    expect(resolveNewsSearchQuery("今天有什么 iPhone 相关的新闻？", [
+      { role: "user", content: "今天有什么华为相关的新闻？" },
+    ])).toBe("iPhone")
   })
 })

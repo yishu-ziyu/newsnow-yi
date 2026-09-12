@@ -1,6 +1,8 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion"
-import type { NewsItem } from "@shared/types"
+import { useQueryClient } from "@tanstack/react-query"
+import type { NewsItem, SourceID } from "@shared/types"
+import { relatedNewsItems } from "@shared/news-search"
 import { useWindowSize } from "react-use"
 import { useAtomValue, useSetAtom } from "jotai"
 import { agentPanelActionsAtom } from "~/atoms/agent-panel"
@@ -9,19 +11,58 @@ import { layoutModeAtom } from "~/atoms/layout-mode"
 import { useRelativeTime } from "~/hooks/useRelativeTime"
 
 const SPRING = { type: "spring", stiffness: 300, damping: 25 }
+/** Glance-style collapse-after. Fits ~8 rows in the 500px card without inner scroll. */
+const COLLAPSE_AFTER = 8
+
+interface WallItem extends NewsItem {
+  source: string
+  sourceName: string
+}
+
+function useWallPeers(sourceId: SourceID, items: NewsItem[]) {
+  const queryClient = useQueryClient()
+  const [tick, setTick] = useState(0)
+  useEffect(() => {
+    return queryClient.getQueryCache().subscribe((event) => {
+      if (event.query?.queryKey?.[0] === "source") setTick(n => n + 1)
+    })
+  }, [queryClient])
+
+  return useMemo(() => {
+    const corpus: WallItem[] = []
+    for (const [id, resp] of cacheSources) {
+      if (id === sourceId) continue
+      const sourceName = sources[id]?.name ?? String(id)
+      for (const item of resp.items ?? []) {
+        corpus.push({ ...item, source: id, sourceName })
+      }
+    }
+    const map = new Map<string, WallItem[]>()
+    for (const item of items) {
+      const peers = relatedNewsItems({ ...item, source: sourceId }, corpus)
+      if (peers.length) map.set(itemKey(item), peers)
+    }
+    return map
+  }, [items, sourceId, tick])
+}
 
 export interface MorphingNewsListProps {
   items: NewsItem[]
   type: "hottest" | "realtime"
   sourceColor: string
+  sourceId: SourceID
 }
 
-export function MorphingNewsList({ items, sourceColor }: MorphingNewsListProps) {
+export function MorphingNewsList({ items, sourceColor, sourceId }: MorphingNewsListProps) {
   const layout = useAtomValue(layoutModeAtom)
   const [expandedId, setExpandedId] = useState<string | number | null>(null)
+  const [showAll, setShowAll] = useState(false)
   const { width } = useWindowSize()
   const isMobile = width < 768
   const setAgentPanel = useSetAtom(agentPanelActionsAtom)
+  const peersByItem = useWallPeers(sourceId, items)
+  const visibleItems = showAll || items.length <= COLLAPSE_AFTER ? items : items.slice(0, COLLAPSE_AFTER)
+  const hiddenCount = items.length - visibleItems.length
 
   const handleAgentClick = useCallback((e: React.MouseEvent, item: NewsItem) => {
     e.preventDefault()
@@ -110,6 +151,7 @@ export function MorphingNewsList({ items, sourceColor }: MorphingNewsListProps) 
                 {item.extra.hover}
               </motion.p>
             )}
+            {isExpanded && <ClusterPeers peers={peersByItem.get(itemKey(item)) ?? []} isMobile={isMobile} />}
             {isExpanded
               ? (
                   <div className="flex items-center justify-between mt-3">
@@ -123,7 +165,8 @@ export function MorphingNewsList({ items, sourceColor }: MorphingNewsListProps) 
                 )
               : (
                   <div className="flex items-center justify-between mt-2.5">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <PeerBadge count={peersByItem.get(itemKey(item))?.length ?? 0} />
                       {item.extra?.info && <span className={$("text-xs truncate", c)}>{item.extra.info}</span>}
                       {date && <NewsTime date={date} />}
                     </div>
@@ -186,6 +229,7 @@ export function MorphingNewsList({ items, sourceColor }: MorphingNewsListProps) 
                   {item.extra.hover}
                 </motion.p>
               )}
+              {isExpanded && <ClusterPeers peers={peersByItem.get(itemKey(item)) ?? []} isMobile={isMobile} />}
               {isExpanded
                 ? (
                     <div className="flex items-center gap-2 mt-2">
@@ -197,6 +241,7 @@ export function MorphingNewsList({ items, sourceColor }: MorphingNewsListProps) 
                   )
                 : (
                     <div className="flex items-center gap-3 mt-1">
+                      <PeerBadge count={peersByItem.get(itemKey(item))?.length ?? 0} />
                       {item.extra?.info && (
                         <span className={$("text-xs truncate", c)}>{item.extra.info}</span>
                       )}
@@ -227,16 +272,66 @@ export function MorphingNewsList({ items, sourceColor }: MorphingNewsListProps) 
           className={$(isGrid ? "grid grid-cols-2 gap-3" : "flex flex-col gap-1.5")}
         >
           <AnimatePresence mode="popLayout">
-            {items.map((item, i) => isGrid ? renderGridItem(item, i) : renderListItem(item, i))}
+            {visibleItems.map((item, i) => isGrid ? renderGridItem(item, i) : renderListItem(item, i))}
           </AnimatePresence>
         </motion.div>
       </LayoutGroup>
+      {hiddenCount > 0 && (
+        <button
+          type="button"
+          className="w-full rounded-lg py-1.5 text-xs text-neutral-500 transition-colors duration-150 hover:bg-neutral-900/[0.06] hover:text-neutral-700"
+          onClick={() => setShowAll(true)}
+        >
+          还有
+          {" "}
+          {hiddenCount}
+          {" "}
+          条
+        </button>
+      )}
 
     </div>
   )
 }
 
 // --- Sub-components ---
+
+function PeerBadge({ count }: { count: number }) {
+  if (count < 1) return null
+  return (
+    <span className="shrink-0 text-[10px] text-neutral-500 tabular-nums">
+      {count + 1}
+      {" "}
+      源
+    </span>
+  )
+}
+
+function ClusterPeers({ peers, isMobile }: { peers: WallItem[], isMobile: boolean }) {
+  if (!peers.length) return null
+  return (
+    <ul className="mt-2 flex flex-col gap-1 border-t border-neutral-900/10 pt-2">
+      {peers.map((peer) => {
+        const href = isMobile ? (peer.mobileUrl || peer.url) : peer.url
+        return (
+          <li key={`${peer.source}:${peer.url}`} className="flex items-center gap-1 min-w-0">
+            <a
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex min-w-0 flex-1 items-center gap-2 text-xs text-neutral-700 hover:text-neutral-900"
+              onClick={e => e.stopPropagation()}
+            >
+              <span className="shrink-0 text-neutral-500">{peer.sourceName}</span>
+              <span className="truncate">{peer.title}</span>
+            </a>
+            <SelectBtn item={peer} />
+          </li>
+        )
+      })}
+    </ul>
+  )
+}
 
 function NewsTime({ date }: { date: string | number }) {
   const relative = useRelativeTime(date)

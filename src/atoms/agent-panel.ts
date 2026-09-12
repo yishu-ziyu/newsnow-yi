@@ -1,5 +1,6 @@
 import { atom } from "jotai"
-import type { AgentStep } from "@shared/agent"
+import type { AgentStep, AgentStreamEvent } from "@shared/agent"
+import { applyAgentStreamEvent } from "@shared/agent"
 import type { NewsItem } from "@shared/types"
 
 export interface ChatMessage {
@@ -19,10 +20,14 @@ export interface ChatMessage {
   provider?: string
   model?: string
   degradedReason?: string
+  streaming?: boolean
+  startedAt?: number
+  thoughtMs?: number
+  reasoning?: string
 }
 
 /** Extra fields the backend returns alongside a reply. */
-export type AssistantMeta = Pick<ChatMessage, "mock" | "steps" | "provider" | "model" | "degradedReason">
+export type AssistantMeta = Pick<ChatMessage, "mock" | "steps" | "provider" | "model" | "degradedReason" | "streaming" | "startedAt" | "thoughtMs" | "reasoning">
 
 export interface AgentPanelState {
   open: boolean
@@ -54,7 +59,8 @@ type Action =
   | { type: "set_view", view: AgentPanelState["view"] }
   | { type: "set_messages", messages: ChatMessage[] }
   | { type: "add_user", content: string, context?: ChatMessage["context"] }
-  | { type: "add_assistant", content: string, meta?: AssistantMeta }
+  | { type: "add_assistant", id?: string, content: string, meta?: AssistantMeta }
+  | { type: "apply_stream", id: string, event: AgentStreamEvent }
   | { type: "set_loading", loading: boolean }
   | { type: "clear" }
 
@@ -98,12 +104,37 @@ export const agentPanelActionsAtom = atom(null, (get, set, action: Action) => {
       set(agentPanelAtom, {
         ...state,
         messages: [...state.messages, {
-          id: crypto.randomUUID(),
+          id: action.id ?? crypto.randomUUID(),
           role: "assistant",
           content: action.content,
           timestamp: Date.now(),
           ...action.meta,
         }],
+      })
+      break
+    case "apply_stream":
+      set(agentPanelAtom, {
+        ...state,
+        messages: state.messages.map((message) => {
+          if (message.id !== action.id) return message
+          const next = applyAgentStreamEvent({
+            content: message.content,
+            steps: message.steps ?? [],
+            provider: message.provider,
+            model: message.model,
+            mock: message.mock,
+            degradedReason: message.degradedReason,
+            streaming: message.streaming,
+            reasoning: message.reasoning,
+          }, action.event)
+          return {
+            ...message,
+            ...next,
+            thoughtMs: action.event.type === "done" && message.startedAt
+              ? Date.now() - message.startedAt
+              : message.thoughtMs,
+          }
+        }),
       })
       break
     case "set_loading":

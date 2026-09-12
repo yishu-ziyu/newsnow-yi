@@ -73,20 +73,17 @@ export function Header() {
 
   return (
     <>
-      <span className="flex justify-self-start">
-        <Link to="/" className="flex gap-2 items-center">
-          <div className="h-10 w-10 bg-cover" title="logo" style={{ backgroundImage: "url(/icon.svg)" }} />
-          <span className="text-2xl font-serif-heading font-bold line-height-none! tracking-wide">
-            <p>{Brand.wordmark[0]}</p>
-            <p className="mt--1">
+      <span className="justify-self-start">
+        <Link to="/" className="flex items-center gap-2.5">
+          <div className="h-10 w-10 shrink-0 bg-cover" title="logo" style={{ backgroundImage: "url(/icon.svg)" }} />
+          <span className="flex flex-col gap-1 text-2xl font-serif-heading font-bold leading-none tracking-wide">
+            <span>{Brand.wordmark[0]}</span>
+            <span>
               <span className="color-primary-6">{Brand.wordmark[1]?.slice(0, 1)}</span>
               <span>{Brand.wordmark[1]?.slice(1)}</span>
-            </p>
+            </span>
           </span>
         </Link>
-        <a target="_blank" href={`${Brand.repo}/releases`} className="btn text-sm ml-1 font-mono">
-          {`v${Version}`}
-        </a>
       </span>
       <span className="justify-self-center">
         <span className="hidden md:(inline-block)">

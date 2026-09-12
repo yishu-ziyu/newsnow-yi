@@ -31,7 +31,7 @@ export function MarkdownLite({ text, className }: { text: string, className?: st
   const blocks = useMemo(() => parseMarkdownLite(text), [text])
 
   return (
-    <div className={clsx("flex flex-col gap-2 [text-wrap:pretty]", className)}>
+    <div className={clsx("flex flex-col gap-2.5 [text-wrap:pretty]", className)}>
       {blocks.map((block, index) => {
         switch (block.type) {
           case "heading":
@@ -39,8 +39,8 @@ export function MarkdownLite({ text, className }: { text: string, className?: st
               <p
                 key={index}
                 className={clsx(
-                  "font-semibold [text-wrap:balance]",
-                  block.level <= 2 ? "text-[0.95em]" : "text-[0.9em]",
+                  "mt-3 first:mt-0 font-serif-heading font-semibold text-ink-text [text-wrap:balance]",
+                  block.level <= 2 ? "text-[1.05em]" : "text-[0.95em]",
                 )}
               >
                 <Inline text={block.text} />

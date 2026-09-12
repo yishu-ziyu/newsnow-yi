@@ -190,6 +190,32 @@ export interface ChatRequest {
   }>
 }
 
+/** Fixed Semaform headings for a compare reply. Order is the product contract. */
+export const SEMAFORM_HEADINGS = ["事实", "各源口径", "差异"] as const
+
+export const COMPARE_USER_PROMPT = "按三段对比这几条：事实、各源口径、差异。数字和时间对不上的要写出来。"
+
+export const COMPARE_SYSTEM_RULE = `本次是对比分析。先用一句话结论，再按三个标题输出（每个标题单独成行，可用 ##）：
+
+事实
+各源口径
+差异
+
+事实：只写各方都承认或可核对的内容。
+各源口径：按来源分点，写各自强调什么、回避什么。
+差异：数字、时间线、因果上的矛盾或缺口。信息不足写「未提及」，不要编，不要表格。`
+
+/** True when the reply already has the three Semaform headings as their own lines. */
+export function hasSemaformSections(text: string): boolean {
+  if (!text) return false
+  return SEMAFORM_HEADINGS.every(heading => hasSemaformHeading(text, heading))
+}
+
+function hasSemaformHeading(text: string, heading: string): boolean {
+  const escaped = heading.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+  return new RegExp(`(^|\\n)\\s*#{0,3}\\s*${escaped}\\s*$`, "m").test(text)
+}
+
 /** One tool call the agent made while answering. */
 export interface AgentStep {
   tool: string
@@ -197,6 +223,144 @@ export interface AgentStep {
   ok: boolean
   /** First line of the tool result, for the panel. */
   summary?: string
+  /** Matches start/done events for the same call while streaming. */
+  id?: string
+}
+
+const TOOL_LABELS: Record<string, string> = {
+  search_news: "搜索新闻",
+  list_sources: "列出源",
+  get_source_items: "取源条目",
+  create_tracker: "建立追踪",
+}
+
+export function toolLabel(tool: string): string {
+  return TOOL_LABELS[tool] ?? tool
+}
+
+/** Chip text: the search query, not three identical 「搜索新闻」. */
+export function toolChipLabel(step: { tool: string, input?: unknown }): string {
+  if (step.input && typeof step.input === "object") {
+    const input = step.input as Record<string, unknown>
+    if (step.tool === "search_news" && input.query) return String(input.query)
+    if (step.tool === "get_source_items" && input.id) return String(input.id)
+  }
+  return toolLabel(step.tool)
+}
+
+/** Follow-ups still have to hit the tools — MiniMax otherwise invents 「无结果」. */
+export function shouldForceNewsTool(message: string): boolean {
+  return /今天|最近|现在|搜|热点|大事|有什么|跟进|再挖|递归|盯|细节|后续|再看|具体看|再查/.test(message)
+}
+
+export function mockAgentReply(
+  message: string,
+  context?: ChatRequest["context"],
+  degradedReason = "没有可用的模型",
+): ChatResponse {
+  const titleHint = context?.title ? `关于"${context.title}"` : ""
+  return {
+    reply: `[mock] 收到你的消息${titleHint}："${message.slice(0, 50)}${message.length > 50 ? "..." : ""}"。当前没有可用的模型，这条是本地占位回复。配置 NEWSNOW_LLM_API_KEY 或 NEWSNOW_LLM_FALLBACK_MINIMAX 后启用真实回答。`,
+    model: "mock",
+    mock: true,
+    degradedReason,
+    steps: [],
+  }
+}
+
+/** Server → panel events over SSE (`data: <json>`). */
+export type AgentStreamEvent =
+  | { type: "start", provider: string, model: string }
+  | { type: "reasoning", delta: string }
+  | { type: "tool", id: string, tool: string, status: "start" | "done" | "error", input?: unknown, summary?: string }
+  | { type: "text", delta: string }
+  | { type: "replace", reply: string }
+  | { type: "done", reply: string, steps: AgentStep[], provider?: string, model: string, mock?: boolean, degradedReason?: string }
+  | { type: "error", reason: string }
+
+export interface AgentStreamState {
+  content: string
+  steps: AgentStep[]
+  provider?: string
+  model?: string
+  mock?: boolean
+  degradedReason?: string
+  streaming?: boolean
+  reasoning?: string
+}
+
+export function parseAgentSseBlock(block: string): AgentStreamEvent | null {
+  const data = block
+    .split("\n")
+    .filter(line => line.startsWith("data:"))
+    .map(line => line.slice(5).trimStart())
+    .join("\n")
+  if (!data || data === "[DONE]") return null
+  try {
+    const parsed = JSON.parse(data) as { type?: unknown }
+    if (!parsed || typeof parsed !== "object" || typeof parsed.type !== "string") return null
+    return parsed as AgentStreamEvent
+  } catch {
+    return null
+  }
+}
+
+export function splitSseBuffer(buffer: string): { events: AgentStreamEvent[], rest: string } {
+  const parts = buffer.split("\n\n")
+  const rest = parts.pop() ?? ""
+  const events: AgentStreamEvent[] = []
+  for (const part of parts) {
+    const event = parseAgentSseBlock(part)
+    if (event) events.push(event)
+  }
+  return { events, rest }
+}
+
+export function applyAgentStreamEvent(state: AgentStreamState, event: AgentStreamEvent): AgentStreamState {
+  switch (event.type) {
+    case "start":
+      return { ...state, provider: event.provider, model: event.model, streaming: true }
+    case "reasoning":
+      return { ...state, reasoning: `${state.reasoning ?? ""}${event.delta}`, streaming: true }
+    case "tool": {
+      const steps = [...state.steps]
+      const index = event.id ? steps.findIndex(step => step.id === event.id) : -1
+      const previous = index >= 0 ? steps[index] : undefined
+      const next: AgentStep = {
+        id: event.id,
+        tool: event.tool,
+        input: event.input ?? previous?.input,
+        ok: event.status !== "error",
+        summary: event.summary ?? previous?.summary,
+      }
+      if (index >= 0) steps[index] = { ...previous, ...next }
+      else steps.push(next)
+      return { ...state, steps, streaming: true }
+    }
+    case "text":
+      return { ...state, content: `${state.content}${event.delta}`, streaming: true }
+    case "replace":
+      return { ...state, content: event.reply, streaming: true }
+    case "done":
+      return {
+        ...state,
+        content: event.reply || state.content,
+        steps: event.steps?.length ? event.steps : state.steps,
+        provider: event.provider ?? state.provider,
+        model: event.model ?? state.model,
+        mock: event.mock,
+        degradedReason: event.degradedReason,
+        streaming: false,
+      }
+    case "error":
+      return {
+        ...state,
+        streaming: false,
+        mock: true,
+        degradedReason: event.reason,
+        content: state.content || `抱歉，请求失败了（${event.reason}）。请稍后再试。`,
+      }
+  }
 }
 
 export interface ChatResponse {

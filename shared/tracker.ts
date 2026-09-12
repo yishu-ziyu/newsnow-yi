@@ -29,6 +29,8 @@ export interface BriefingRecord {
 
 export const TRACKER_DEFAULT_INTERVAL_MS = 24 * 60 * 60 * 1000
 export const TRACKER_MIN_INTERVAL_MS = 60 * 1000
+/** Kagi-style finite briefing list. Newest first. */
+export const BRIEFING_LIST_LIMIT = 12
 
 /** Clamp a requested interval so a tracker cannot spin. */
 export function clampInterval(intervalMs?: number): number {

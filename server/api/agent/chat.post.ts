@@ -1,5 +1,7 @@
+import { createEventStream } from "h3"
 import type { ChatRequest, ChatResponse } from "@shared/agent"
-import { runNewsAgent } from "#/utils/agent-runner"
+import { mockAgentReply } from "@shared/agent"
+import { runNewsAgent, streamNewsAgent } from "#/utils/agent-runner"
 
 export default defineEventHandler<{ body: ChatRequest, response: ChatResponse }>(async (event) => {
   const body = await readBody(event)
@@ -13,32 +15,57 @@ export default defineEventHandler<{ body: ChatRequest, response: ChatResponse }>
     })
   }
 
-  const result = await runNewsAgent(message.trim(), context, history, { userId: user?.id, contexts })
+  const trimmed = message.trim()
+  const accept = getHeader(event, "accept") || ""
+  // nitro-go/vite 在 dev 里经常丢 Accept；面板用 ?stream=1 作可靠开关。
+  const streamFlag = String((getQuery(event) as { stream?: unknown }).stream ?? "")
+  const stream = accept.includes("text/event-stream") || streamFlag === "1" || streamFlag === "true"
 
-  if (result.ok) {
-    return {
-      reply: result.reply,
-      model: result.model,
-      provider: result.provider,
-      mock: false,
-      steps: result.steps,
-    } satisfies ChatResponse
+  if (!stream) {
+    const result = await runNewsAgent(trimmed, context, history, { userId: user?.id, contexts })
+    if (result.ok) {
+      return {
+        reply: result.reply,
+        model: result.model,
+        provider: result.provider,
+        mock: false,
+        steps: result.steps,
+      } satisfies ChatResponse
+    }
+    return mockAgentReply(trimmed, context, result.reason)
   }
 
-  return mockChatReply(message, context, result.reason)
+  const eventStream = createEventStream(event)
+  const abort = new AbortController()
+  event.node?.req?.once?.("close", () => abort.abort())
+
+  void (async () => {
+    try {
+      const result = await streamNewsAgent(
+        trimmed,
+        context,
+        history,
+        { userId: user?.id, contexts, abortSignal: abort.signal },
+        event => eventStream.push(JSON.stringify(event)),
+      )
+      if (!result.ok) {
+        const mock = mockAgentReply(trimmed, context, result.reason)
+        await eventStream.push(JSON.stringify({
+          type: "done",
+          reply: mock.reply,
+          steps: [],
+          model: mock.model,
+          mock: true,
+          degradedReason: mock.degradedReason,
+        }))
+      }
+    } catch (e) {
+      const reason = e instanceof Error ? e.message : "生成失败"
+      await eventStream.push(JSON.stringify({ type: "error", reason: reason.slice(0, 160) }))
+    } finally {
+      await eventStream.close()
+    }
+  })()
+
+  return eventStream.send()
 })
-
-function mockChatReply(
-  message: string,
-  context?: ChatRequest["context"],
-  degradedReason = "没有可用的模型",
-): ChatResponse {
-  const titleHint = context?.title ? `关于"${context.title}"` : ""
-  return {
-    reply: `[mock] 收到你的消息${titleHint}："${message.slice(0, 50)}${message.length > 50 ? "..." : ""}"。当前没有可用的模型，这条是本地占位回复。配置 NEWSNOW_LLM_API_KEY 或 NEWSNOW_LLM_FALLBACK_MINIMAX 后启用真实回答。`,
-    model: "mock",
-    mock: true,
-    degradedReason,
-    steps: [],
-  }
-}

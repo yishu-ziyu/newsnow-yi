@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
-import { anthropicMessagesBaseUrl, summarizeSteps, trimAgentHistory, trimHistoryForPrompt } from "@shared/agent"
+import { anthropicMessagesBaseUrl, applyAgentStreamEvent, hasSemaformSections, parseAgentSseBlock, shouldForceNewsTool, splitSseBuffer, summarizeSteps, toolChipLabel, toolLabel, trimAgentHistory, trimHistoryForPrompt } from "@shared/agent"
 import { TRACKER_DEFAULT_INTERVAL_MS, TRACKER_MIN_INTERVAL_MS, clampInterval } from "@shared/tracker"
 
 // getLLMProviders, getLLMConfig, callLLM are auto-injected via unimport from shared/ dir
@@ -304,6 +304,20 @@ describe("clampInterval", () => {
   })
 })
 
+describe("hasSemaformSections", () => {
+  it("accepts the three headings as their own lines", () => {
+    expect(hasSemaformSections("先看口径。\n\n## 事实\n都在谈同一场发布。\n\n## 各源口径\n- 酷安谈价格\n\n## 差异\n时间对不上")).toBe(true)
+  })
+
+  it("rejects a table-shaped compare reply", () => {
+    expect(hasSemaformSections("| 维度 | 来源 | 说法 |\n|---|---|---|\n| 定价 | 酷安 | 15999 |")).toBe(false)
+  })
+
+  it("ignores the words when they are not headings", () => {
+    expect(hasSemaformSections("事实是各源口径都有差异，但没有分段。")).toBe(false)
+  })
+})
+
 describe("summarizeSteps", () => {
   it("groups repeats and keeps order", () => {
     expect(summarizeSteps([{ tool: "search_news" }, { tool: "list_sources" }, { tool: "search_news" }]))
@@ -313,5 +327,55 @@ describe("summarizeSteps", () => {
   it("handles empty input", () => {
     expect(summarizeSteps()).toEqual([])
     expect(summarizeSteps([])).toEqual([])
+  })
+})
+
+describe("agent stream events", () => {
+  it("parses an SSE data block and ignores a partial tail", () => {
+    const { events, rest } = splitSseBuffer("data: {\"type\":\"text\",\"delta\":\"今\"}\n\ndata: {\"type\":\"text\",\"delta\":\"天")
+    expect(events).toEqual([{ type: "text", delta: "今" }])
+    expect(rest).toBe("data: {\"type\":\"text\",\"delta\":\"天")
+    expect(parseAgentSseBlock("not-sse")).toBeNull()
+  })
+
+  it("applies tool start/done then text then done", () => {
+    const empty = { content: "", steps: [] }
+    const started = applyAgentStreamEvent(empty, { type: "start", provider: "minimax", model: "MiniMax-M3" })
+    const calling = applyAgentStreamEvent(started, { type: "tool", id: "t1", tool: "search_news", status: "start", input: { query: "今天" } })
+    const doneTool = applyAgentStreamEvent(calling, { type: "tool", id: "t1", tool: "search_news", status: "done", summary: "命中 8 条" })
+    const text = applyAgentStreamEvent(doneTool, { type: "text", delta: "有" })
+    const done = applyAgentStreamEvent(text, {
+      type: "done",
+      reply: "有几件大事。",
+      steps: doneTool.steps,
+      provider: "minimax",
+      model: "MiniMax-M3",
+    })
+    expect(calling.steps).toHaveLength(1)
+    expect(calling.steps[0].summary).toBeUndefined()
+    expect(doneTool.steps[0].summary).toBe("命中 8 条")
+    expect(text.content).toBe("有")
+    expect(done.content).toBe("有几件大事。")
+    expect(done.streaming).toBe(false)
+  })
+
+  it("labels known tools in Chinese", () => {
+    expect(toolLabel("search_news")).toBe("搜索新闻")
+    expect(toolLabel("unknown_tool")).toBe("unknown_tool")
+  })
+
+  it("puts the search query on the chip", () => {
+    expect(toolChipLabel({ tool: "search_news", input: { query: "iPhone", limit: 10 } })).toBe("iPhone")
+    expect(toolChipLabel({ tool: "search_news" })).toBe("搜索新闻")
+    expect(toolChipLabel({ tool: "get_source_items", input: { id: "zhihu" } })).toBe("zhihu")
+  })
+
+  it("forces a tool on a fresh news ask, not on 翻译/要点", () => {
+    expect(shouldForceNewsTool("今天有什么 iPhone 相关的新闻？")).toBe(true)
+    expect(shouldForceNewsTool("是的，你可以做一些更详细的递归搜索。")).toBe(true)
+    expect(shouldForceNewsTool("可以具体看一下细节吧和后续反应。")).toBe(true)
+    expect(shouldForceNewsTool("这个被泄密是什么意思？")).toBe(false)
+    expect(shouldForceNewsTool("请翻译成英文")).toBe(false)
+    expect(shouldForceNewsTool("请用3条要点总结这篇新闻")).toBe(false)
   })
 })
