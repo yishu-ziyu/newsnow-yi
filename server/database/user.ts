@@ -19,9 +19,8 @@ export class UserTable {
         updated BIGINT
       );
     `).run()
-    await this.db.prepare(`
-      CREATE INDEX IF NOT EXISTS idx_user_id ON user(id);
-    `).run()
+    // id 已是 PRIMARY KEY，不必再单独建索引。Postgres 里 user 是保留字，
+    // 未加引号的 `ON user(id)` 会让登录回调直接 500。
     logger.success(`init user table`)
   }
 
