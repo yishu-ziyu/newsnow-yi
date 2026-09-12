@@ -12,7 +12,7 @@ export function defineSource(source: SourceGetter | R): SourceGetter | R {
 
 export function defineRSSSource(url: string, option?: SourceOption): SourceGetter {
   return async () => {
-    const data = await rss2json(url)
+    const data = await rss2json(url, option?.request)
     const items = Array.isArray(data?.items) ? data.items.filter((item: any) => item && (item.title || item.link)) : []
     if (!items.length) throw new Error(`RSS 没有可用条目：${url}`)
     return items.map((item: any) => ({

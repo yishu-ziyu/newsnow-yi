@@ -61,6 +61,10 @@ export interface RSSHubOption {
 export interface SourceOption {
   // default: false
   hiddenDate?: boolean
+  request?: {
+    headers?: Record<string, string>
+    retry?: number
+  }
 }
 
 export type SourceGetter = () => Promise<NewsItem[]>

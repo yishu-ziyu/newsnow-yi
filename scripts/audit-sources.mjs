@@ -1,20 +1,50 @@
 #!/usr/bin/env node
 import process from "node:process"
-
-// 逐个源体检：打本地 /api/s，记录状态、条数、耗时、错误。
 import fs from "node:fs/promises"
 
+// 逐个源体检：打本地 /api/s，记录状态、条数、耗时、错误或停用原因。
 const BASE = process.env.AUDIT_BASE || "http://localhost:5173"
-const CONCURRENCY = Number(process.env.AUDIT_CONCURRENCY || 6)
+const CONCURRENCY = Number(process.env.AUDIT_CONCURRENCY || 2)
 const TIMEOUT_MS = Number(process.env.AUDIT_TIMEOUT || 30000)
 
 const sources = JSON.parse(await fs.readFile(new URL("../shared/sources.json", import.meta.url), "utf8"))
-const ids = Object.entries(sources).filter(([, v]) => !v.redirect).map(([id]) => id)
+const requestedIDs = process.env.AUDIT_IDS?.split(",").map(id => id.trim()).filter(Boolean)
+const requestedIDSet = requestedIDs?.length ? new Set(requestedIDs) : undefined
+const ids = Object.entries(sources)
+  .filter(([, value]) => !value.redirect)
+  .map(([id]) => id)
+  .filter(id => !requestedIDSet || requestedIDSet.has(id))
 
+async function fetchHealth() {
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS)
+  try {
+    const response = await fetch(`${BASE}/api/sources/health`, { signal: controller.signal })
+    const body = await response.json().catch(() => null)
+    if (!response.ok || !body?.disabled || typeof body.disabled !== "object") {
+      throw new Error(body?.message || `源健康接口返回 ${response.status}`)
+    }
+    return body.disabled
+  } finally {
+    clearTimeout(timer)
+  }
+}
+
+const disabledSources = await fetchHealth()
 const results = []
 let cursor = 0
 
 async function check(id) {
+  const disabled = disabledSources[id]
+  if (disabled) {
+    return {
+      id,
+      kind: "disabled",
+      ms: 0,
+      detail: `${disabled.kind}: ${disabled.reason}`.slice(0, 120),
+    }
+  }
+
   const started = Date.now()
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS)
@@ -42,22 +72,22 @@ async function worker() {
   }
 }
 
-await Promise.all(Array.from({ length: CONCURRENCY }, worker))
+await Promise.all(Array.from({ length: Math.max(1, CONCURRENCY) }, worker))
 process.stderr.write("\n")
 
-const order = { error: 0, empty: 1, ok: 2 }
+const order = { disabled: 0, error: 1, empty: 2, ok: 3 }
 results.sort((a, b) => (order[a.kind] - order[b.kind]) || b.ms - a.ms)
 
-const counts = results.reduce((acc, r) => ({ ...acc, [r.kind]: (acc[r.kind] ?? 0) + 1 }), {})
-console.log(`体检 ${results.length} 个源：ok ${counts.ok ?? 0} / empty ${counts.empty ?? 0} / error ${counts.error ?? 0}`)
+const counts = results.reduce((acc, result) => ({ ...acc, [result.kind]: (acc[result.kind] ?? 0) + 1 }), {})
+console.log(`体检 ${results.length} 个源：ok ${counts.ok ?? 0} / empty ${counts.empty ?? 0} / error ${counts.error ?? 0} / disabled ${counts.disabled ?? 0}`)
 console.log("")
-for (const r of results.filter(r => r.kind !== "ok")) {
-  console.log(`${r.kind.toUpperCase().padEnd(5)} ${r.id.padEnd(24)} ${String(r.ms).padStart(6)}ms  ${r.detail ?? ""}`)
+for (const result of results.filter(result => result.kind !== "ok")) {
+  console.log(`${result.kind.toUpperCase().padEnd(8)} ${result.id.padEnd(24)} ${String(result.ms).padStart(6)}ms  ${result.detail ?? ""}`)
 }
-const slow = results.filter(r => r.kind === "ok" && r.ms > 8000)
+const slow = results.filter(result => result.kind === "ok" && result.ms > 8000)
 console.log("")
 console.log(`慢（>8s 但成功）：${slow.length}`)
-slow.forEach(r => console.log(`  ${r.id.padEnd(24)} ${r.ms}ms  ${r.items} 条`))
+slow.forEach(result => console.log(`  ${result.id.padEnd(24)} ${result.ms}ms  ${result.items} 条`))
 
 await fs.writeFile("/tmp/source-audit.json", JSON.stringify(results, null, 2))
 console.log("\n明细写到 /tmp/source-audit.json")

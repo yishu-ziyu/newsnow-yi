@@ -15,20 +15,23 @@ import { OverlayScrollbar } from "../common/overlay-scrollbar"
 import type { ItemsProps } from "./card"
 import { CardWrapper } from "./card"
 import { currentSourcesAtom } from "~/atoms"
+import { disabledSourceIDsAtom } from "~/atoms/source-health"
 
 const AnimationDuration = 200
 const WIDTH = 350
 export function Dnd() {
   const [items, setItems] = useAtom(currentSourcesAtom)
+  const disabledSourceIDs = useAtomValue(disabledSourceIDsAtom)
+  const visibleItems = useMemo(() => items.filter((id: SourceID) => !disabledSourceIDs.has(id)), [disabledSourceIDs, items])
   const [parent] = useAutoAnimate({ duration: AnimationDuration })
-  useEntireQuery(items)
+  useEntireQuery(visibleItems)
   const { width } = useWindowSize()
   const minWidth = useMemo(() => {
     // double padding = 32
     return Math.min(width - 32, WIDTH)
   }, [width])
 
-  if (!items.length) return null
+  if (!visibleItems.length) return null
 
   return (
     <DndWrapper items={items} setItems={setItems} isSingleColumn={isMobile}>
@@ -60,10 +63,10 @@ export function Dnd() {
             },
           }}
         >
-          {items.map((id, index) => (
+          {visibleItems.map((id: SourceID, index: number) => (
             <motion.li
               key={id}
-              className={$(isMobile && "flex-shrink-0", isMobile && index === items.length - 1 && "mr-2")}
+              className={$(isMobile && "flex-shrink-0", isMobile && index === visibleItems.length - 1 && "mr-2")}
               style={isMobile ? { width: `${width - 16 > WIDTH ? WIDTH : width - 16}px` } : undefined}
               transition={{
                 type: "tween",

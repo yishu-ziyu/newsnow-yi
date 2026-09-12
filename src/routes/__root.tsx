@@ -12,6 +12,7 @@ import { Toast } from "~/components/common/toast"
 import { SearchBar } from "~/components/common/search-bar"
 import { AgentPanel } from "~/components/common/agent-panel"
 import { CompareBar } from "~/components/common/compare-bar"
+import { useSourceHealth } from "~/atoms/source-health"
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient
@@ -31,6 +32,7 @@ function RootComponent() {
   useOnReload()
   useSync()
   usePWA()
+  useSourceHealth()
   return (
     <>
       <GlobalOverlayScrollbar

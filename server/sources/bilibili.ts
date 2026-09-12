@@ -34,21 +34,23 @@ const hotVideo = defineSource(async () => {
   }))
 })
 
+/**
+ * 官方 v2 排行榜接口（`/x/web-interface/ranking/v2`）有风控，同一出口偶发成功、多数返回 -352，
+ * 不适合做定时源；改用稳定的旧接口 `ranking/index`。代价是条目少（约 8 条），够用就行。
+ */
 const ranking = defineSource(async () => {
-  const url = "https://rsshub.app/bilibili/ranking/0"
-  const data = await myFetch(url)
-  const items = data.items || data
-  if (!Array.isArray(items) || items.length === 0) {
-    throw new Error("No Bilibili ranking data")
-  }
-  return items.map((item: any) => ({
-    id: item.url?.split("/").pop() || item.guid || String(Math.random()),
+  const data = await myFetch<any>("https://api.bilibili.com/x/web-interface/ranking/index?day=3", {
+    headers: { Referer: "https://www.bilibili.com/" },
+  })
+  const list = data?.data
+  if (!Array.isArray(list) || list.length === 0) throw new Error("B 站排行榜接口没有返回数据")
+  return list.map((item: any) => ({
+    id: String(item.bvid ?? item.aid),
     title: item.title,
-    url: item.url || "https://www.bilibili.com",
-    pubDate: item.pubDate ? new Date(item.pubDate).getTime() : undefined,
+    url: item.bvid ? `https://www.bilibili.com/video/${item.bvid}` : "https://www.bilibili.com",
     extra: {
-      info: item.author || "",
-      hover: item.description?.substring?.(0, 200) || "",
+      info: [item.author, item.typename].filter(Boolean).join(" · "),
+      hover: typeof item.description === "string" ? item.description.slice(0, 200) : "",
     },
   }))
 })

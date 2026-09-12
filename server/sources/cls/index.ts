@@ -59,11 +59,16 @@ const hot = defineSource(async () => {
 })
 
 const telegraph = defineSource(async () => {
-  const apiUrl = `https://www.cls.cn/nodeapi/updateTelegraphList`
+  const apiUrl = "https://www.cls.cn/v1/roll/get_roll_list"
   const res: TelegraphRes = await myFetch(apiUrl, {
     query: Object.fromEntries(await getSearchParams()),
   })
-  return res.data.roll_data.filter(k => !k.is_ad).map((k) => {
+  const rollData = res?.data?.roll_data
+  if (!Array.isArray(rollData) || rollData.length === 0) {
+    throw new Error("财联社电报接口没有返回数据")
+  }
+
+  const items = rollData.filter(k => !k.is_ad && (k.title || k.brief)).map((k) => {
     return {
       id: k.id,
       title: k.title || k.brief,
@@ -72,6 +77,8 @@ const telegraph = defineSource(async () => {
       url: `https://www.cls.cn/detail/${k.id}`,
     }
   })
+  if (items.length === 0) throw new Error("财联社电报接口没有可用条目")
+  return items
 })
 
 export default defineSource({

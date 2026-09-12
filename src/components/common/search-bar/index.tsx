@@ -5,6 +5,7 @@ import { useMemo, useRef, useState } from "react"
 import pinyin from "@shared/pinyin.json"
 import { OverlayScrollbar } from "../overlay-scrollbar"
 import { CardWrapper } from "~/components/column/card"
+import { disabledSourceIDsAtom } from "~/atoms/source-health"
 
 import "./cmdk.css"
 
@@ -38,10 +39,11 @@ function groupByColumn(items: SourceItemProps[]) {
 
 export function SearchBar() {
   const { opened, toggle } = useSearchBar()
+  const disabledSourceIDs = useAtomValue(disabledSourceIDsAtom)
   const sourceItems = useMemo(
     () =>
       groupByColumn(typeSafeObjectEntries(sources)
-        .filter(([_, source]) => !source.redirect)
+        .filter(([id, source]) => !source.redirect && !disabledSourceIDs.has(id))
         .map(([k, source]) => ({
           id: k,
           title: source.title,
@@ -49,7 +51,7 @@ export function SearchBar() {
           name: source.name,
           pinyin: pinyin?.[k as keyof typeof pinyin] ?? "",
         })))
-    , [],
+    , [disabledSourceIDs],
   )
   const inputRef = useRef<HTMLInputElement | null>(null)
 
@@ -102,7 +104,7 @@ export function SearchBar() {
           </Command.List>
         </OverlayScrollbar>
         <div className="flex-1 pt-2 px-4 min-w-350px max-md:hidden">
-          <CardWrapper id={value} />
+          {!disabledSourceIDs.has(value) && <CardWrapper id={value} />}
         </div>
       </div>
     </Command.Dialog>

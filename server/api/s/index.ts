@@ -2,20 +2,28 @@ import type { SourceID, SourceResponse } from "@shared/types"
 import { getters } from "#/getters"
 import { getCacheTable } from "#/database/cache"
 import type { CacheInfo } from "#/types"
+import { assertSourceEnabled } from "#/utils/source-health"
 
 export default defineEventHandler(async (event): Promise<SourceResponse> => {
-  try {
-    const query = getQuery(event)
-    const latest = query.latest !== undefined && query.latest !== "false"
-    let id = query.id as SourceID
-    const isValid = (id: SourceID) => !id || !sources[id] || !getters[id]
+  const query = getQuery(event)
+  const latest = query.latest !== undefined && query.latest !== "false"
+  let id = query.id as SourceID
+  const isValid = (sourceID: SourceID) => !sourceID || !sources[sourceID] || !getters[sourceID]
 
+  if (isValid(id)) {
+    const redirectID = sources?.[id]?.redirect
+    if (redirectID) id = redirectID
     if (isValid(id)) {
-      const redirectID = sources?.[id]?.redirect
-      if (redirectID) id = redirectID
-      if (isValid(id)) throw new Error("Invalid source id")
+      throw createError({
+        statusCode: 400,
+        message: "Invalid source id",
+      })
     }
+  }
 
+  assertSourceEnabled(id)
+
+  try {
     const cacheTable = await getCacheTable()
     // Date.now() in Cloudflare Worker will not update throughout the entire runtime.
     const now = Date.now()

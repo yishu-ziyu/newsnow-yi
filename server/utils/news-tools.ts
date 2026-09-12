@@ -7,6 +7,7 @@ import { clampInterval } from "@shared/tracker"
 import { getters } from "#/getters"
 import { getCacheTable } from "#/database/cache"
 import { TrackerTable } from "#/database/tracker"
+import { assertSourceEnabled, getDisabledSources } from "#/utils/source-health"
 
 /** Cap on sources touched by one search so a single question stays cheap. */
 const MAX_SOURCES_PER_SEARCH = 8
@@ -22,8 +23,9 @@ const COLUMNS = ["china", "world", "tech", "finance", "ai", "english"] as const
 
 /** All real sources (alias rows with `redirect` point at another id). */
 export function listSourceBriefs(column?: string): SourceBrief[] {
+  const disabled = getDisabledSources()
   return Object.entries(sources as Record<string, any>)
-    .filter(([, value]) => value && !value.redirect)
+    .filter(([id, value]) => value && !value.redirect && !disabled[id])
     .filter(([, value]) => !column || value.column === column)
     .map(([id, value]) => ({ id, name: value.name, column: value.column, type: value.type }))
 }
@@ -45,6 +47,7 @@ export const fetchSourceItems: ItemFetcher = async (id: string) => {
   const sourceId = resolveSourceId(id) as SourceID
   const getter = getters[sourceId]
   if (!getter) throw new Error(`未知源：${id}`)
+  assertSourceEnabled(sourceId)
 
   const cacheTable = await getCacheTable()
   const cache = cacheTable ? await cacheTable.get(sourceId) : undefined
@@ -110,12 +113,17 @@ export interface SearchNewsOptions {
  */
 export async function searchNews(query: string, options: SearchNewsOptions = {}) {
   const { column, ids, limit = 10, fetchItems = fetchSourceItems } = options
+  const availableBriefs = listSourceBriefs()
+  const availableIDs = new Set(availableBriefs.map(brief => brief.id))
   const scope = ids?.length
-    ? ids.slice(0, MAX_SOURCES_PER_SEARCH).map(id => ({
-        id,
-        name: listSourceBriefs().find(b => b.id === id)?.name ?? id,
-        column: "",
-      }))
+    ? ids
+        .filter(id => availableIDs.has(resolveSourceId(id)))
+        .slice(0, MAX_SOURCES_PER_SEARCH)
+        .map(id => ({
+          id,
+          name: availableBriefs.find(b => b.id === resolveSourceId(id))?.name ?? id,
+          column: "",
+        }))
     : defaultSearchScope(column)
 
   const settled = await Promise.all(scope.map(async (brief) => {
