@@ -4,6 +4,7 @@ import { useDebounce } from "react-use"
 import { clsx } from "clsx"
 import { motion, useReducedMotion } from "framer-motion"
 import type { NewsItem } from "@shared/types"
+import { summarizeSteps } from "@shared/agent"
 import { agentPanelActionsAtom, agentPanelAtom } from "~/atoms/agent-panel"
 import { itemKey } from "~/atoms/compare-selection"
 import { loadAgentHistory, saveAgentHistory } from "~/hooks/useAgentHistory"
@@ -41,58 +42,84 @@ interface ChatMessageBubbleProps {
   message: import("~/atoms/agent-panel").ChatMessage
 }
 
+/** One collapsible line above the answer: what the agent did to get there. */
+function StepTrace({ steps }: { steps: NonNullable<import("~/atoms/agent-panel").ChatMessage["steps"]> }) {
+  const [open, setOpen] = useState(false)
+  const groups = summarizeSteps(steps)
+  const summary = groups.map(group => (group.count > 1 ? `${group.label} ×${group.count}` : group.label)).join(" · ")
+
+  return (
+    <div className="flex max-w-[85%] flex-col gap-1 px-2">
+      <button
+        type="button"
+        aria-expanded={open}
+        onClick={() => setOpen(prev => !prev)}
+        className="flex items-center gap-1 self-start rounded text-[11px] text-neutral-400 transition-colors duration-150 hover:text-neutral-600"
+      >
+        <span
+          aria-hidden="true"
+          className={clsx("i-ph:caret-right inline-block size-3 transition-transform duration-150", open && "rotate-90")}
+        />
+        <span className="tabular-nums">
+          调了
+          {steps.length}
+          {" "}
+          次工具
+        </span>
+        {!open && (
+          <span className="truncate text-neutral-400/80">
+            ·
+            {summary}
+          </span>
+        )}
+      </button>
+      {open && (
+        <ul className="ml-4 flex flex-col gap-0.5 border-l border-neutral-400/20 pl-2 text-[11px] text-neutral-400">
+          {steps.map((step, index) => (
+            <li key={`${step.tool}-${index}`} className="truncate">
+              {step.tool}
+              {describeStepInput(step.input) && ` · ${describeStepInput(step.input)}`}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  )
+}
+
 function ChatMessageBubble({ message }: ChatMessageBubbleProps) {
   const isUser = message.role === "user"
   return (
     <div className={clsx("flex flex-col gap-1", isUser ? "items-end" : "items-start")}>
       {message.context?.title && (
-        <div className="text-xs text-neutral-400/70 max-w-[85%] truncate px-2">
+        <div className="max-w-[85%] truncate px-2 text-xs text-neutral-400/70">
           {message.context.title}
         </div>
       )}
       {message.mock && (
         <div
-          className="text-xs px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-400 max-w-[85%]"
+          className="max-w-[85%] rounded-full bg-amber-500/15 px-2 py-0.5 text-xs text-amber-700 dark:text-amber-400"
           title={message.degradedReason}
         >
           模拟回复 · 未接模型
         </div>
       )}
+      {!!message.steps?.length && <StepTrace steps={message.steps} />}
       <div className={clsx(
-        "max-w-[85%] px-3 py-2 rounded-2xl text-sm leading-relaxed [text-wrap:pretty]",
+        "max-w-[85%] rounded-2xl px-3 py-2 text-sm leading-relaxed [text-wrap:pretty]",
         isUser
           ? "bg-primary/20 text-primary dark:bg-primary/30"
           : message.mock
-            ? "bg-amber-500/5 border border-dashed border-amber-500/40 text-neutral-600 dark:text-neutral-300"
+            ? "border border-dashed border-amber-500/40 bg-amber-500/5 text-neutral-600 dark:text-neutral-300"
             : "bg-neutral-400/10 text-neutral-800 dark:text-neutral-200",
       )}
       >
         {isUser ? message.content : <MarkdownLite text={message.content} />}
       </div>
-      {!!message.steps?.length && (
-        <div className="flex flex-col gap-0.5 text-xs text-neutral-400/80 px-2 max-w-[85%]">
-          <span className="opacity-60 tabular-nums">
-            调了
-            {message.steps.length}
-            {" "}
-            次工具
-          </span>
-          {message.steps.map((step, index) => (
-            <span key={`${step.tool}-${index}`} className="truncate">
-              {step.tool}
-              {describeStepInput(step.input) && ` · ${describeStepInput(step.input)}`}
-            </span>
-          ))}
-        </div>
-      )}
-      <span className="text-xs text-neutral-400/50 px-2 tabular-nums">
+      <span className="flex items-center gap-2 px-2 text-[11px] text-neutral-400/70 tabular-nums">
         {formatTime(message.timestamp)}
         {message.provider && message.model && (
-          <span className="ml-2 opacity-70">
-            {message.provider}
-            {" "}
-            ·
-            {" "}
+          <span className="text-[10px] text-neutral-400/50" title={`${message.provider} · ${message.model}`}>
             {message.model}
           </span>
         )}
@@ -101,7 +128,7 @@ function ChatMessageBubble({ message }: ChatMessageBubbleProps) {
             href={message.context.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="ml-2 underline opacity-60 hover:opacity-100"
+            className="underline opacity-60 transition-opacity duration-150 hover:opacity-100"
           >
             原文
           </a>

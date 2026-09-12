@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
-import { anthropicMessagesBaseUrl, trimAgentHistory, trimHistoryForPrompt } from "@shared/agent"
+import { anthropicMessagesBaseUrl, summarizeSteps, trimAgentHistory, trimHistoryForPrompt } from "@shared/agent"
 import { TRACKER_DEFAULT_INTERVAL_MS, TRACKER_MIN_INTERVAL_MS, clampInterval } from "@shared/tracker"
 
 // getLLMProviders, getLLMConfig, callLLM are auto-injected via unimport from shared/ dir
@@ -301,5 +301,17 @@ describe("clampInterval", () => {
   })
   it("falls back on junk", () => {
     expect(clampInterval(Number.NaN)).toBe(TRACKER_DEFAULT_INTERVAL_MS)
+  })
+})
+
+describe("summarizeSteps", () => {
+  it("groups repeats and keeps order", () => {
+    expect(summarizeSteps([{ tool: "search_news" }, { tool: "list_sources" }, { tool: "search_news" }]))
+      .toEqual([{ label: "search_news", count: 2 }, { label: "list_sources", count: 1 }])
+  })
+
+  it("handles empty input", () => {
+    expect(summarizeSteps()).toEqual([])
+    expect(summarizeSteps([])).toEqual([])
   })
 })

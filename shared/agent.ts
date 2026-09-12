@@ -210,6 +210,15 @@ export interface ChatResponse {
   degradedReason?: string
 }
 
+/** Group tool calls by name so the panel can show "调了 3 次工具 · search_news ×2". */
+export function summarizeSteps(steps: Array<{ tool: string }> = []): Array<{ label: string, count: number }> {
+  const counts = new Map<string, number>()
+  for (const step of steps) {
+    counts.set(step.tool, (counts.get(step.tool) ?? 0) + 1)
+  }
+  return [...counts.entries()].map(([label, count]) => ({ label, count }))
+}
+
 export interface BriefingRequest {
   topic?: string
   days?: number
