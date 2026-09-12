@@ -13,7 +13,7 @@ export class Cache {
     await this.db.prepare(`
       CREATE TABLE IF NOT EXISTS cache (
         id TEXT PRIMARY KEY,
-        updated INTEGER,
+        updated BIGINT,
         data TEXT
       );
     `).run()
@@ -23,7 +23,8 @@ export class Cache {
   async set(key: string, value: NewsItem[]) {
     const now = Date.now()
     await this.db.prepare(
-      `INSERT OR REPLACE INTO cache (id, data, updated) VALUES (?, ?, ?)`,
+      `INSERT INTO cache (id, data, updated) VALUES (?, ?, ?)
+      ON CONFLICT(id) DO UPDATE SET data = excluded.data, updated = excluded.updated`,
     ).run(key, JSON.stringify(value), now)
     logger.success(`set ${key} cache`)
   }
@@ -73,7 +74,7 @@ export class Cache {
 
 export async function getCacheTable() {
   try {
-    const db = useDatabase()
+    const db = await getDatabase()
     // logger.info("db: ", db.getInstance())
     if (process.env.ENABLE_CACHE === "false") return
     const cacheTable = new Cache(db)

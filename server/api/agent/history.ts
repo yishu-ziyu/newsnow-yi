@@ -12,7 +12,7 @@ import { AgentHistoryTable } from "#/database/agent-history"
  */
 export default defineEventHandler<{ body: { messages?: unknown }, response: AgentHistoryResponse }>(async (event) => {
   const user = event.context.user as { id?: string } | undefined
-  const db = useDatabase()
+  const db = await getDatabase()
 
   if (!user?.id || !db) {
     return { messages: [], updatedTime: 0, persisted: false }

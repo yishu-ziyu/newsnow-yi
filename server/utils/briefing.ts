@@ -13,7 +13,7 @@ export interface CachedBriefingMaterial {
  * on-demand briefing endpoint and the tracker runs so both see the same shape.
  */
 export async function collectCachedSeeds(days: number): Promise<CachedBriefingMaterial> {
-  const db = useDatabase()
+  const db = await getDatabase()
   const cutoff = Date.now() - days * 24 * 60 * 60 * 1000
   const rows = (await db.prepare(
     "SELECT id, data, updated FROM cache WHERE updated >= ?",

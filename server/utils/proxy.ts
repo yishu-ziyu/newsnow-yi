@@ -1,4 +1,3 @@
-
 import type { SourceGetter } from "#/types"
 
 interface RSSItem {
@@ -33,12 +32,12 @@ export function defineForeignSource(url: string): SourceGetter {
     // This allows the app to work in China without a system-level VPN for the node process.
     const gateway = "https://api.rss2json.com/v1/api.json?rss_url="
     const target = gateway + encodeURIComponent(url)
-    
+
     // api.rss2json.com returns JSON directly
     const res = await myFetch(target) as RSSResponse
 
-    if (res.status !== 'ok') {
-        throw new Error(`Failed to fetch foreign source via proxy: ${url}`)
+    if (res.status !== "ok") {
+      throw new Error(`Failed to fetch foreign source via proxy: ${url}`)
     }
 
     return res.items.map(item => ({
@@ -49,7 +48,7 @@ export function defineForeignSource(url: string): SourceGetter {
       extra: {
         info: item.author || item.pubDate,
         hover: item.description,
-      }
+      },
     }))
   }
 }

@@ -15,13 +15,13 @@ export class TrackerTable {
         id TEXT PRIMARY KEY,
         user_id TEXT,
         topic TEXT,
-        days INTEGER,
-        interval_ms INTEGER,
-        enabled INTEGER,
-        created INTEGER,
-        updated INTEGER,
-        last_run INTEGER,
-        next_run INTEGER
+        days BIGINT,
+        interval_ms BIGINT,
+        enabled BIGINT,
+        created BIGINT,
+        updated BIGINT,
+        last_run BIGINT,
+        next_run BIGINT
       );
     `).run()
     await this.db.prepare(`
@@ -32,10 +32,10 @@ export class TrackerTable {
         topic TEXT,
         summary TEXT,
         model TEXT,
-        mock INTEGER,
-        source_count INTEGER,
+        mock BIGINT,
+        source_count BIGINT,
         steps TEXT,
-        created INTEGER
+        created BIGINT
       );
     `).run()
     logger.success(`init trackers + briefings tables`)

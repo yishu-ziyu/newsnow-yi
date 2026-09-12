@@ -12,7 +12,7 @@ export class AgentHistoryTable {
       CREATE TABLE IF NOT EXISTS agent_history (
         id TEXT PRIMARY KEY,
         data TEXT,
-        updated INTEGER
+        updated BIGINT
       );
     `).run()
     logger.success(`init agent_history table`)
@@ -32,7 +32,8 @@ export class AgentHistoryTable {
   async set(id: string, messages: AgentChatMessage[]) {
     const now = Date.now()
     await this.db.prepare(
-      `INSERT OR REPLACE INTO agent_history (id, data, updated) VALUES (?, ?, ?)`,
+      `INSERT INTO agent_history (id, data, updated) VALUES (?, ?, ?)
+      ON CONFLICT(id) DO UPDATE SET data = excluded.data, updated = excluded.updated`,
     ).run(id, JSON.stringify(messages), now)
     logger.success(`set agent history ${id} (${messages.length} messages)`)
     return now

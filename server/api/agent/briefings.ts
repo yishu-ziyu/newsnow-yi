@@ -4,7 +4,7 @@ import { TrackerTable } from "#/database/tracker"
 /** Briefing history for the logged-in user (newest first). */
 export default defineEventHandler(async (event) => {
   const user = event.context.user as { id?: string } | undefined
-  const db = useDatabase()
+  const db = await getDatabase()
 
   if (!user?.id || !db) return { briefings: [], persisted: false }
 

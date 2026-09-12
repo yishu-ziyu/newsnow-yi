@@ -1,7 +1,7 @@
 import { load } from "cheerio"
 
 export default defineSource({
-  "openai": async () => {
+  openai: async () => {
     const url = "https://openai.com/news/research/"
     const res = await myFetch(url)
     const $ = load(res)

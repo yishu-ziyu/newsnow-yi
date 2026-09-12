@@ -15,7 +15,7 @@ export default defineEventHandler<{ body: BriefingRequest, response: BriefingRes
     })
   }
 
-  const db = useDatabase()
+  const db = await getDatabase()
 
   // Fetch recent cache rows
   const cutoff = Date.now() - days * 24 * 60 * 60 * 1000

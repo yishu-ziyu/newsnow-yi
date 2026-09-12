@@ -228,7 +228,7 @@ export function createNewsTools(options: NewsToolOptions = {}) {
         }
 
         try {
-          const db = useDatabase()
+          const db = await getDatabase()
           const table = new TrackerTable(db)
           await table.init()
           const tracker = await table.createTracker({

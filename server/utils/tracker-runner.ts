@@ -18,7 +18,7 @@ export interface TrackerRunResult {
  */
 export async function runDueTrackers(options: { now?: number, limit?: number } = {}): Promise<TrackerRunResult[]> {
   const now = options.now ?? Date.now()
-  const db = useDatabase()
+  const db = await getDatabase()
   const table = new TrackerTable(db)
   await table.init()
 

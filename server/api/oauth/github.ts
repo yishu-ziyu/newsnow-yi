@@ -4,7 +4,7 @@ import { Brand } from "@shared/brand"
 import { UserTable } from "#/database/user"
 
 export default defineEventHandler(async (event) => {
-  const db = useDatabase()
+  const db = await getDatabase()
   const userTable = db ? new UserTable(db) : undefined
   if (!userTable) throw new Error("db is not defined")
   if (process.env.INIT_TABLE !== "false") await userTable.init()
