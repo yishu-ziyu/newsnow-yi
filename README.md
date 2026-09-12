@@ -1,108 +1,77 @@
-![](/public/og-image.png)
+# 闻见
 
-[English](README.md) | 简体中文
+从新闻里，看见值得追踪的事。
 
-# 闻见 WENJIAN — 从新闻里，看见值得追踪的事。
+线上：[wenjian.yishuziyu.cn](https://wenjian.yishuziyu.cn)
 
-> 🚀 基于 [ourongxing/newsnow](https://github.com/ourongxing/newsnow) 的增强版本，专注于**海外优质 AI 资讯与深度阅读**
+把几十个来源的实时资讯放在一起，追问、对比，并持续追踪真正重要的变化。
 
-**_优雅地阅读实时资讯与热点新闻_**
+基于 [NewsNow](https://github.com/ourongxing/newsnow) 二次开发。
 
-## ✨ 本项目的创新
+## 能做什么
 
-在原项目的基础上，我们做了以下增强：
+- **新闻墙**：知乎、微博、HN 等几十个源并排看，热榜实时更新
+- **追问**：点一条新闻问 Agent，总结、翻译、对比口径
+- **登录后**：同步关注源；对 Agent 说「帮我盯 XX」，追踪和简报会记在你的账号下
 
-### 🌍 新增海外优质信息源
+目前只接 GitHub 登录。没登录也能看墙、问 Agent。
 
-| 分类         | 源                 | 说明                        |
-| ------------ | ------------------ | --------------------------- |
-| **AI 资讯**  | TLDR               | 每日科技快讯摘要            |
-|              | OpenAI Research    | OpenAI 官方研究动态         |
-|              | Reddit AI Monitor  | Reddit AI 工具讨论监控      |
-| **科技博客** | Stratechery        | Ben Thompson 的科技商业分析 |
-|              | Lenny's Newsletter | 产品增长与用户运营洞察      |
-|              | Paul Graham Essays | 创业与黑客精神              |
-| **深度阅读** | Aeon               | 哲学与人文深度随笔          |
-|              | Psyche             | 心理学与生活哲学            |
-|              | Farnam Street      | 思维模型与决策智慧          |
-| **中文精选** | 阮一峰的网络日志   | 科技爱好者周刊              |
+## 本地开发
 
-### 🔧 技术改进
+需要 Node.js >= 20。
 
-- **Foreign Source Proxy**：通过 RSS-to-JSON 代理解决海外源访问问题
-- **信息分层架构**：新增 `english` 专栏，独立展示海外资讯
-- **模块化设计**：`server/sources/foreign/` 目录专门管理海外源
-
----
-
-## 原项目功能
-
-- 简洁优雅的 UI 设计，带来最佳阅读体验
-- 实时热点新闻更新
-- GitHub OAuth 登录与数据同步
-- 30 分钟默认缓存（登录用户可强制刷新）
-- 自适应抓取间隔，优化资源使用
-- 支持 MCP Server
-
-## 部署
-
-### 基础部署
-
-无需登录和缓存功能：
-
-1. Fork 本仓库
-2. 导入到 Cloudflare Pages 或 Vercel
-
-### Cloudflare Pages 配置
-
-- 构建命令: `pnpm run build`
-- 输出目录: `dist/output/public`
-
-### 环境变量
-
-参考 `example.env.server`，本地开发时重命名为 `.env.server`：
-
-```env
-G_CLIENT_ID=
-G_CLIENT_SECRET=
-JWT_SECRET=
-INIT_TABLE=true
-ENABLE_CACHE=true
-```
-
-### Docker 部署
-
-```sh
-docker compose up
-```
-
-## 开发
-
-> 需要 Node.js >= 20
-
-```sh
+```bash
 corepack enable
 pnpm i
+cp example.env.server .env.server
 pnpm dev
 ```
 
-### 添加新信息源
+打开 [http://127.0.0.1:5173](http://127.0.0.1:5173)。端口被占用时会直接报错（`--strictPort`）。
 
-1. 在 `server/sources/foreign/` 创建源文件
-2. 使用 `defineForeignSource` 封装 RSS URL
-3. 在 `shared/pre-sources.ts` 注册源信息
+本地默认用 SQLite（`.data/db.sqlite3`）。**不要**把生产 `DATABASE_URL` 写进 `.env.server`，否则本地会往线上库写数据。
 
-详细说明见 [CONTRIBUTING.md](CONTRIBUTING.md)
+Agent 至少配一个模型 key（见 `example.env.server`）；不配也能跑，对话会走内置免费兜底或模拟回复。
 
-## 致谢
+## 部署
 
-- 原项目 [ourongxing/newsnow](https://github.com/ourongxing/newsnow)
-- RSS-to-JSON API by rss2json.com
+当前生产跑在 **Vercel（Node 函数）+ Neon Postgres**，域名 `wenjian.yishuziyu.cn`。push 到 `main` 会自动部署。
+
+要用登录和缓存，在托管平台配置：
+
+| 变量 | 用途 |
+|---|---|
+| `DATABASE_URL` | Postgres（生产是 Neon） |
+| `JWT_SECRET` | 登录态签名 |
+| `G_CLIENT_ID` / `G_CLIENT_SECRET` | GitHub OAuth App。回调地址：`https://你的域名/api/oauth/github` |
+| `NEWSNOW_LLM_FALLBACK_MINIMAX` 等 | Agent 模型；不配则走内置兜底 |
+
+GitHub OAuth 建的是 [OAuth App](https://github.com/settings/applications/new)，不是 GitHub App。
+
+Docker：
+
+```bash
+docker compose up --build
+```
+
+## MCP
+
+```json
+{
+  "mcpServers": {
+    "wenjian": {
+      "command": "npx",
+      "args": ["-y", "newsnow-mcp-server"],
+      "env": {
+        "BASE_URL": "https://wenjian.yishuziyu.cn"
+      }
+    }
+  }
+}
+```
+
+自托管时把 `BASE_URL` 换成你的域名。
 
 ## License
 
-[MIT](./LICENSE) © ourongxing
-
----
-
-> 📫 如有问题或建议，欢迎提 Issue 或 PR
+[MIT](./LICENSE)。原作 © [ourongxing](https://github.com/ourongxing)；本仓库二次开发 © [yishu-ziyu](https://github.com/yishu-ziyu)。

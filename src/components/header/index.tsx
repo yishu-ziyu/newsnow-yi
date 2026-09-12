@@ -25,6 +25,23 @@ function Github() {
   )
 }
 
+function Login() {
+  const { enableLogin, loggedIn, login } = useLogin()
+  if (!enableLogin || loggedIn) return null
+  return (
+    <button
+      type="button"
+      title="GitHub 登录"
+      aria-label="GitHub 登录"
+      className="btn flex items-center gap-1 text-sm font-medium"
+      onClick={login}
+    >
+      <span className="i-ph:sign-in-duotone text-xl" />
+      <span>登录</span>
+    </button>
+  )
+}
+
 function Refresh() {
   const currentSources = useAtomValue(currentSourcesAtom)
   const { refresh } = useRefetch()
@@ -88,6 +105,7 @@ export function Header() {
         <GoTop />
         <Refresh />
         <Github />
+        <Login />
         <Menu />
       </span>
     </>
