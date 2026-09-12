@@ -6,7 +6,10 @@ import type { UseOverlayScrollbarsParams } from "./useOverlayScrollbars"
 import { goToTopAtom } from "~/atoms"
 import "./style.css"
 
-type Props = HTMLProps<HTMLDivElement> & UseOverlayScrollbarsParams
+type Props = HTMLProps<HTMLDivElement> & UseOverlayScrollbarsParams & {
+  /** 需要测量溢出/滚动时用：把宿主滚动容器交出去 */
+  hostRef?: (el: HTMLDivElement | null) => void
+}
 const defaultScrollbarParams: UseOverlayScrollbarsParams = {
   options: {
     scrollbars: {
@@ -16,8 +19,13 @@ const defaultScrollbarParams: UseOverlayScrollbarsParams = {
   defer: true,
 }
 
-export function OverlayScrollbar({ disabled, children, options, events, defer, className, ...props }: PropsWithChildren<Props>) {
+export function OverlayScrollbar({ disabled, children, options, events, defer, className, hostRef, ...props }: PropsWithChildren<Props>) {
   const ref = useRef<HTMLDivElement>(null)
+
+  const setHost = useCallback((node: HTMLDivElement | null) => {
+    ref.current = node
+    hostRef?.(node)
+  }, [hostRef])
   const scrollbarParams = useMemo(() => defu<UseOverlayScrollbarsParams, Array<UseOverlayScrollbarsParams> >({
     options,
     events,
@@ -49,7 +57,7 @@ export function OverlayScrollbar({ disabled, children, options, events, defer, c
   }, [instance])
 
   return (
-    <div ref={ref} {...props} className={$("overflow-auto scrollbar-hidden", className)}>
+    <div ref={setHost} {...props} className={$("overflow-auto scrollbar-hidden", className)}>
       {/* 只能有一个 element */}
       <div>{children}</div>
     </div>

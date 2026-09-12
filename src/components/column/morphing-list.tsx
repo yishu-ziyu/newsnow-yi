@@ -5,12 +5,10 @@ import { useWindowSize } from "react-use"
 import { useAtomValue, useSetAtom } from "jotai"
 import { agentPanelActionsAtom } from "~/atoms/agent-panel"
 import { compareSelectionActionsAtom, compareSelectionAtom, itemKey } from "~/atoms/compare-selection"
+import { layoutModeAtom } from "~/atoms/layout-mode"
 import { useRelativeTime } from "~/hooks/useRelativeTime"
 
-const SWIPE_THRESHOLD = 50
 const SPRING = { type: "spring", stiffness: 300, damping: 25 }
-
-export type LayoutMode = "stack" | "grid" | "list"
 
 export interface MorphingNewsListProps {
   items: NewsItem[]
@@ -19,9 +17,8 @@ export interface MorphingNewsListProps {
 }
 
 export function MorphingNewsList({ items, sourceColor }: MorphingNewsListProps) {
-  const [layout, setLayout] = useState<LayoutMode>("list")
+  const layout = useAtomValue(layoutModeAtom)
   const [expandedId, setExpandedId] = useState<string | number | null>(null)
-  const [activeIndex, setActiveIndex] = useState(0)
   const { width } = useWindowSize()
   const isMobile = width < 768
   const setAgentPanel = useSetAtom(agentPanelActionsAtom)
@@ -32,39 +29,19 @@ export function MorphingNewsList({ items, sourceColor }: MorphingNewsListProps) 
     setAgentPanel({ type: "open", item })
   }, [setAgentPanel])
 
-  const handleDragEnd = useCallback((_event: MouseEvent | TouchEvent | PointerEvent, info: { offset: { x: number }, velocity: { x: number } }) => {
-    const { offset, velocity } = info
-    const swipe = offset.x * velocity.x
-    if (offset.x < -SWIPE_THRESHOLD || swipe < -1000) {
-      setActiveIndex(prev => (prev + 1) % items.length)
-    } else if (offset.x > SWIPE_THRESHOLD || swipe > 1000) {
-      setActiveIndex(prev => (prev - 1 + items.length) % items.length)
-    }
-  }, [items.length])
-
   const toggleExpand = useCallback((id: string | number) => {
     setExpandedId(prev => prev === id ? null : id)
   }, [])
 
   if (!items.length) return null
 
-  const isStack = layout === "stack"
   const isGrid = layout === "grid"
-  const stackVisibleCount = 3
-
-  const stackItems = isStack
-    ? Array.from({ length: Math.min(stackVisibleCount, items.length) }, (_, i) => {
-        const idx = (activeIndex + i) % items.length
-        return { item: items[idx], stackPos: i }
-      })
-    : null
 
   // 身份色只留给细条与图标；卡片本身走中性面，屏上只保留一个 accent（primary）
   const identityBar = `bg-${sourceColor}-500`
   const c = "text-neutral-600"
-  const bgSolid = "bg-neutral-900/[0.06] text-neutral-600"
-  const accentSolid = "bg-primary text-white"
-  const borderC = "border-neutral-900/10"
+  const bgSolid = "bg-neutral-900/[0.06] text-neutral-700"
+  const accentSolid = "bg-primary/15 text-primary-800"
 
   // --- Nav button inside expanded card ---
   const NavBtn = ({ item }: { item: NewsItem }) => {
@@ -75,112 +52,15 @@ export function MorphingNewsList({ items, sourceColor }: MorphingNewsListProps) 
         target="_blank"
         rel="noopener noreferrer"
         className={$(
-          "inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-lg",
-          "transition-opacity duration-150 hover:opacity-80",
-          `${bgSolid} text-white`,
+          "inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-medium",
+          "transition-colors duration-150 hover:bg-neutral-900/[0.1]",
+          bgSolid,
         )}
         title={item.title}
       >
         <span className="i-ph:arrow-square-out text-sm" />
         原文
       </a>
-    )
-  }
-
-  // --- Stack ---
-  const renderStackItem = (item: NewsItem, _index: number, stackPos: number) => {
-    const isExpanded = expandedId === item.id
-    const isTopCard = stackPos === 0
-    const diff = item.extra?.diff
-    const date = item.pubDate || item.extra?.date
-
-    return (
-      <motion.div
-        key={item.id}
-        layoutId={String(item.id)}
-        initial={{ opacity: 0, scale: 0.95, y: 20 }}
-        animate={{
-          opacity: 1,
-          scale: isExpanded ? 1.01 : (1 - stackPos * 0.03),
-          y: stackPos * 8,
-          x: stackPos * 3,
-          zIndex: stackVisibleCount - stackPos,
-          rotate: (stackPos - 1) * 1.5,
-        }}
-        exit={{ opacity: 0, scale: 0.95, y: -20 }}
-        transition={SPRING}
-        drag={isTopCard ? "x" : false}
-        dragConstraints={{ left: 0, right: 0 }}
-        dragElastic={0.7}
-        onDragStart={() => setIsDragging(true)}
-        onDragEnd={handleDragEnd}
-        whileDrag={{ scale: 1.02 }}
-      >
-        <div
-          onClick={() => toggleExpand(item.id)}
-          className={$(
-            "cursor-pointer rounded-2xl border shadow-md transition-[box-shadow,border-color] duration-150",
-            "backdrop-blur-sm bg-white/70",
-            borderC,
-            isTopCard && "hover:shadow-lg hover:border-neutral-900/15",
-            isExpanded && "ring-2 ring-primary/40 shadow-lg",
-            isStack && "absolute w-full",
-          )}
-        >
-          <div className="p-4">
-            <div className="flex items-start gap-3">
-              <span className={$(
-                "flex size-9 shrink-0 items-center justify-center rounded-xl text-base font-black tabular-nums",
-                isExpanded ? accentSolid : bgSolid,
-              )}
-              >
-                {activeIndex + 1}
-              </span>
-              <div className="min-w-0 flex-1">
-                <p className={$("font-bold leading-snug line-clamp-2 text-neutral-800", isExpanded && "text-base")}>
-                  {item.title}
-                </p>
-                {isExpanded && item.extra?.hover && (
-                  <motion.p
-                    initial={{ opacity: 0, y: 4 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="text-sm text-neutral-500 mt-3 line-clamp-3 leading-relaxed"
-                  >
-                    {item.extra.hover}
-                  </motion.p>
-                )}
-                {isExpanded && (
-                  <div className="flex items-center gap-2 mt-3">
-                    <NavBtn item={item} />
-                    <AgentBtn label={item.title} onClick={e => handleAgentClick(e, item)} />
-                    <SelectBtn item={item} />
-                  </div>
-                )}
-                <div className="flex items-center gap-3 mt-2">
-                  {item.extra?.info && (
-                    <span className={$("text-xs font-semibold truncate", c)}>{item.extra.info}</span>
-                  )}
-                  {date && <span className="text-xs text-neutral-500 tabular-nums"><NewsTime date={date} /></span>}
-                </div>
-              </div>
-              <div className="shrink-0 flex flex-col items-end gap-1">
-                {diff != null && <DiffBadge diff={diff} />}
-                {!isExpanded && (
-                  <>
-                    <AgentBtn label={item.title} onClick={e => handleAgentClick(e, item)} />
-                    <SelectBtn item={item} />
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
-          {isTopCard && (
-            <div className="text-center pb-2">
-              <span className="text-[10px] text-neutral-400">Swipe to navigate</span>
-            </div>
-          )}
-        </div>
-      </motion.div>
     )
   }
 
@@ -213,7 +93,7 @@ export function MorphingNewsList({ items, sourceColor }: MorphingNewsListProps) 
           <div className="p-3.5">
             <div className="flex items-start gap-2.5">
               <span className={$(
-                "shrink-0 w-8 h-8 flex items-center justify-center rounded-lg text-sm font-black text-white",
+                "shrink-0 w-8 h-8 flex items-center justify-center rounded-lg text-sm font-medium tabular-nums",
                 isExpanded ? accentSolid : bgSolid,
               )}
               >
@@ -244,7 +124,7 @@ export function MorphingNewsList({ items, sourceColor }: MorphingNewsListProps) 
               : (
                   <div className="flex items-center justify-between mt-2.5">
                     <div className="flex items-center gap-2">
-                      {item.extra?.info && <span className={$("text-xs font-semibold truncate", c)}>{item.extra.info}</span>}
+                      {item.extra?.info && <span className={$("text-xs truncate", c)}>{item.extra.info}</span>}
                       {date && <NewsTime date={date} />}
                     </div>
                     {diff != null && <DiffBadge diff={diff} />}
@@ -287,14 +167,14 @@ export function MorphingNewsList({ items, sourceColor }: MorphingNewsListProps) 
         >
           <div className="flex items-center gap-3">
             <span className={$(
-              "shrink-0 w-7 h-7 flex items-center justify-center rounded-lg text-xs font-black text-white",
+              "shrink-0 w-7 h-7 flex items-center justify-center rounded-lg text-xs font-medium tabular-nums",
               isExpanded ? accentSolid : bgSolid,
             )}
             >
               {index + 1}
             </span>
             <div className="min-w-0 flex-1">
-              <p className={$("text-sm font-semibold leading-snug line-clamp-1 text-neutral-800", isExpanded && "line-clamp-2")}>
+              <p className={$("text-sm font-bold leading-snug line-clamp-1 text-neutral-800", isExpanded && "line-clamp-2")}>
                 {item.title}
               </p>
               {isExpanded && item.extra?.hover && (
@@ -341,57 +221,17 @@ export function MorphingNewsList({ items, sourceColor }: MorphingNewsListProps) 
 
   return (
     <div className="space-y-2.5">
-      {/* Layout Toggle */}
-      <div className="flex items-center justify-center gap-0.5 rounded-lg bg-black/10 p-0.5 w-fit mx-auto">
-        {(["stack", "grid", "list"] as LayoutMode[]).map(mode => (
-          <button
-            type="button"
-            key={mode}
-            onClick={() => setLayout(mode)}
-            className={$(
-              "rounded-md px-3 py-1.5 text-xs font-bold transition-colors duration-150",
-              layout === mode ? "bg-neutral-900/80 text-white" : "text-neutral-500 hover:bg-neutral-900/[0.06] hover:text-neutral-700",
-            )}
-          >
-            {mode === "stack" ? "Stack" : mode === "grid" ? "Grid" : "List"}
-          </button>
-        ))}
-      </div>
-
       <LayoutGroup>
         <motion.div
           layout
-          className={$(
-            isStack && "relative h-[26rem]",
-            isGrid && "grid grid-cols-2 gap-3",
-            !isStack && !isGrid && "flex flex-col gap-1.5",
-          )}
+          className={$(isGrid ? "grid grid-cols-2 gap-3" : "flex flex-col gap-1.5")}
         >
           <AnimatePresence mode="popLayout">
-            {isStack && stackItems
-              ? stackItems.map(({ item, stackPos }) => renderStackItem(item, activeIndex + stackPos, stackPos))
-              : items.map((item, i) =>
-                  isGrid ? renderGridItem(item, i) : renderListItem(item, i),
-                )}
+            {items.map((item, i) => isGrid ? renderGridItem(item, i) : renderListItem(item, i))}
           </AnimatePresence>
         </motion.div>
       </LayoutGroup>
 
-      {isStack && items.length > 1 && (
-        <div className="flex justify-center gap-1.5 pt-1">
-          {items.map((item, index) => (
-            <button
-              type="button"
-              key={item.id}
-              onClick={() => setActiveIndex(index)}
-              className={$(
-                "h-1.5 rounded-full transition-[background-color] duration-150",
-                index === activeIndex ? "w-5 bg-primary" : "w-1.5 bg-neutral-400/25 hover:bg-neutral-400/50",
-              )}
-            />
-          ))}
-        </div>
-      )}
     </div>
   )
 }
@@ -411,6 +251,9 @@ function DiffBadge({ diff }: { diff: number }) {
     return () => clearTimeout(timer)
   }, [diff])
 
+  // 位次没变（diff = 0）不值得占一个徽章：否则刷新后每行都挂一个「0」
+  if (!diff) return null
+
   return (
     <AnimatePresence>
       {visible && (
@@ -419,8 +262,8 @@ function DiffBadge({ diff }: { diff: number }) {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -8, scale: 0.8 }}
           className={$(
-            "text-[10px] font-black px-1.5 py-0.5 rounded-md",
-            "bg-primary/15 text-primary",
+            "text-[10px] font-medium px-1.5 py-0.5 rounded-md",
+            "bg-primary-100 text-primary-800 dark:bg-primary-950 dark:text-primary-200",
           )}
         >
           {diff > 0 ? `+${diff}` : diff}
@@ -435,7 +278,7 @@ function AgentBtn({ onClick, label }: { onClick: (e: React.MouseEvent) => void, 
     <button
       type="button"
       aria-label={label ? `问 Agent：${label}` : "问 Agent"}
-      className="i-ph:sparkle-duotone px-1 text-sm text-neutral-500 transition-opacity duration-150 hover:text-neutral-700"
+      className="i-ph:sparkle-duotone box-content rounded-md p-1.5 text-sm text-neutral-500 transition-colors duration-150 hover:bg-neutral-900/[0.06] hover:text-neutral-700"
       title="问 Agent"
       onClick={onClick}
     />
@@ -455,8 +298,8 @@ function SelectBtn({ item }: { item: NewsItem }) {
       aria-pressed={selected}
       title={selected ? "已加入对比" : "加入对比"}
       className={$(selected
-        ? "i-ph:check-circle-fill text-primary"
-        : "i-ph:plus-circle text-neutral-500 hover:text-neutral-700", "px-1 text-sm transition-colors duration-150")}
+        ? "i-ph:check-circle-fill text-primary-600 dark:text-primary-400"
+        : "i-ph:plus-circle text-neutral-500 hover:text-neutral-700", "box-content rounded-md p-1.5 text-sm transition-colors duration-150 hover:bg-neutral-900/[0.06]")}
       onClick={(e) => {
         e.preventDefault()
         e.stopPropagation()

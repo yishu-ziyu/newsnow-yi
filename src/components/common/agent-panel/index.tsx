@@ -54,7 +54,7 @@ function StepTrace({ steps }: { steps: NonNullable<import("~/atoms/agent-panel")
         type="button"
         aria-expanded={open}
         onClick={() => setOpen(prev => !prev)}
-        className="flex items-center gap-1 self-start rounded text-[11px] text-neutral-400 transition-colors duration-150 hover:text-neutral-600"
+        className="flex items-center gap-1 self-start rounded text-[11px] text-neutral-600 transition-colors duration-150 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-200"
       >
         <span
           aria-hidden="true"
@@ -67,14 +67,14 @@ function StepTrace({ steps }: { steps: NonNullable<import("~/atoms/agent-panel")
           次工具
         </span>
         {!open && (
-          <span className="truncate text-neutral-400/80">
+          <span className="truncate text-neutral-600 dark:text-neutral-400">
             ·
             {summary}
           </span>
         )}
       </button>
       {open && (
-        <ul className="ml-4 flex flex-col gap-0.5 border-l border-neutral-400/20 pl-2 text-[11px] text-neutral-400">
+        <ul className="ml-4 flex flex-col gap-0.5 border-l border-neutral-300 pl-2 text-[11px] text-neutral-600 dark:border-neutral-700 dark:text-neutral-400">
           {steps.map((step, index) => (
             <li key={`${step.tool}-${index}`} className="truncate">
               {step.tool}
@@ -92,13 +92,13 @@ function ChatMessageBubble({ message }: ChatMessageBubbleProps) {
   return (
     <div className={clsx("flex flex-col gap-1", isUser ? "items-end" : "items-start")}>
       {message.context?.title && (
-        <div className="max-w-[85%] truncate px-2 text-xs text-neutral-400/70">
+        <div className="max-w-[85%] truncate px-2 text-xs text-neutral-600 dark:text-neutral-400">
           {message.context.title}
         </div>
       )}
       {message.mock && (
         <div
-          className="max-w-[85%] rounded-full bg-amber-500/15 px-2 py-0.5 text-xs text-amber-700 dark:text-amber-400"
+          className="max-w-[85%] rounded-full bg-amber-100 px-2 py-0.5 text-xs text-amber-800 dark:bg-amber-950 dark:text-amber-300"
           title={message.degradedReason}
         >
           模拟回复 · 未接模型
@@ -108,18 +108,18 @@ function ChatMessageBubble({ message }: ChatMessageBubbleProps) {
       <div className={clsx(
         "max-w-[85%] rounded-2xl px-3 py-2 text-sm leading-relaxed [text-wrap:pretty]",
         isUser
-          ? "bg-primary/20 text-primary dark:bg-primary/30"
+          ? "bg-primary-100 text-primary-800 dark:bg-primary-950 dark:text-primary-200"
           : message.mock
             ? "border border-dashed border-amber-500/40 bg-amber-500/5 text-neutral-600 dark:text-neutral-300"
-            : "bg-neutral-400/10 text-neutral-800 dark:text-neutral-200",
+            : "border border-boundary-border bg-boundary-border/70 text-ink-text dark:border-neutral-700 dark:bg-neutral-800/70 dark:text-neutral-200",
       )}
       >
         {isUser ? message.content : <MarkdownLite text={message.content} />}
       </div>
-      <span className="flex items-center gap-2 px-2 text-[11px] text-neutral-400/70 tabular-nums">
+      <span className="flex items-center gap-2 px-2 text-[11px] text-neutral-600 dark:text-neutral-400 tabular-nums">
         {formatTime(message.timestamp)}
         {message.provider && message.model && (
-          <span className="text-[10px] text-neutral-400/50" title={`${message.provider} · ${message.model}`}>
+          <span className="text-[10px] text-neutral-600 dark:text-neutral-400" title={`${message.provider} · ${message.model}`}>
             {message.model}
           </span>
         )}
@@ -128,7 +128,7 @@ function ChatMessageBubble({ message }: ChatMessageBubbleProps) {
             href={message.context.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="underline opacity-60 transition-opacity duration-150 hover:opacity-100"
+            className="underline transition-colors duration-150 hover:text-primary-700 dark:hover:text-primary-400"
           >
             原文
           </a>
@@ -155,8 +155,8 @@ function SegmentedTabs({ value, onChange }: { value: "chat" | "trackers", onChan
           className={clsx(
             "rounded-full px-2.5 py-1 text-xs transition-colors duration-150",
             value === item.id
-              ? "bg-primary/15 text-primary"
-              : "text-neutral-500 hover:bg-neutral-400/10 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200",
+              ? "bg-primary-100 text-primary-800 dark:bg-primary-950 dark:text-primary-200"
+              : "text-neutral-600 hover:bg-neutral-100 hover:text-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-200",
           )}
         >
           {item.label}
@@ -200,7 +200,7 @@ function TrackersView({ onStartTracking, reloadToken = 0 }: { onStartTracking?: 
 
   if (!state.persisted) {
     return (
-      <div className="flex flex-1 flex-col items-center justify-center gap-2 px-6 py-16 text-center text-sm text-neutral-500 dark:text-neutral-400">
+      <div className="flex flex-1 flex-col items-center justify-center gap-2 px-6 py-16 text-center text-sm text-neutral-600 dark:text-neutral-400">
         <span className="text-2xl">🗂️</span>
         <span>登录后才能保存追踪与简报。</span>
         <span className="text-xs">现在也可以在对话里直接问，只是不会留档。</span>
@@ -214,7 +214,7 @@ function TrackersView({ onStartTracking, reloadToken = 0 }: { onStartTracking?: 
         <header className="flex items-baseline justify-between">
           <h3 className="text-xs font-semibold text-neutral-600 dark:text-neutral-300">追踪</h3>
           <span className="flex items-center gap-2">
-            <span className="text-xs text-neutral-400 tabular-nums">
+            <span className="text-xs text-neutral-600 dark:text-neutral-400 tabular-nums">
               {state.trackers.length}
               {" "}
               条
@@ -223,7 +223,7 @@ function TrackersView({ onStartTracking, reloadToken = 0 }: { onStartTracking?: 
               type="button"
               aria-label="刷新追踪与简报"
               onClick={refresh}
-              className="rounded px-1.5 py-0.5 text-xs text-neutral-500 transition-colors duration-150 hover:bg-neutral-400/20 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200"
+              className="rounded px-1.5 py-0.5 text-xs text-neutral-600 transition-colors duration-150 hover:bg-neutral-100 hover:text-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-200"
             >
               刷新
             </button>
@@ -237,7 +237,7 @@ function TrackersView({ onStartTracking, reloadToken = 0 }: { onStartTracking?: 
                 {onStartTracking && (
                   <button
                     type="button"
-                    className="rounded-full bg-primary/10 px-3 py-1 text-xs text-primary transition-colors duration-150 hover:bg-primary/20"
+                    className="rounded-full bg-primary-100 px-3 py-1 text-xs text-primary-800 transition-colors duration-150 hover:bg-primary-200 dark:bg-primary-950 dark:text-primary-200 dark:hover:bg-primary-900"
                     onClick={onStartTracking}
                   >
                     去对话里建一条
@@ -308,7 +308,7 @@ function TrackersView({ onStartTracking, reloadToken = 0 }: { onStartTracking?: 
       <section className="flex flex-col gap-2">
         <header className="flex items-baseline justify-between">
           <h3 className="text-xs font-semibold text-neutral-600 dark:text-neutral-300">简报</h3>
-          <span className="text-xs text-neutral-400 tabular-nums">
+          <span className="text-xs text-neutral-600 dark:text-neutral-400 tabular-nums">
             {state.briefings.length}
             {" "}
             份
@@ -551,7 +551,7 @@ export function AgentPanel() {
         ref={panelRef}
         className={clsx(
           "absolute right-0 top-0 h-full w-full max-w-md",
-          "bg-base/95 dark:bg-neutral-900/95 backdrop-blur-xl",
+          "bg-base dark:bg-neutral-900",
           "border-l border-neutral-200 dark:border-neutral-800",
           "flex flex-col shadow-2xl",
         )}
@@ -577,14 +577,14 @@ export function AgentPanel() {
           <div className="ml-2 flex gap-2">
             <button
               type="button"
-              className="rounded bg-neutral-400/10 px-2 py-1 text-xs transition-colors duration-150 hover:bg-neutral-400/20"
+              className="rounded bg-neutral-400/10 px-2 py-1 text-xs text-neutral-700 transition-colors duration-150 hover:bg-neutral-400/20 dark:text-neutral-200"
               onClick={() => dispatch({ type: "clear" })}
             >
               清空
             </button>
             <button
               type="button"
-              className="rounded bg-neutral-400/10 px-2 py-1 text-xs transition-colors duration-150 hover:bg-neutral-400/20"
+              className="rounded bg-neutral-400/10 px-2 py-1 text-xs text-neutral-700 transition-colors duration-150 hover:bg-neutral-400/20 dark:text-neutral-200"
               onClick={() => dispatch({ type: "close" })}
             >
               关闭
@@ -642,7 +642,7 @@ export function AgentPanel() {
               <>
                 <div className="flex flex-1 flex-col gap-3 overflow-y-auto p-4">
                   {state.messages.length === 0 && (
-                    <div className="flex flex-1 flex-col items-center justify-center gap-2 py-12 text-sm text-neutral-500 dark:text-neutral-400">
+                    <div className="flex flex-1 flex-col items-center justify-center gap-2 py-12 text-sm text-neutral-600 dark:text-neutral-400">
                       <span className="text-3xl">💬</span>
                       <span>{isCompare ? "正在对比选中的来源…" : "选中新闻后，可以问我任何问题"}</span>
                       {!isCompare && (
@@ -676,7 +676,7 @@ export function AgentPanel() {
                         // 面板在暗色下底色近黑，必须显式给文字色，不能靠继承
                         "text-neutral-800 caret-primary dark:text-neutral-100",
                         "focus:border-primary/50 focus:outline-none",
-                        "placeholder:text-neutral-500 dark:placeholder:text-neutral-500",
+                        "placeholder:text-neutral-500 dark:placeholder:text-neutral-400",
                         "disabled:opacity-50",
                       )}
                     />
@@ -685,8 +685,8 @@ export function AgentPanel() {
                       disabled={state.loading}
                       className={clsx(
                         "rounded-full px-4 py-2 text-sm",
-                        "bg-primary text-white",
-                        "transition-opacity duration-150 hover:opacity-90",
+                        "bg-primary-600 text-white hover:bg-primary-700",
+                        "transition-colors duration-150",
                         "disabled:opacity-50",
                       )}
                     >

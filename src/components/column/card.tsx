@@ -27,6 +27,29 @@ export const CardWrapper = forwardRef<HTMLElement, ItemsProps>(({ id, isDragging
     once: true,
   })
 
+  /**
+   * 卡片内容懒挂载：进视口才渲染。
+   * 但后台标签页里 IntersectionObserver 不回调，卡片会一直停在空壳状态（等于整面墙是空白框），
+   * 所以：页面本来就不可见（后台打开 / 预渲染）时直接挂上，切回前台时再按视口位置补一次。
+   */
+  const [contentReady, setContentReady] = useState(false)
+  useEffect(() => {
+    if (inView) setContentReady(true)
+  }, [inView])
+  useEffect(() => {
+    const check = () => {
+      if (document.visibilityState !== "visible") return
+      const el = ref.current
+      if (!el) return
+      const rect = el.getBoundingClientRect()
+      if (rect.top < window.innerHeight && rect.bottom > 0) setContentReady(true)
+    }
+    if (document.visibilityState !== "visible") setContentReady(true)
+    else check()
+    document.addEventListener("visibilitychange", check)
+    return () => document.removeEventListener("visibilitychange", check)
+  }, [])
+
   useImperativeHandle(dndRef, () => ref.current! as HTMLDivElement)
 
   return (
@@ -49,7 +72,7 @@ export const CardWrapper = forwardRef<HTMLElement, ItemsProps>(({ id, isDragging
         aria-hidden="true"
         className={$("absolute inset-x-4 top-0 h-0.5 rounded-full opacity-80", `bg-${sources[id].color}-500`)}
       />
-      {inView && <NewsCard id={id} setHandleRef={setHandleRef} />}
+      {contentReady && <NewsCard id={id} setHandleRef={setHandleRef} />}
     </div>
   )
 })
@@ -108,6 +131,44 @@ function NewsCard({ id, setHandleRef }: NewsCardProps) {
 
   const { isFocused, toggleFocus } = useFocusWith(id)
 
+  // 卡片是固定 500px，内容超出时底部是硬切一刀；实际滚动的是 overlayscrollbars 的 viewport，
+  // 量出溢出与是否已到底，用遮罩渐隐提示「下面还有」，到底就撤掉。
+  const [scrollHost, setScrollHost] = useState<HTMLDivElement | null>(null)
+  const [fadeNeeded, setFadeNeeded] = useState(false)
+  useEffect(() => {
+    if (!scrollHost) return
+    let frame = 0
+    // 实际滚动的是 overlayscrollbars 初始化后包出来的 viewport，每次现查（库会重建节点）
+    const measure = () => {
+      const viewport = (scrollHost.querySelector("[data-overlayscrollbars-viewport]") ?? scrollHost.firstElementChild) as HTMLElement | null
+      const content = viewport?.scrollHeight ?? scrollHost.scrollHeight
+      const overflowing = content - scrollHost.clientHeight > 4
+      const atBottom = viewport ? viewport.scrollTop + viewport.clientHeight >= content - 4 : true
+      setFadeNeeded(overflowing && !atBottom)
+    }
+    const schedule = () => {
+      cancelAnimationFrame(frame)
+      frame = requestAnimationFrame(measure)
+    }
+    measure()
+    // 尺寸、内容（骨架→列表、展开条目）、滚动都要重算；scroll 不冒泡，用捕获监听
+    const resize = new ResizeObserver(schedule)
+    resize.observe(scrollHost)
+    const mutation = new MutationObserver(schedule)
+    mutation.observe(scrollHost, { childList: true, subtree: true })
+    scrollHost.addEventListener("scroll", measure, { capture: true, passive: true })
+    const timer = setTimeout(measure, 400)
+    return () => {
+      cancelAnimationFrame(frame)
+      clearTimeout(timer)
+      resize.disconnect()
+      mutation.disconnect()
+      scrollHost.removeEventListener("scroll", measure, { capture: true })
+    }
+  }, [scrollHost, data])
+
+  const fadeMask = "linear-gradient(to bottom, black calc(100% - 26px), transparent)"
+
   return (
     <>
       <div className={$("flex justify-between mx-2 mt-0 mb-2 items-center")}>
@@ -124,24 +185,28 @@ function NewsCard({ id, setHandleRef }: NewsCardProps) {
           <span className="flex flex-col">
             <span className="flex items-center gap-2">
               <span
-                className="text-xl font-bold"
+                className="text-xl text-sm! font-medium text-neutral-700"
                 title={sources[id].desc}
               >
                 {sources[id].name}
               </span>
               {sources[id]?.title && <span className="rounded bg-neutral-400/10 px-1 text-sm text-neutral-600">{sources[id].title}</span>}
             </span>
-            <span className="text-xs op-70"><UpdatedTime isError={isError} updatedTime={data?.updatedTime} /></span>
+            <span className="text-xs text-neutral-500"><UpdatedTime isError={isError} updatedTime={data?.updatedTime} /></span>
           </span>
         </div>
         <div className="flex gap-2 text-lg text-neutral-500">
           <button
             type="button"
+            aria-label={`刷新：${sources[id].name}`}
+            title="刷新"
             className={$("btn i-ph:arrow-counter-clockwise-duotone", isFetching && "animate-spin i-ph:circle-dashed-duotone")}
             onClick={() => refresh(id)}
           />
           <button
             type="button"
+            aria-label={isFocused ? `取消收藏：${sources[id].name}` : `收藏：${sources[id].name}`}
+            title={isFocused ? "取消收藏" : "收藏"}
             className={$("btn", isFocused ? "i-ph:star-fill" : "i-ph:star-duotone")}
             onClick={toggleFocus}
           />
@@ -149,6 +214,8 @@ function NewsCard({ id, setHandleRef }: NewsCardProps) {
           {setHandleRef && (
             <div
               ref={setHandleRef}
+              aria-label={`拖动排序：${sources[id].name}`}
+              title="拖动排序"
               className={$("btn", "i-ph:dots-six-vertical-duotone", "cursor-grab")}
             />
           )}
@@ -156,7 +223,9 @@ function NewsCard({ id, setHandleRef }: NewsCardProps) {
       </div>
 
       <OverlayScrollbar
+        hostRef={setScrollHost}
         className="h-full overflow-y-auto rounded-2xl p-2"
+        style={fadeNeeded ? { maskImage: fadeMask, WebkitMaskImage: fadeMask } : undefined}
         options={{
           overflow: { x: "hidden" },
         }}

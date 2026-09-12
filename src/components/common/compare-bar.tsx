@@ -57,7 +57,7 @@ export function CompareBar() {
 
       <button
         type="button"
-        className="shrink-0 rounded-full bg-primary px-3 py-1 text-xs text-white transition-opacity duration-150 hover:opacity-90"
+        className="shrink-0 rounded-full bg-primary-600 px-3 py-1 text-xs text-white transition-colors duration-150 hover:bg-primary-700"
         onClick={start}
       >
         对比分析
