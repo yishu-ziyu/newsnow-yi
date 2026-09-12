@@ -2,7 +2,7 @@
 
 [English](README.md) | 简体中文
 
-# NewsNow Pro - 优质信息聚合阅读器
+# 闻见 WENJIAN — 从新闻里，看见值得追踪的事。
 
 > 🚀 基于 [ourongxing/newsnow](https://github.com/ourongxing/newsnow) 的增强版本，专注于**海外优质 AI 资讯与深度阅读**
 
