@@ -170,8 +170,8 @@ function NewsCard({ id, setHandleRef }: NewsCardProps) {
               sourceColor={sources[id].color}
             />
           )}
-          {/* 结构化骨架：不用整卡脉冲 */}
-          {!data?.items?.length && (
+          {/* 结构化骨架：只在真的加载中显示 */}
+          {isFetching && !data?.items?.length && (
             <div className="flex flex-col gap-2 px-1 pt-6" aria-hidden="true">
               {[0, 1, 2, 3, 4, 5].map(i => (
                 <div key={i} className="flex items-center gap-3">
@@ -179,6 +179,22 @@ function NewsCard({ id, setHandleRef }: NewsCardProps) {
                   <div className="h-3 rounded-full bg-neutral-900/[0.06]" style={{ width: `${72 - i * 7}%` }} />
                 </div>
               ))}
+            </div>
+          )}
+
+          {/* 取不到内容时不能一直转骨架：给出原因和下一步 */}
+          {!isFetching && !data?.items?.length && (
+            <div className="flex flex-col items-start gap-2 px-3 pt-10">
+              <p className="text-sm text-neutral-600 dark:text-neutral-300">
+                {isError ? "这个源这次没取到内容。" : "这个源暂时没有条目。"}
+              </p>
+              <button
+                type="button"
+                onClick={() => refresh(id)}
+                className="rounded-full bg-neutral-900/[0.06] px-3 py-1 text-xs text-neutral-700 transition-colors duration-150 hover:bg-neutral-900/[0.12]"
+              >
+                重试
+              </button>
             </div>
           )}
         </div>

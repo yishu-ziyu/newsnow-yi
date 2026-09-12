@@ -642,10 +642,11 @@ export function AgentPanel() {
                       placeholder="问点什么..."
                       disabled={state.loading}
                       className={clsx(
-                        "flex-1 rounded-full px-4 py-2 text-sm",
-                        "bg-neutral-400/10 border border-neutral-400/20",
-                        "focus:outline-none focus:border-primary/50",
-                        "placeholder:text-neutral-400/50",
+                        "flex-1 rounded-full border border-neutral-400/20 bg-neutral-400/10 px-4 py-2 text-sm",
+                        // 面板在暗色下底色近黑，必须显式给文字色，不能靠继承
+                        "text-neutral-800 caret-primary dark:text-neutral-100",
+                        "focus:border-primary/50 focus:outline-none",
+                        "placeholder:text-neutral-500 dark:placeholder:text-neutral-500",
                         "disabled:opacity-50",
                       )}
                     />
