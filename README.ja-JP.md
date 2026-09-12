@@ -25,7 +25,7 @@
         "newsnow-mcp-server"
       ],
       "env": {
-        "BASE_URL": "https://newsnow.busiyi.world"
+        "BASE_URL": "http://127.0.0.1:4444"
       }
     }
   }

@@ -1,6 +1,9 @@
 services:
   newsnow:
-    image: ghcr.io/ourongxing/newsnow:latest
+    # 从本仓库构建：原来这里拉的是上游镜像 ghcr.io/ourongxing/newsnow，跑起来是别人家的代码，
+    # 不含本仓库的改动。要换成自己发布的镜像就改这里的 image。
+    build: .
+    image: newsnow-yi:local
     container_name: newsnow
     ports:
       - '127.0.0.1:4444:4444'

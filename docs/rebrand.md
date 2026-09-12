@@ -40,3 +40,10 @@ grep -rl "ourongxing" dist/output/public/assets   # 只剩 Brand.upstream 那一
 2. **图标与分享图**：`public/icon.svg`、`apple-touch-icon.png`、`pwa-192x192.png`、`pwa-512x512.png`、`og-image.png` 仍是上游素材，需要替换。
 3. **域名**：`index.html` 的 `og:url` 现在指向仓库地址，上线后换成你的域名。
 4. `README*.md` 与 `docs/` 里的上游说明按需重写。
+
+## 第二批：仓库位置与镜像来源
+
+- `docker-compose.yml`：原来 `image: ghcr.io/ourongxing/newsnow:latest`——`docker compose up` 跑的是**上游作者发布的镜像**，一行本仓库的改动都不含。改成 `build: .`（仓库里有 Dockerfile，默认端口 4444）。
+- `README.zh-CN.md` / `README.ja-JP.md` 的 MCP 配置示例里 `BASE_URL` 原来指向上游的线上实例 `newsnow.busiyi.world`，改成自托管的 `http://127.0.0.1:4444`。
+
+改完之后全仓库搜 `ourongxing/newsnow` 只剩三处，都是**故意保留的署名**：`shared/brand.ts`（页脚署名链接）、`README.md` 第 7 行与第 99 行（"基于 xxx 的增强版本" / "原项目"）。
