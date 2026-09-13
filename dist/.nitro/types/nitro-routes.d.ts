@@ -6,8 +6,20 @@ declare module "nitropack/types" {
     '/api/agent/briefing': {
       'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../../server/api/agent/briefing.post').default>>>>
     }
+    '/api/agent/briefings': {
+      'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../../server/api/agent/briefings').default>>>>
+    }
     '/api/agent/chat': {
       'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../../server/api/agent/chat.post').default>>>>
+    }
+    '/api/agent/history': {
+      'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../../server/api/agent/history').default>>>>
+    }
+    '/api/agent/trackers': {
+      'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../../server/api/agent/trackers/index').default>>>>
+    }
+    '/api/agent/trackers/run': {
+      'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../../server/api/agent/trackers/run.post').default>>>>
     }
     '/api/enable-login': {
       'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../../server/api/enable-login').default>>>>
@@ -35,6 +47,9 @@ declare module "nitropack/types" {
     }
     '/api/s': {
       'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../../server/api/s/index').default>>>>
+    }
+    '/api/sources/health': {
+      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../../server/api/sources/health.get').default>>>>
     }
   }
 }
